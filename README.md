@@ -12,4 +12,21 @@ It will be a set of tools and instruction guides that show you how to:
 This code is being used to create a presentation for RuPy2012 about using
 code to analyze and write about music.
 
-Stay tuned for more.
+"Dancing About Architecture"?
+-----------------------------
+
+There's a joke musicians like to tell that writing about music is 
+like dancing about architecture.  Of course, dance is an entirely
+interpretive art so, yes, they do in fact dance about architecture,
+the life of lizards, how square fish can read orange, and many
+other abstract concepts.
+
+But, this lead me to the name.  It comes from Valéria Dienes system
+of dance and body movement called "Orchestics" which, while being
+about dance, sounds like it's about music.  I figured it was fitting
+for a project about writing about music.
+
+Valéria Dienes was super smart. She had a Ph.D. in philosophy, mathematics, and
+aesthetics, so even though she was a dancer and dance teacher, she was also a
+huge math nerd.
+
