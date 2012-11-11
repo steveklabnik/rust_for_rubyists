@@ -1,0 +1,5 @@
+.*.sw*
+output
+output-long
+artifacts
+logs

@@ -1,0 +1,197 @@
+Simplified Music Writing Gear
+=============================
+
+.. contents::
+
+Introduction
+------------
+
+This is a small sample document to document how I'm building a 
+way to write HTML (or PDF, etc.) that easily has music notation
+in it.  Yes, I know about LilyPond and it's too complex for what
+I want.  I want something that I can hand to musicians and they
+can get writing pretty quickly.  These days everyone knows some
+kind of WikiText markup language, so I'm aiming for that style
+of document workflow.
+
+I want to try combining three things:
+
+1. reStructuredText_ For writing the prose.
+2. ABC_ For writing the music.
+3. Dexy_ For building it all and because it's awesome.
+
+From these I can output nearly everything I need very easily.  Here's how
+I'm doing it so far.
+
+Getting Dexy
+------------
+
+The first thing is to setup dexy and get your docs.yaml going.  Right
+now you have to install dexy from the git repository, so here's how you
+do that::
+
+    git clone https://github.com/ananelson/dexy.git
+    cd dexy
+    sudo python setup.py install
+
+That should download all your dependencies and give you the dexy command.
+
+Once you have that installed, you simply create a directory and tell dexy
+to set it up::
+
+    mkdir music-sample
+    cd music-sample
+    dexy setup
+
+Last thing you do is make a ``docs.yaml`` file that sets up some build
+parameters for building rST and ABC documents::
+
+    songs:
+        - .abc|abc:
+            - abc: {args: "-w 5in", ext: '.eps' }
+        - .abc|abc|-:
+            - abc: {args: "-s 1.5", ext: '.svg'}
+        - .abc|jinja|ss
+
+    .rst|jinja|rst2html:
+        - songs
+        - jinja: { vars : { abcext : svg } }
+
+    .rst|jinja|rst2latex|latex:
+        - songs
+        - jinja: { vars : { abcext : eps } }
+
+The explanation of this breaks down thusly:
+
+1. First I setup a target called ``songs`` where I'll put all the
+   different ways I want ABC_ files produced.  Dexy uses YAML for the
+   specification document, so I just put each type of ``songs`` output
+   under that.
+2. In this ``songs`` target I put filters for each type of output, and I use the
+   ``-`` filter as kind of a dummy so the two keys are different. Targets in
+   dexy have to be unique so the ``-`` is kind of like a ``_`` in a programming
+   language.
+3. Once I have my different ``songs`` outputs, I need filters for HTML output.
+   I do this with ``.rst|jinja|rst2html`` and then say it depends on the
+   ``songs`` target from above, and the ``jinja`` dependency.  That dependency just
+   gets some variables that I can use in my rST_ file right in jinja
+   template tags.
+4. I do the same thing again to produce the PDF but I use the
+   ``.rst|jinja|rst2latex|latex`` filter chain instead then change 
+   the ``jinja`` dependency vars to have ``eps`` for the extension.
+
+
+Yes, this means we can run our rST_ and ABC_ files through Jinja_ first, which
+gives us fun templating features.  This is of course all for free because Dexy
+has Jinja built in.
+
+Writing The ABC
+---------------
+
+Once you have this you need some ABC to work with, and the ABC_ site
+hace plenty to play with.  Here's one simple one I grabbed::
+
+{{ d['sample.abc|jinja|ss'] }}
+
+You can't see the Dexy command I used, but just view the source_ of this
+document and you can check what I did.
+
+How Dexy Finds Stuff
+--------------------
+
+Dexy basically processes all of your documents and source materials,
+runs them through the filtes you requested in the dependencies you wanted.
+
+1. First dexy makes a big dictionary with key=value pairs for each result.
+2. You refer to the documents you want to include simply by using their 
+   ``file + filter`` name, so in the above I just use ``sample.abc|jinja|ss``.
+   If I want another ``.abc`` file I use ``other.abc|jinja|ss``.
+3.  These keys are just kept in a ``d[]`` variable for jinja, and that 
+    means you just do ``d['sample.abc|jinja|ss']``.
+4. That means you put that in a jinja tag and that's it. Dexy figures it out
+   and injects what you need.
+
+
+Writing The rST
+---------------
+
+Once you have that written you write the rST_ with what you want to say, and
+you include the Dexy commands you want to get your files in.  The magic of
+dexy is that you don't just include docs, you include docs piped through
+filters.
+
+To see how to write an rST, take a look at the source_ to this document
+as an example.
+
+Including The ABC As SVG or EPS
+-------------------------------
+
+Finally, to get the ``sample.abc`` file into the ``intro.rst`` file
+outputs you do:
+
+``.. image:: sample.{{ abcext }}``
+
+This uses a variable I set in the ``dexy.yaml`` that lets me know what
+the extension is for the file in that particular run.  If dexy is making the
+``.pdf`` using the ``.rst|jinja|rst2latex|latex`` filter then I get ``eps``.
+If it's doing the other ``.rst|jinja|rst2html`` filter then I get ``svg``.
+That is matched up with the ``abcm2ps`` command Dexy runs for the ``AbcFilter``.
+
+I could also use all of Jinja to alter the output or rST_ however I want.
+
+The final result then looks like:
+
+.. image:: sample.{{ abcext }}
+
+This now lets me produce HTML or PDFs from an rST_ document, but tailor the
+generated resources based on the target output.
+
+Running Dexy
+------------
+
+Last step is you just run dexy::
+
+    dexy
+
+If you did everything right then you should get a document that looks like
+what I've got here.
+
+The PDF Version
+---------------
+
+You can take a look at the PDF_ version of this same document that is produced
+with the above single command from the one source set.
+
+
+Why This Is Fun
+---------------
+
+Here's some key points to understand about what I just did:
+
+1. That's straight up SVG, which means I can style it with CSS and it works in most browsers.
+2. I can also produce an EPS from this, then use rst2latex, and put this same music in a PDF output.
+3. If you look at the source_ it's 1 line to do that and it matches the source I mention above. No more source/output skew.
+4. ABC_ is like markdown for music notation. rST_ is a nice strict multi-output format for text. Dexy_ binds them together
+   and gives me templating and document carving awesomeness for free.
+5. Dexy doesn't get in my way when I'm craft a document workflow.  Other tools impose their stupid ideas about how you should
+   write your docs, while dexy just gives you the framework that has 90% of the crap document workflows have that you 
+   kind of don't care about.  And, if you do care about it you can write your own filters and plugins to change it.
+6. If you try to write about music you'll realize why the above is great stuff.  If you write about code you should see
+   why this is also great stuff.
+
+Phase 4
+-------
+
+Next I need to formalize this a bit and get some better examples up.  If you have
+feedback let me know on twitter @zedshaw_
+
+
+.. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
+.. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
+.. _ABC: http://abcnotation.com/
+.. _Dexy: http://dexy.it/
+.. _YAML: http://www.yaml.org/
+.. _Jinja: http://jinja.pocoo.org/
+.. _source: http://zedshaw.com/music/index.rst
+.. _PDF: http://zedshaw.com/music/index.pdf
+.. _@zedshaw: http://twitter.com/zedshaw

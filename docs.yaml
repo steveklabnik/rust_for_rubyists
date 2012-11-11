@@ -1,0 +1,14 @@
+songs:
+    - .abc|abc:
+        - abc: {args: "-w 5in", ext: '.eps' }
+    - .abc|abc|-:
+        - abc: {args: "-s 1.5", ext: '.svg'}
+    - .abc|jinja|ss
+
+.rst|jinja|rst2html:
+    - songs
+    - jinja: { vars : { abcext : svg } }
+
+.rst|jinja|rst2latex|latex:
+    - songs
+    - jinja: { vars : { abcext : eps } }
