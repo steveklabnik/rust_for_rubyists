@@ -1,4 +1,4 @@
 
 all:
 	dexy
-	rsync --delete -azv index.rst output/* zedshaw.com:/var/www/zedshaw.com/music/
+	rsync --delete -azv index.rst output/* orkestrix.org:/var/www/orkestrix.org/
