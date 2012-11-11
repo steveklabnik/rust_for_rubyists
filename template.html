@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+    <!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width" />
+
+  %(head)s
+
+  <!-- Included CSS Files (Compressed) -->
+  <link rel="stylesheet" href="stylesheets/foundation.min.css">
+  <link rel="stylesheet" href="stylesheets/app.css">
+
+  <script src="javascripts/modernizr.foundation.js"></script>
+
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+
+  <div class="row">
+      <div class="twelve columns">
+        %(body_pre_docinfo)s
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="eight columns">
+        %(docinfo)s
+        %(body)s
+    </div>
+
+    <div class="four columns">
+        <h4>What Is This?</h4>
+        <p>Orkestrix is a system I'm developing to make it easier to write about
+        music and publish it.
+        </p>
+
+      <h4>Phase 5 Results</h4>
+      <p>You're looking at the Phase 5 results, which involved using 
+      <a href="http://github.com/zurb/foundation">Foundation</a> to create
+      a simple style for the HTML version.
+      </p>
+
+      <h4>Other Resources</h4>
+      <ul>
+          <li><a href="https://github.com/zedshaw/orkestrix">Github Repo</a></li>
+          <li><a href="/index.pdf">PDF of This Page</a></li>
+          <li><a href="/index.rst">rST of This Page</a></li>
+          <li><a href="http://twitter.com/zedshaw">@zedshaw</a></li>
+      </ul>
+    </div>
+  </div>
+      
+  <!-- Included JS Files (Compressed) -->
+  <script src="javascripts/jquery.js"></script>
+  <script src="javascripts/foundation.min.js"></script>
+  
+  <!-- Initialize JS Plugins -->
+  <script src="javascripts/app.js"></script>
+
+</body>
+</html>

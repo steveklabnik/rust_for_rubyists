@@ -1,9 +1,5 @@
-Dancing About Architecture With Orkestrix
-=========================================
-
-Orkestrix_ is a system I'm developing to make it easier to write about
-music and publish it.  This is the first sample document, and if you're
-a programmer you can grab the code for this at github_.
+Orkestrix Music Publishing Phase 5
+==================================
 
 .. contents::
 
@@ -183,16 +179,11 @@ Here's some key points to understand about what I just did:
 6. If you try to write about music you'll realize why the above is great stuff.  If you write about code you should see
    why this is also great stuff.
 
-Phase 5
+Phase 6
 -------
 
-I have the Orkestrix_ site up, a github_ repo, and this working example. Next
-I need to get a basic design for the site and default document output and LaTeX
-style.  Then I need to grab the random tools I have and start creating a first
-example paper so I can refine it.
-
-If you have feedback let me know on twitter zedshaw_.
-
+Now that I can get the rST to style the HTML and use a site design I need to
+do something similar to the LaTeX for the PDF output.
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
@@ -200,8 +191,8 @@ If you have feedback let me know on twitter zedshaw_.
 .. _Dexy: http://dexy.it/
 .. _YAML: http://www.yaml.org/
 .. _Jinja: http://jinja.pocoo.org/
-.. _source: http://zedshaw.com/music/index.rst
-.. _PDF: http://zedshaw.com/music/index.pdf
+.. _source: http://orkestrix.org/index.rst
+.. _PDF: http://orkestrix.org/index.pdf
 .. _zedshaw: http://twitter.com/zedshaw
 .. _Orkestrix: http://orkestrix.org/
 .. _github: http://github.org/zedshaw/orkestrix

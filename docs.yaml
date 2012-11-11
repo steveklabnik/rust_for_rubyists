@@ -2,13 +2,22 @@ songs:
     - .abc|abc:
         - abc: {args: "-w 5in", ext: '.eps' }
     - .abc|abc|-:
-        - abc: {args: "-s 1.5", ext: '.svg'}
+        - abc: {args: "-w 7.5in -s 1.2", ext: '.svg'}
     - .abc|jinja|ss
+
+assets:
+    - .css|jinja
+    - .js
+    - .html|jinja
+    - .png
 
 .rst|jinja|rst2html:
     - songs
+    - assets
     - jinja: { vars : { abcext : svg } }
+    - rst2html: { args: "--template=template.html" }
 
 .rst|jinja|rst2latex|latex:
     - songs
     - jinja: { vars : { abcext : eps } }
+
