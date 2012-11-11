@@ -20,4 +20,5 @@ assets:
 .rst|jinja|rst2latex|latex:
     - songs
     - jinja: { vars : { abcext : eps } }
+    - rst2latex: { args: "--stylesheet=savetrees --documentclass=article --documentoptions=letterpaper" }
 

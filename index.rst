@@ -1,5 +1,8 @@
-Orkestrix Music Publishing Phase 5
-==================================
+Orkestrix Music Publishing System
+=================================
+
+Phase 5 Experiment
+------------------
 
 .. contents::
 
