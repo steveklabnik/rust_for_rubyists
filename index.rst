@@ -1,5 +1,19 @@
+{% macro code(basename, testval, htmlval) -%}
+{% if testval == htmlval %}
+.. raw:: html
+
+    {{ d[basename + '|h'].as_text()|indent(4) }}
+
+{% else %}
+.. raw:: latex
+
+    {{ d[basename + '|l'].as_text()|indent(4) }}
+{% endif %}
+{%- endmacro %}
+
 Orkestrix Music Publishing System
 =================================
+
 
 Phase 5 Experiment
 ------------------
@@ -87,6 +101,13 @@ The explanation of this breaks down thusly:
 Yes, this means we can run our rST_ and ABC_ files through Jinja_ first, which
 gives us fun templating features.  This is of course all for free because Dexy
 has Jinja built in.
+
+.. note::
+
+    In the current Phase 6 version the docs.yaml file is more complex so that
+    I can style the rST_ output for HTML and LaTeX, but the above is the
+    basics of it.  Look in the github_ repo to see how it's currently
+    implemented.
 
 Writing The ABC
 ---------------
@@ -182,11 +203,12 @@ Here's some key points to understand about what I just did:
 6. If you try to write about music you'll realize why the above is great stuff.  If you write about code you should see
    why this is also great stuff.
 
-Phase 6
--------
+Sample Of Including Colorized Code
+----------------------------------
 
-Now that I can get the rST to style the HTML and use a site design I need to
-do something similar to the LaTeX for the PDF output.
+Next I want to include a little bit of code and have Pygments colorize it:
+
+{{ code('test.py|pyg', abcext, 'svg') }}
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html

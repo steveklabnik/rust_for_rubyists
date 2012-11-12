@@ -11,14 +11,22 @@ assets:
     - .html|jinja
     - .png
 
+code:
+    - .py|pyg|l
+    - .py|pyg|h
+    - .jinja
+
 .rst|jinja|rst2html:
+    - code
     - songs
     - assets
     - jinja: { vars : { abcext : svg } }
     - rst2html: { args: "--template=template.html" }
 
 .rst|jinja|rst2latex|latex:
+    - code
     - songs
+    - .tex
+    - .sty
     - jinja: { vars : { abcext : eps } }
-    - rst2latex: { args: "--stylesheet=savetrees --documentclass=article --documentoptions=letterpaper" }
-
+    - rst2latex: { args: "--documentclass=article --documentoptions=letterpaper --latex-preamble='\\include{preamble}' --stylesheet=orkestrix" }

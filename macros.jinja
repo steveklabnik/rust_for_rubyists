@@ -1,0 +1,12 @@
+{% macro code(basename, testval, htmlval) -%}
+{% if testval == htmlval %}
+.. raw:: html
+
+    {{ d[basename + '|h'].as_text()|indent(4) }}
+
+{% else %}
+.. raw:: latex
+
+    {{ d[basename + '|l'].as_text()|indent(4) }}
+{% endif %}
+{%- endmacro %}
