@@ -1,15 +1,4 @@
-{% macro code(basename, testval, htmlval) -%}
-{% if testval == htmlval %}
-.. raw:: html
-
-    {{ d[basename + '|h'].as_text()|indent(4) }}
-
-{% else %}
-.. raw:: latex
-
-    {{ d[basename + '|l'].as_text()|indent(4) }}
-{% endif %}
-{%- endmacro %}
+{% import 'macros.jinja' as ork with context %}
 
 Orkestrix Music Publishing System
 =================================
@@ -61,22 +50,18 @@ to set it up::
     dexy setup
 
 Last thing you do is make a ``docs.yaml`` file that sets up some build
-parameters for building rST and ABC documents::
+parameters for building rST and ABC documents:
 
-    songs:
-        - .abc|abc:
-            - abc: {args: "-w 5in", ext: '.eps' }
-        - .abc|abc|-:
-            - abc: {args: "-s 1.5", ext: '.svg'}
-        - .abc|jinja|ss
 
-    .rst|jinja|rst2html:
-        - songs
-        - jinja: { vars : { abcext : svg } }
+.. @export "abc"
 
-    .rst|jinja|rst2latex|latex:
-        - songs
-        - jinja: { vars : { abcext : eps } }
+{{ ork.code('docs.yaml|pyg') }}
+
+.. @end
+
+Here is how to include docs.yaml
+
+{{ ork.codes('index.rst|idio', 'abc') }}
 
 The explanation of this breaks down thusly:
 
@@ -153,7 +138,7 @@ Including The ABC As SVG or EPS
 Finally, to get the ``sample.abc`` file into the ``intro.rst`` file
 outputs you do:
 
-``.. image:: sample.{{ abcext }}``
+``.. image:: sample.{{ ork.image_ext }}``
 
 This uses a variable I set in the ``dexy.yaml`` that lets me know what
 the extension is for the file in that particular run.  If dexy is making the
@@ -165,7 +150,7 @@ I could also use all of Jinja to alter the output or rST_ however I want.
 
 The final result then looks like:
 
-.. image:: sample.{{ abcext }}
+.. image:: sample.{{ ork.image_ext }}
 
 This now lets me produce HTML or PDFs from an rST_ document, but tailor the
 generated resources based on the target output.
@@ -207,8 +192,7 @@ Sample Of Including Colorized Code
 ----------------------------------
 
 Next I want to include a little bit of code and have Pygments colorize it:
-
-{{ code('test.py|pyg', abcext, 'svg') }}
+{{ ork.code('test.py|pyg') }}
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html

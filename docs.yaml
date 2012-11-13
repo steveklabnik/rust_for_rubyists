@@ -14,19 +14,25 @@ assets:
 code:
     - .py|pyg|l
     - .py|pyg|h
+    - .yaml|pyg|l
+    - .yaml|pyg|h
     - .jinja
+    - .rst|idio|l
+    - .rst|idio|h
 
 .rst|jinja|rst2html:
     - code
     - songs
     - assets
-    - jinja: { vars : { abcext : svg } }
-    - rst2html: { args: "--template=template.html" }
+    - rst2html: { clargs: "--template=template.html" }
 
-.rst|jinja|rst2latex|latex:
+.rst|jinja|rst2latex|xetex:
     - code
     - songs
     - .tex
-    - .sty
-    - jinja: { vars : { abcext : eps } }
-    - rst2latex: { args: "--documentclass=article --documentoptions=letterpaper --latex-preamble='\\include{preamble}' --stylesheet=orkestrix" }
+    - .sty|jinja
+    - rst2latex:
+        { clargs: "--documentclass=article \
+                   --documentoptions=letterpaper \
+                   --latex-preamble='\\include{preamble}' \
+                   --stylesheet=orkestrix" }
