@@ -4,8 +4,12 @@ Orkestrix Music Publishing System
 =================================
 
 
-Phase 5 Experiment
-------------------
+Final Experiment
+----------------
+
+This is the last experiment that I'm doing to explore the features
+I need for Orkestrix_.  The next releases will be a combination
+of working software and documentation with examples on using it.
 
 .. contents::
 
@@ -59,29 +63,25 @@ parameters for building rST and ABC documents:
 
 .. @end
 
-Here is how to include docs.yaml
+Here is how to include docs.yaml:
 
 {{ ork.codes('index.rst|idio', 'abc') }}
 
-The explanation of this breaks down thusly:
+This seems large but here's the breakdown of what it does:
 
-1. First I setup a target called ``songs`` where I'll put all the
-   different ways I want ABC_ files produced.  Dexy uses YAML for the
-   specification document, so I just put each type of ``songs`` output
-   under that.
-2. In this ``songs`` target I put filters for each type of output, and I use the
-   ``-`` filter as kind of a dummy so the two keys are different. Targets in
-   dexy have to be unique so the ``-`` is kind of like a ``_`` in a programming
-   language.
-3. Once I have my different ``songs`` outputs, I need filters for HTML output.
-   I do this with ``.rst|jinja|rst2html`` and then say it depends on the
-   ``songs`` target from above, and the ``jinja`` dependency.  That dependency just
-   gets some variables that I can use in my rST_ file right in jinja
-   template tags.
-4. I do the same thing again to produce the PDF but I use the
-   ``.rst|jinja|rst2latex|latex`` filter chain instead then change 
-   the ``jinja`` dependency vars to have ``eps`` for the extension.
-
+1. I have a songs section that lists out how to process ABC_ files.
+   Under that I have filters setup for processing the ABC_ as SVG
+   or as EPS files.  Dexy uses a filter specification that's 
+   ``file|filter|filter`` then you can add options for each filter 
+   under it.  The ``file`` part can also just a ``.ext`` file extension
+   to mean "all the files ending in this".
+2. I do the same thing for ``assets`` and ``code``.
+3. I create a target ``.rst|jinja|rst2html`` which depends on the
+   ``songs``, ``assets``, and ``code`` targets, then sets options for
+   the ``rst2html`` plugin so that I can alter how rST_ outputs my
+   stuff.
+4. Finally I do the same thing but for ``.rst|jinja|rst2latex|xetex``
+   which will run it through xetex instead of doing HTML.
 
 Yes, this means we can run our rST_ and ABC_ files through Jinja_ first, which
 gives us fun templating features.  This is of course all for free because Dexy
@@ -191,9 +191,37 @@ Here's some key points to understand about what I just did:
 Sample Of Including Colorized Code
 ----------------------------------
 
-Next I want to include a little bit of code and have Pygments colorize it:
+One additional thing I'll want to do, since I'm a programmer, is include code
+that I may write about music.  Here's a simple example of getting that included
+with Pygments_ coloring:
 
 {{ ork.code('test.py|pyg') }}
+
+You include code using the ``ork`` macros I'm making.  Here's a simple sample
+that does both the import and loading of some code:
+
+.. code::
+
+    {% raw %}
+    {% import 'macros/ork.jinja' as ork with context %}
+    {{ ork.code('test.py|pyg') }}
+    {% endraw %}
+
+Finally here's a bigger sample that is the ``macros/ork.jinja`` file itself:
+
+{{ ork.code('macros/ork.jinja|pyg') }}
+
+That is a lot of Junk if you don't know how to code, but this is a nice demo
+of including code in your documents directly with color.
+
+Conclusion
+----------
+
+This is the last experiment phase for seeing if Orkestrix_ will work
+to produce the kind of documents I like.  I'm now going to start formalizing
+how it's structured and how to use it.  This site will eventually change
+to simply document how to use Orkestrix_ and also have some sample
+documents demonstrating it.
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
@@ -206,3 +234,4 @@ Next I want to include a little bit of code and have Pygments colorize it:
 .. _zedshaw: http://twitter.com/zedshaw
 .. _Orkestrix: http://orkestrix.org/
 .. _github: http://github.org/zedshaw/orkestrix
+.. _Pygments: http://pygments.org/

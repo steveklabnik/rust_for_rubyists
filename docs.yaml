@@ -16,6 +16,10 @@ code:
     - .py|pyg|h
     - .yaml|pyg|l
     - .yaml|pyg|h
+    - .jinja|pyg|h:
+        - pyg: {lexer: 'html+jinja'}
+    - .jinja|pyg|l:
+        - pyg: {lexer: 'html+jinja'}
     - .jinja
     - .rst|idio|l
     - .rst|idio|h
