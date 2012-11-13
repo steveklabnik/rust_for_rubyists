@@ -1,4 +1,4 @@
-{% import 'macros.jinja' as ork with context %}
+{% import 'macros/ork.jinja' as ork with context %}
 
 Orkestrix Music Publishing System
 =================================
@@ -192,6 +192,7 @@ Sample Of Including Colorized Code
 ----------------------------------
 
 Next I want to include a little bit of code and have Pygments colorize it:
+
 {{ ork.code('test.py|pyg') }}
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
