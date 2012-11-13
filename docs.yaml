@@ -3,7 +3,7 @@ songs:
         - abc: {args: "-w 5in", ext: '.eps' }
     - .abc|abc|-:
         - abc: {args: "-w 7.5in -s 1.2", ext: '.svg'}
-    - .abc|jinja|ss
+    - .abc|ss
 
 assets:
     - .css|jinja

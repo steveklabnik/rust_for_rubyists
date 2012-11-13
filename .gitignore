@@ -3,3 +3,4 @@ output
 output-long
 artifacts
 logs
+*.pyc
