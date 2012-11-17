@@ -3,13 +3,14 @@
 Orkestrix Music Publishing System
 =================================
 
-
 Final Experiment
 ----------------
 
 This is the last experiment that I'm doing to explore the features
 I need for Orkestrix_.  The next releases will be a combination
 of working software and documentation with examples on using it.
+
+
 
 .. contents::
 
@@ -50,7 +51,6 @@ Once you have that installed, you simply create a directory and tell dexy
 to set it up::
 
     mkdir music-sample
-    cd music-sample
     dexy setup
 
 Last thing you do is make a ``docs.yaml`` file that sets up some build
@@ -59,7 +59,7 @@ parameters for building rST and ABC documents:
 
 .. @export "abc"
 
-{{ ork.code('docs.yaml|pyg') }}
+{{ ork.code('docs.yaml|idio') }}
 
 .. @end
 
@@ -195,7 +195,7 @@ One additional thing I'll want to do, since I'm a programmer, is include code
 that I may write about music.  Here's a simple example of getting that included
 with Pygments_ coloring:
 
-{{ ork.code('test.py|pyg') }}
+{{ ork.code('test.py|idio') }}
 
 You include code using the ``ork`` macros I'm making.  Here's a simple sample
 that does both the import and loading of some code:
@@ -204,24 +204,21 @@ that does both the import and loading of some code:
 
     {% raw %}
     {% import 'macros/ork.jinja' as ork with context %}
-    {{ ork.code('test.py|pyg') }}
+    {{ ork.code('test.py|idio') }}
     {% endraw %}
 
 Finally here's a bigger sample that is the ``macros/ork.jinja`` file itself:
 
-{{ ork.code('macros/ork.jinja|pyg') }}
+{{ ork.code('macros/ork.jinja|idio') }}
 
 That is a lot of Junk if you don't know how to code, but this is a nice demo
 of including code in your documents directly with color.
 
-Conclusion
-----------
+Another Example
+---------------
 
-This is the last experiment phase for seeing if Orkestrix_ will work
-to produce the kind of documents I like.  I'm now going to start formalizing
-how it's structured and how to use it.  This site will eventually change
-to simply document how to use Orkestrix_ and also have some sample
-documents demonstrating it.
+Here's another example_ where I talk about figuring out which pentatonics
+over different Jazz chord forms.
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
@@ -235,3 +232,4 @@ documents demonstrating it.
 .. _Orkestrix: http://orkestrix.org/
 .. _github: http://github.org/zedshaw/orkestrix
 .. _Pygments: http://pygments.org/
+.. _example: jazz_chords.html
