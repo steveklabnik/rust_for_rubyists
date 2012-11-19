@@ -33,12 +33,6 @@ code:
     - rst2html: { clargs: "--template=template.html" }
     - recurse: false
 
-examples/*.rst|jinja|rst2html:
-    - code
-    - songs
-    - assets
-    - rst2html: { clargs: "--template=../template.html" }
-
 .rst|jinja|rst2latex|xetex:
     - code
     - songs
@@ -50,3 +44,18 @@ examples/*.rst|jinja|rst2html:
                    --documentoptions=letterpaper \
                    --latex-preamble='\\include{preamble}' \
                    --stylesheet=orkestrix" }
+
+chapters-for-book:
+    - chapter*.rst|jinja
+
+book.rst|jinja|rst2latex|xetex:
+    - chapters-for-book
+    - rst2latex:
+        { clargs: "--documentclass=article \
+                   --documentoptions=letterpaper \
+                   --latex-preamble='\\include{preamble}' \
+                   --stylesheet=orkestrix" }
+
+book.rst|jinja|rst2html:
+    - chapters-for-book
+

@@ -37,7 +37,7 @@ I'm doing it so far.
 Getting Dexy
 ------------
 
-The first thing is to setup dexy and get your docs.yaml going.  Right
+The first thing is to setup dexy and get your dexy.yaml going.  Right
 now you have to install dexy from the git repository, so here's how you
 do that::
 
@@ -53,17 +53,17 @@ to set it up::
     mkdir music-sample
     dexy setup
 
-Last thing you do is make a ``docs.yaml`` file that sets up some build
+Last thing you do is make a ``dexy.yaml`` file that sets up some build
 parameters for building rST and ABC documents:
 
 
 .. @export "abc"
 
-{{ ork.code('docs.yaml|idio') }}
+{{ ork.code('dexy.yaml|idio') }}
 
 .. @end
 
-Here is how to include docs.yaml:
+Here is how to include dexy.yaml:
 
 {{ ork.codes('index.rst|idio', 'abc') }}
 
@@ -89,7 +89,7 @@ has Jinja built in.
 
 .. note::
 
-    In the current Phase 6 version the docs.yaml file is more complex so that
+    In the current Phase 6 version the dexy.yaml file is more complex so that
     I can style the rST_ output for HTML and LaTeX, but the above is the
     basics of it.  Look in the github_ repo to see how it's currently
     implemented.
