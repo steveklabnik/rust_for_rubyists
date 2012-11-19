@@ -26,36 +26,24 @@ code:
     - .rst|idio|h:
         - idio: { "lexer" : "rst+jinja" }
 
-.rst|jinja|rst2html:
-    - code
-    - songs
-    - assets
-    - rst2html: { clargs: "--template=template.html" }
-    - recurse: false
+book-materials:
+    - .tex
+    - .sty|jinja
 
 .rst|jinja|rst2latex|xetex:
     - code
     - songs
-    - .tex
-    - .sty|jinja
+    - book-materials
     - recurse: false
     - rst2latex:
         { clargs: "--documentclass=article \
                    --documentoptions=letterpaper \
                    --latex-preamble='\\include{preamble}' \
                    --stylesheet=orkestrix" }
-
-chapters-for-book:
-    - chapter*.rst|jinja
-
-book.rst|jinja|rst2latex|xetex:
-    - chapters-for-book
-    - rst2latex:
-        { clargs: "--documentclass=article \
-                   --documentoptions=letterpaper \
-                   --latex-preamble='\\include{preamble}' \
-                   --stylesheet=orkestrix" }
-
+.rst|jinja:
+    - code
+    - songs
+    
 book.rst|jinja|rst2html:
-    - chapters-for-book
+    - .rst|jinja
 
