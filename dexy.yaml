@@ -33,14 +33,13 @@ index.rst|jinja|rst2html:
     - rst2html:
         { clargs: "--template=template.html" }
 
-book/book.rst|jinja|rst2html:
+book/*.rst|jinja|rst2html:
     - code
     - songs
     - assets
     - tex-assets
     - rst2html:
         { clargs: "--template=template.html" }
-    - book/chapter*.rst
 
 book/book.rst|jinja|rst2latex|xetex:
     - code

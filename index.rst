@@ -214,11 +214,13 @@ Finally here's a bigger sample that is the ``macros/ork.jinja`` file itself:
 That is a lot of Junk if you don't know how to code, but this is a nice demo
 of including code in your documents directly with color.
 
-Another Example
----------------
+First Attempt At Writing A Book
+-------------------------------
 
-Here's another example_ where I talk about figuring out which pentatonics
-over different Jazz chord forms.
+I have figured out how to build whole books that are structured into
+individual chapter files.  You can see an example of it in the
+example_ book.
+
 
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _rST: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
@@ -232,4 +234,4 @@ over different Jazz chord forms.
 .. _Orkestrix: http://orkestrix.org/
 .. _github: http://github.org/zedshaw/orkestrix
 .. _Pygments: http://pygments.org/
-.. _example: jazz_chords.html
+.. _example: /book/
