@@ -6,6 +6,7 @@ Jazz Pentatonics Example
 There are two basic pentatonics you can play for Jazz.  One is based on the
 Major Scale, the other is based on the Mixolydian mode.  If I write
 these out in the key of C they are:
+
 .. image:: examples/jazz_pents.{{ ork.image_ext }}
 
 These two pentatonics, when shifted make up all the main arpeggios with common
@@ -60,20 +61,14 @@ The Results
 
 Here's the results::
 
-    {{ d["examples/chord_analysis.py|py"].as_text()|indent(4) }}
+    {{ d["examples/chord_analysis.py|py"].as_text()|indent(4, false) }}
 
 Here's some examples of these scales for different chords using ABC notation::
 
-    {{ d["examples/jazz_pents_example.abc|ss"] }}
+    {{ d["examples/jazz_pents_example.abc|ss"]|indent(4, false) }}
 
 And finally what that looks like rendered into SVG:
 
 .. image:: examples/jazz_pents_example.{{ ork.image_ext }}
 
-PDF Output
-----------
-
-Here's the PDF_ of this page so you can compare the output quality.
-
-.. _PDF: jazz_chords.pdf
 

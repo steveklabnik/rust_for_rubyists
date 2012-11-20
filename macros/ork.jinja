@@ -8,12 +8,16 @@
 {% if f.final_ext() == '.html' %}
 .. raw:: html
 
-    {{ d[basename + '|h'] | indent(4) }}
+    {{ d[basename + '|h'] | indent(4, false) }}
 
-{% else %}
+{% elif f.final_ext() == '.pdf' %}
 .. raw:: latex
 
-    {{ d[basename + '|l'] | indent(4) }}
+    {{ d[basename + '|l'] | indent(4, false) }}
+{% else %}
+.. warning:: 
+
+    Unknown target extension {{ f.final_ext() }} for basename {{ basename }}.
 
 {% endif %}
 {%- endmacro %}
@@ -22,12 +26,16 @@
 {% if f.final_ext() == '.html' %}
 .. raw:: html
 
-    {{ d[basename + '|h'][section] | indent(4) }}
+    {{ d[basename + '|h'][section] | indent(4, false) }}
 
-{% else %}
+{% elif f.final_ext() == '.pdf' %}
 .. raw:: latex
 
-    {{ d[basename + '|l'][section] | indent(4) }}
+    {{ d[basename + '|l'][section] | indent(4, false) }}
 
+{% else %}
+.. warning::
+
+    Unknown target extension {{ f.final_ext() }} for basename {{ basename }} section {{ section }}.
 {% endif %}
 {%- endmacro %}
