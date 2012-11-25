@@ -14,22 +14,38 @@ assets:
 code:
     - .py|idio|l
     - .py|idio|h
+    - .py|idio|pn:
+        - idio: { 'add-new-files' : True, 'line_numbers' : True }
     - .py|py:
         - .py
     - .yaml|idio|l
     - .yaml|idio|h
+    - .yaml|idio|pn:
+        - idio: { 'add-new-files' : True, 'line_numbers' : False }
     - .jinja|idio|h
     - .jinja|idio|l
+    - .jinja|idio|pn:
+        - idio: { 'add-new-files' : True, 'line_numbers' : False }
     - .jinja
     - .rst|idio|l:
         - idio: { "lexer" : "rst+django" }
     - .rst|idio|h:
+        - idio: { "lexer" : "rst+jinja" }
+    - .rst|idio|pn:
         - idio: { "lexer" : "rst+jinja" }
 
 index.rst|jinja|rst2html:
     - code
     - songs
     - assets
+    - rst2html:
+        { clargs: "--template=template.html" }
+
+book/*.rst|jinja|rst2html|calibre:
+    - code
+    - songs
+    - assets
+    - tex-assets
     - rst2html:
         { clargs: "--template=template.html" }
 
