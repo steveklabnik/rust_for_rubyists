@@ -1,74 +1,113 @@
 {% import 'macros/ork.jinja' as ork with context %}
 
-Jazz Pentatonics Example
-========================
+Why care about Rust?
+====================
 
-There are two basic pentatonics you can play for Jazz.  One is based on the
-Major Scale, the other is based on the Mixolydian mode.  If I write
-these out in the key of C they are:
+You already write software in Ruby. It pays your bills. You enjoy it. Why
+should you care about Rust?
 
-.. image:: examples/jazz_pents.{{ ork.image_ext }}
+> A programming language that doesn't teach you something isn't worth learning.
+> 
+> - Someone
 
-These two pentatonics, when shifted make up all the main arpeggios with common
-additional notes, but without any of the avoid notes like the 4th and the 7th.
+Let's think about Ruby for a minute: what's its biggest weakness? For me, it's
+these things:
 
-The Scales
-----------
+- Concurrency
+- Concurrency
+- Safety guarantees
+- Lots of mutable state
+- Only vaguely functional
+- Speed
+- Complexity. (Smalltalks' semantics fit on an index card)
+- Documentation
+- nil
 
-To print out the notes in these pentatonics for all keys, I use this code:
+What's awesome about Ruby?
 
-{{ ork.code("examples/scale_notes.py|idio") }}
+- Blocks
+- Blocks
+- Vaguely functional
+- Syntax is pretty easy
+- Focus on developer happiness
+- Get up and running quickly
+- Dynamically typed
 
-With just these two versions of the scale I can then play over chords
-in various ways.
+So we could learn a lot from a language that handles concurrency well, has good
+safety guarantees, is immutable by default, and is fast and simple. We don't
+want to sacrifice anonymous functions, pretty syntax, or not making
+`AbstractFactoryFactoryImpls` just to get work done.
 
-The Chords
-----------
+I think that that language is Rust.
 
-To analyze all the most useful permutations I have a script that goes through
-every chord I need and then tries all the pentatonics to see if any match the
-same notes in the chords.
+Now: Rust is not perfect, by far. Its documentation is poor. It is certainly
+_very_ complex. Fighting with a compiler can be frustrating. But the point is
+to _learn_. And using a language that's very familliar, yet very different, can
+teach us a lot.
 
-First I setup a bunch of sets for the notes that are in the kinds of
-chords I like to play:
+Here's "Hello World" in Rust:
 
-{{ ork.codes("examples/chord_analysis.py|idio", "chords") }}
+```
+fn main() {
+    io::println("hello?");
+}
+```
 
-Notice how I'm importing the ``scale_notes`` module that I just showed
-you.
+Here's a parallell "Hello World" in Rust:
 
-I then have an ``analyze_scales_chords`` function which goes through
-all the permutations of chords and the notes from the ``scale_notes``
-module to find all the possible matches.
+```
+use task::spawn;
 
-{{ ork.codes("examples/chord_analysis.py|idio", "analyze") }}
+fn main() {
 
-A match is simply any pentatonic that has the same notes as might be
-found in that kind of chord.
+    for 10.times {
+        do spawn {
+          let greeting_message = "Hello?";
+          io::println(greeting_message);
+        }
+    }
+}
+```
 
-Once I have that I then need to reduce it to something I can print out:
+Here's a rough port to Ruby:
 
-{{ ork.codes("examples/chord_analysis.py|idio", "reduce") }}
+```
+10.times do
+  Thread.new do
+    greeting_message = "Hello?"
+    puts greeting_message
+  end
+end
+```
 
-And finally I just run it twice.  Once to get all the fits for the
-Dominant Scales (Jazz Pentatonics), and once again for the Major Scales
-(Blues Pentatonics):
+That's it. Note the stuff that's *similar* to Ruby:
 
-{{ ork.codes("examples/chord_analysis.py|idio", "final") }}
-
-The Results
------------
-
-Here's the results::
-
-    {{ d["examples/chord_analysis.py|py"].as_text()|indent(4, false) }}
-
-Here's some examples of these scales for different chords using ABC notation::
-
-    {{ d["examples/jazz_pents_example.abc|ss"]|indent(4, false) }}
-
-And finally what that looks like rendered into SVG:
-
-.. image:: examples/jazz_pents_example.{{ ork.image_ext }}
+- Variables are in `snake_case`
+- We have 'blocks' that use `{}`. No `do/end` though.
+- Variables, while statically typed, have inference, so we don't need to declare types
 
 
+Here's some stuff that's _different_:
+
+- `;` s everywhere. You don't always need them, but let's put them in for now.
+- slightly different syntax, `fn` rather than `def`.
+- Because we have no `do/end`, we use `{}` s instead.
+- The compiler will yell at us harder if we mess up.
+
+Oh, and:
+
+```
+$ time ./hello  
+./hello  0.01s user 0.01s system 91% cpu 0.014 total
+
+$ time ruby hello.rb
+ruby hello.rb  0.02s user 0.01s system 95% cpu 0.026 total
+```
+
+Twice as fast. Yay irrelevant microbenchmarks!
+
+Anyway, I hope you get my point: There's lots of things about Rust that make
+it syntactically vaguely similar enough to Ruby that you can feel at home, at
+least at first. And its strengths are some of Rubys' greatest weaknesses.
+That's why I think you can learn a lot from playing with Rust, even if you
+don't do it as your day job.

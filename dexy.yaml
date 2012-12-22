@@ -1,10 +1,3 @@
-songs:
-    - .abc|abc:
-        - abc: {args: "-w 5in", ext: '.eps' }
-    - .abc|abc|-:
-        - abc: {args: "-w 7.5in -s 1.2", ext: '.svg'}
-    - .abc|ss
-
 assets:
     - .css|jinja
     - .js
@@ -41,7 +34,7 @@ index.rst|jinja|rst2html:
     - rst2html:
         { clargs: "--template=template.html" }
 
-book/*.rst|jinja|rst2html|calibre:
+book/*.rst|jinja|rst2html:
     - code
     - songs
     - assets
