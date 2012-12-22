@@ -27,3 +27,4 @@ You can just disregard a lot of the analogies.
 
 {% include "book/chapter-01.rst" %}
 
+{% include "book/chapter-02.rst" %}
