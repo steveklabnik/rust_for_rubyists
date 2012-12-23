@@ -16,7 +16,7 @@ modify though:
 
   $ brew edit rust
 
-This will open up the Formula to build Rust. Change the `url` and `sha256`
+This will open up the Formula to build Rust. Change the ``url`` and ``sha256``
 lines to this:
 
 ::

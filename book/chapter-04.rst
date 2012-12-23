@@ -16,7 +16,7 @@ In Rust, you annotate test methods like such::
 
 You'll note that tests take no arguments and return nothing. If the method
 runs, the test passes, and if it errors in some way, the test fails. Let's
-give it a shot: Open up `testing.rs` and put this in it::
+give it a shot: Open up ``testing.rs`` and put this in it::
 
   extern mod std;
 
@@ -25,7 +25,8 @@ give it a shot: Open up `testing.rs` and put this in it::
     io::println("")
   }
 
-Then, compile it with the `--test` flag, and run it::
+Let's ignore that ``extern mod`` for now. Then, compile it with the ``--test``
+flag, and run it::
 
   $ rustc testing.rs --test
   $ ./testing

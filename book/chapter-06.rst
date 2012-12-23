@@ -60,12 +60,12 @@ This makes sense: We haven't defined any functions yet. Let's define one::
   fn main() {
   }
 
-Okay. Here's some new syntax. The `num: int` says that we take one argument,
-`num`, and that it's of an integer type. The `-> bool` says that we return a
-boolean, and the `return true;`, well, returns true.
+Okay. Here's some new syntax. The ``num: int`` says that we take one argument,
+``num``, and that it's of an integer type. The ``-> bool`` says that we return a
+boolean, and the ``return true;``, well, returns true.
 
-You'll also note we have an `if` statement. It's pretty close to what you'd
-expect, but we have curly braces rather than our friends `do/end`.
+You'll also note we have an ``if`` statement. It's pretty close to what you'd
+expect, but we have curly braces rather than our friends ``do/end``.
 
 Now that we've got that cleared up, let's run our tests::
 
@@ -91,7 +91,7 @@ Now that we've got that cleared up, let's run our tests::
   rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
   make: *** [run] Error 101
 
-Rust is kind enough to give us a warning: we never used the `num` argument. We
+Rust is kind enough to give us a warning: we never used the ``num`` argument. We
 then get our failure, "One is not three", because we returned true. Now that
 we have a failing test, let's make it pass::
 
@@ -250,7 +250,7 @@ Basically, ending an expression in Rust with a semicolon ignores the value of
 that expression. This is kinda weird. I don't know how I feel about it. But it
 is something you should know about.
 
-Okay, now try to TDD out an `is_five` and `is_fifteen` methods.
+Okay, now try to TDD out an ``is_five`` and ``is_fifteen`` methods.
 They should work the same way, but this will let you get practice actually
 writing it out. Once you see this, you're ready to advance::
 
@@ -282,8 +282,8 @@ the numbers from one to 100. It's easy!
     }
   }
   
-Step one: print _something_ 100 times. If you run this with `make` (not `make
-test`!) you should see `num` printed 100 times. Note that our tests didn't
+Step one: print _something_ 100 times. If you run this with ``make`` (not ``make
+test``!) you should see ``num`` printed 100 times. Note that our tests didn't
 actually run. Not only are they not run, they're actually not even in
 the executable::
 
@@ -325,8 +325,8 @@ Anywho, where were we? Oh, iteration::
     }
   }
 
-Let's talk about `for`. `for` is actually syntax sugar. Here's the equivalent
-without `for`::
+Let's talk about ``for``. ``for`` is actually syntax sugar. Here's the equivalent
+without ``for``::
 
   fn main() {
     100.times({
@@ -334,7 +334,7 @@ without `for`::
     });
   }
 
-Note the extra parens. Typing out `});` really sucks, and having the `({` is
+Note the extra parens. Typing out ``});`` really sucks, and having the ``({`` is
 also awkward. Just like Ruby, Rust has special syntax when you're passing a
 single closure to a method. Awesome. And it shouldn't suprise Rubyists that you
 can pass a closure (read: block) to a method, and have it loop. Let's print
@@ -374,7 +374,7 @@ The big one is this::
 
   error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
 
-Expected `fn()` but got `fn(<V0>)`. It wants no parameters, but we gave it one.
+Expected ``fn()`` but got ``fn(<V0>)``. It wants no parameters, but we gave it one.
 Whoops! These kind of crazy compiler errors are a little hard to read,
 especially since we don't get them at all in Ruby.
 
@@ -386,10 +386,10 @@ Anyway, we need a different function::
     }
   }
 
-Okay. The `[]` s indicate a 'vector', which is kind of like a Ruby array. The
+Okay. The ``[]`` s indicate a 'vector', which is kind of like a Ruby array. The
 ampersand before the block argument is sort of like the tilde before that
 string we found before: it modifies the declaration somehow. We're going to
-skim over that until the next section. But that gives us a variable, `num`,
+skim over that until the next section. But that gives us a variable, ``num``,
 within the closure. If we run this, we get another error message::
 
   $ make
@@ -425,7 +425,7 @@ Bam! Whew. We had to fight with the compiler a bit, and the errors weren't
 great, but that wasn't too bad.
 
 What I _will_ tell you is that this took me _forever_ to figure out. The
-documentation for `each` says this::
+documentation for ``each`` says this::
 
   Method each
 
@@ -450,7 +450,7 @@ suck... what to do? This::
 
 
 Okay. Range takes two numbers and makes them into a range, then we iterate over
-it. Peachy. The `uint` part means we're using an unsigned integer, which makes
+it. Peachy. The ``uint`` part means we're using an unsigned integer, which makes
 sense: We're not doing anything that's negative.
 
 Now we can put the two together::
@@ -474,7 +474,7 @@ Now we can put the two together::
     }
   }
 
-Uhhhh `let mut`? `let` is the way that we make a local variable. `mut` means
+Uhhhh ``let mut``? ``let`` is the way that we make a local variable. ``mut`` means
 we plan to mutate that variable: yes, variables are immutable by default.
 When I first wrote this, I wrote this::
 
@@ -511,9 +511,9 @@ We can shorten this up a bit with this syntax::
     }
   }
 
-We've made the `if` assign the value to answer. Note that we had to remove
-the semicolons again; that lets the expression give its value to `answer.` Note
-that this _also_ makes answer immutable, so we can remove the `mut`::
+We've made the ``if`` assign the value to answer. Note that we had to remove
+the semicolons again; that lets the expression give its value to ``answer.`` Note
+that this _also_ makes answer immutable, so we can remove the ``mut``::
 
   fn main() {
     for int::range(0, 100) |num| {
@@ -562,7 +562,7 @@ Remember that the tilde has an effect that we haven't talked about yet. I added
 it because running without it gives an error message that implies you need it:
 give it a shot. Anyway, we give either the string
 
-Because the `if` returns a value, we could also do something like this::
+Because the ``if`` returns a value, we could also do something like this::
 
   fn main() {
     for int::range(0, 100) |num| {
@@ -577,5 +577,5 @@ Because the `if` returns a value, we could also do something like this::
 
 It's more compact, and removes the intermediate variable alltogether. 
 
-Anyway, awesome! We've conquered FizzBuzz. `is_fifteen` isn't the best named
+Anyway, awesome! We've conquered FizzBuzz. ``is_fifteen`` isn't the best named
 method, but we're just learning. ;)

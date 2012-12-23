@@ -6,9 +6,9 @@ Why care about Rust?
 You already write software in Ruby. It pays your bills. You enjoy it. Why
 should you care about Rust?
 
-Someone once said::
+Someone once said:
 
-  > A programming language that doesn't teach you something isn't worth learning.
+    A programming language that doesn't teach you something isn't worth learning.
 
 Let's think about Ruby for a minute: what's its biggest weakness? For me, it's
 these things:
@@ -36,7 +36,7 @@ What's awesome about Ruby?
 So we could learn a lot from a language that handles concurrency well, has good
 safety guarantees, is immutable by default, and is fast and simple. We don't
 want to sacrifice anonymous functions, pretty syntax, or not making
-`AbstractFactoryFactoryImpls` just to get work done.
+``AbstractFactoryFactoryImpls`` just to get work done.
 
 I think that that language is Rust.
 
@@ -82,16 +82,16 @@ Here's a rough port to Ruby:
 
 That's it. Note the stuff that's *similar* to Ruby:
 
-- Variables are in `snake_case`
-- We have 'blocks' that use `{}`. No `do/end` though.
+- Variables are in ``snake_case``
+- We have 'blocks' that use ``{}``. No ``do/end`` though.
 - Variables, while statically typed, have inference, so we don't need to declare types
 
 
 Here's some stuff that's _different_:
 
-- `;` s everywhere. You don't always need them, but let's put them in for now.
-- slightly different syntax, `fn` rather than `def`.
-- Because we have no `do/end`, we use `{}` s instead.
+- ``;`` s everywhere. You don't always need them, but let's put them in for now.
+- slightly different syntax, ``fn`` rather than ``def``.
+- Because we have no ``do/end``, we use ``{}`` s instead.
 - The compiler will yell at us harder if we mess up.
 
 Oh, and:

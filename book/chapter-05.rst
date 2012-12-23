@@ -12,8 +12,8 @@ Make
 ----
 
 Yeah, you already know how to use Rake, but we're going to work with its
-progenitor, `make`. We don't want to assume that others have Ruby installed,
-and you'll end up reading `Makefiles` that others write anyway, so it's time
+progenitor, ``make``. We don't want to assume that others have Ruby installed,
+and you'll end up reading ``Makefiles`` that others write anyway, so it's time
 to learn why Jim bothered with Rake in the first place.
 
 Let's start off by running it::
@@ -34,20 +34,20 @@ then a bunch of shell commands we want to run. Try running make again now::
   hello world
 
 Make will spit out all the commands it runs, so we see the echo and the result
-of the echo. Let's tell `make` how to build our project. Since we're going to
-build FizzBuzz in the next example, let's call it `fizzbuzz.rs`::
+of the echo. Let's tell ``make`` how to build our project. Since we're going to
+build FizzBuzz in the next example, let's call it ``fizzbuzz.rs``::
 
   defult:
     rustc fizzbuzz.rs
 
-If we run `make`, we get this output::
+If we run ``make``, we get this output::
 
   $ make
   rustc fizzbuzz.rs
   error: error opening fizzbuzz.rs
   make: *** [defult] Error 101
 
-Let's make `fizzbuzz.rs` with the following contents::
+Let's make ``fizzbuzz.rs`` with the following contents::
 
   extern mod std;
 

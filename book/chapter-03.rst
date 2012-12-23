@@ -5,8 +5,8 @@ Writing Your First Rust Program
 
 Okay! Let's get down to it: in order to call yourself an "X Programmer," you
 must write "Hello, world" in X. So let's do it. Open up a text file: I'll use
-`vim` because I'm that kind of guy, but use whatever you want. Rust programs
-end in `.rs`:
+``vim`` because I'm that kind of guy, but use whatever you want. Rust programs
+end in ``.rs``:
 
 ::
 
@@ -22,7 +22,7 @@ Put this in it::
   }
 
 
-And compile it with `rustc`::
+And compile it with ``rustc``::
 
   $ rustc hello.rs
 
@@ -34,7 +34,7 @@ semicolons, the curlies, and the parentheis. Errors look like this::
   hello.rs:3 fn main() {
              ^~
 
-This happened when I left off the semicolon after the `use` statement above.
+This happened when I left off the semicolon after the ``use`` statement above.
 To run your program, do the Usual UNIX Thing::
 
   $ ./hello
