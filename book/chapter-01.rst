@@ -6,9 +6,9 @@ Why care about Rust?
 You already write software in Ruby. It pays your bills. You enjoy it. Why
 should you care about Rust?
 
-> A programming language that doesn't teach you something isn't worth learning.
-> 
-> - Someone
+Someone once said::
+
+  > A programming language that doesn't teach you something isn't worth learning.
 
 Let's think about Ruby for a minute: what's its biggest weakness? For me, it's
 these things:
@@ -47,38 +47,38 @@ teach us a lot.
 
 Here's "Hello World" in Rust:
 
-```
-fn main() {
-    io::println("hello?");
-}
-```
+::
+
+  fn main() {
+      io::println("hello?");
+  }
 
 Here's a parallell "Hello World" in Rust:
 
-```
-use task::spawn;
+::
 
-fn main() {
+  use task::spawn;
 
-    for 10.times {
-        do spawn {
-          let greeting_message = "Hello?";
-          io::println(greeting_message);
-        }
-    }
-}
-```
+  fn main() {
+
+      for 10.times {
+          do spawn {
+            let greeting_message = "Hello?";
+            io::println(greeting_message);
+          }
+      }
+  }
 
 Here's a rough port to Ruby:
 
-```
-10.times do
-  Thread.new do
-    greeting_message = "Hello?"
-    puts greeting_message
+::
+
+  10.times do
+    Thread.new do
+      greeting_message = "Hello?"
+      puts greeting_message
+    end
   end
-end
-```
 
 That's it. Note the stuff that's *similar* to Ruby:
 
@@ -96,13 +96,13 @@ Here's some stuff that's _different_:
 
 Oh, and:
 
-```
-$ time ./hello  
-./hello  0.01s user 0.01s system 91% cpu 0.014 total
+::
 
-$ time ruby hello.rb
-ruby hello.rb  0.02s user 0.01s system 95% cpu 0.026 total
-```
+  $ time ./hello  
+  ./hello  0.01s user 0.01s system 91% cpu 0.014 total
+
+  $ time ruby hello.rb
+  ruby hello.rb  0.02s user 0.01s system 95% cpu 0.026 total
 
 Twice as fast. Yay irrelevant microbenchmarks!
 

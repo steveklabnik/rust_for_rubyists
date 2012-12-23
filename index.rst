@@ -100,7 +100,6 @@ Writing The ABC
 Once you have this you need some ABC to work with, and the ABC_ site
 hace plenty to play with.  Here's one simple one I grabbed::
 
-{{ d['sample.abc|ss'] }}
 
 You can't see the Dexy command I used, but just view the source_ of this
 document and you can check what I did.
