@@ -560,7 +560,9 @@ is::
 
 Remember that the tilde has an effect that we haven't talked about yet. I added
 it because running without it gives an error message that implies you need it:
-give it a shot. Anyway, we give either the string
+give it a shot. Because our variables are typed, we have to coerece the number
+in the ``else`` case to a string. In Ruby we'd just let it be a ``Fixnum`` if
+it was a number. Oh well.
 
 Because the ``if`` returns a value, we could also do something like this::
 
