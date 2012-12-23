@@ -4,3 +4,4 @@ output-long
 artifacts
 logs
 *.pyc
+.DS_Store
