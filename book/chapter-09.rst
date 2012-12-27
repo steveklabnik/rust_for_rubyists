@@ -225,5 +225,5 @@ Let's build monsters!
 Before we build some monsters, let's look at the right way to implement them.
 We can do this with Traits, but that's the next chapter.
 
-.. _DwemthyArray: http://mislav.uniqpath.com/poignant-guide/dwemthy/
+.. _DwemthysArray: http://mislav.uniqpath.com/poignant-guide/dwemthy/
 
