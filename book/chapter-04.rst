@@ -5,7 +5,7 @@ Testing
 
 Rubyists love testing, so before we go any farther, let's talk about testing.
 In Rust, there is a unit testing framework built in, and it's pretty simple.
-Let's write some very simple code and tests to excersize it.
+Let's write some very simple code and tests to exercise it.
 
 In Rust, you annotate test methods like such::
 
@@ -79,7 +79,7 @@ Awesome. We can give it a failure message::
 Note the tilde before the string. We'll talk about that later. For now, let's
 focus on the test. This will output something like this::
 
-  $ ./testing              
+  $ ./testing
 
   running 1 test
   rust: task failed at 'This test has failed because of <%= @reason %>', testing.rs:5

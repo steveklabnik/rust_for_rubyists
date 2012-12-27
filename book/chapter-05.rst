@@ -20,7 +20,7 @@ Let's start off by running it::
 
   $ make
   make: *** No targets specified and no makefile found.  Stop.
-   
+
 Yep. Great error. Make can't find a Makefile. So let's make one::
 
   default:
@@ -71,7 +71,7 @@ tests. We can do this::
 
 And build it both ways::
 
-  $ make     
+  $ make
   rustc fizzbuzz.rs
   warning: no debug symbols in executable (-arch x86_64)
 
@@ -97,7 +97,6 @@ Now we can run it::
   warning: no debug symbols in executable (-arch x86_64)
   ./fizzbuzz
 
-  steve at thoth in ~/tmp
   $ make test
   rustc fizzbuzz.rs --test
   warning: no debug symbols in executable (-arch x86_64)
@@ -133,7 +132,6 @@ run. Awesome. Let's run it::
   warning: no debug symbols in executable (-arch x86_64)
   ./fizzbuzz
 
-  steve at thoth in ~/tmp
   $ make test
   rustc fizzbuzz.rs --test
   warning: no debug symbols in executable (-arch x86_64)
@@ -147,7 +145,7 @@ Same thing. It worked. Cool.
 
 You can do a lot more crazy stuff with Make, and we can make it only do partial
 compilation, etc. I don't want to teach you everything about Make, this is a
-book about Rust. So we'll just leave it like this for now. This recipie will
+book about Rust. So we'll just leave it like this for now. This recipe will
 serve you well until you get to more than one file.
 
 Next up: TDD-ing Fizzbuzz.

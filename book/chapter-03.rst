@@ -27,7 +27,7 @@ And compile it with ``rustc``::
   $ rustc hello.rs
 
 It should compile without error. If you get one, double check that you have the
-semicolons, the curlies, and the parentheis. Errors look like this::
+semicolons, the curlies, and the parentheses. Errors look like this::
 
   $ rustc hello.rs
   hello.rs:3:0: 3:2 error: expected `;` but found `fn`

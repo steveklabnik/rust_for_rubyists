@@ -19,7 +19,7 @@ these things:
 - Lots of mutable state
 - Only vaguely functional
 - Speed
-- Complexity. (Smalltalks' semantics fit on an index card)
+- Complexity. (Smalltalk's semantics fit on an index card)
 - Documentation
 - nil
 
@@ -42,7 +42,7 @@ I think that that language is Rust.
 
 Now: Rust is not perfect, by far. Its documentation is poor. It is certainly
 _very_ complex. Fighting with a compiler can be frustrating. But the point is
-to _learn_. And using a language that's very familliar, yet very different, can
+to _learn_. And using a language that's very familiar, yet very different, can
 teach us a lot.
 
 Here's "Hello World" in Rust:
@@ -53,7 +53,7 @@ Here's "Hello World" in Rust:
       io::println("hello?");
   }
 
-Here's a parallell "Hello World" in Rust:
+Here's a parallel "Hello World" in Rust:
 
 ::
 
@@ -98,7 +98,7 @@ Oh, and:
 
 ::
 
-  $ time ./hello  
+  $ time ./hello
   ./hello  0.01s user 0.01s system 91% cpu 0.014 total
 
   $ time ruby hello.rb
@@ -108,6 +108,6 @@ Twice as fast. Yay irrelevant microbenchmarks!
 
 Anyway, I hope you get my point: There's lots of things about Rust that make
 it syntactically vaguely similar enough to Ruby that you can feel at home, at
-least at first. And its strengths are some of Rubys' greatest weaknesses.
+least at first. And its strengths are some of Ruby's greatest weaknesses.
 That's why I think you can learn a lot from playing with Rust, even if you
 don't do it as your day job.

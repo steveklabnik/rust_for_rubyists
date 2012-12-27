@@ -12,7 +12,7 @@ anymore, which makes me really uncomfortable.
 Tasks
 -----
 
-The fundamenatal unit of computation in Rust is called a 'task.' Tasks are
+The fundamental unit of computation in Rust is called a 'task.' Tasks are
 similar to 'lightweight' threads in Erlang or Go. Rust tasks are entirely
 isolated from one another, though. They're scheduled on an M:N basis to OS
 threads, so they're not quite green threads exactly, either: they'll be
@@ -33,10 +33,10 @@ You may remember this from earlier. This loops 100 times, printing "Hello." Now
 let's make it roflscale with tasks::
 
   use task::spawn;
-  
+
   fn main() {
     for 100.times {
-      do spawn { 
+      do spawn {
         io::println("Hello");
       }
     }
@@ -68,9 +68,9 @@ Pipes, Channels, and Ports
 --------------------------
 
 If our tasks are 100% isolated, they wouldn't be that useful: we need some
-kind of communcation between tasks in order to get back useful results. We can
+kind of communication between tasks in order to get back useful results. We can
 communicate between tasks with pipes. Pipes have two ends: a channel that sends
-info down the pipe, and a port that recieves info. Here's an example of a
+info down the pipe, and a port that receives info. Here's an example of a
 task that sends us back a 10::
 
   use task::spawn;
@@ -90,9 +90,9 @@ task that sends us back a 10::
 
 You can imagine that instead of sending 10, we might be doing some sort of
 complex calculation. It could be doing that work in the background while we
-did more imporant things.
+did more important things.
 
-What about that ``move chan`` bit? We want to give our task ownership of the 
+What about that ``move chan`` bit? We want to give our task ownership of the
 ``chan`` variable, so we tell Rust that we have no interest in doing anything
 with it anymore. That's how Rust is able to move the task around if it needs
 to: even though we defined ``chan`` here, we relinquished ownership. We'll
@@ -213,7 +213,7 @@ talk about them right now. This would give you patterns like "Spin up a
 management task that is bidirectionally linked to main, but have it spin up
 children who are unlinked." Neato.
 
-Rust tasks are so lightweight that you can concievably spin up a ton of tasks,
+Rust tasks are so lightweight that you can conceivably spin up a ton of tasks,
 maybe even one per entity in your system. Servo_ is a prototype browser
 rendering engine from Mozilla, and it spins up a **ton** of tasks. Parallel
 rendering, parsing, downloading, everything.

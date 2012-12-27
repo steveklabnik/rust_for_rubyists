@@ -5,7 +5,7 @@ Boxes, Pointers, and ownership, oh my!
 
 Since you program in Ruby, you probably don't know about pointers, nor care.
 If you're going to work in a language like Rust, though, you gotta know about
-them. So let's talk about the concept real quick, then dicuss how Rust handles
+them. So let's talk about the concept real quick, then discuss how Rust handles
 pointers.
 
 Pointer recap
@@ -41,14 +41,14 @@ thing that ``pi`` points at by using the ``*``::
 
   printf("The value of the thing pi points to is: %d\n", *pi);
 
-The ``*`` de-refereneces the pointer, and gives us the value. Simple!
+The ``*`` dereferences the pointer, and gives us the value. Simple!
 
 Here's the issue: you have no idea if the data that is being pointed to is
 good. What do you think this code does?::
 
   int *pi;
   printf("The value of the thing pi points to is: %d\n", *pi);
-  
+
 Who knows!?!? Probably something bad, but **certainly** not something expected.
 Rust introduces three different kinds of pointers, 'managed,' 'owned,' and
 'borrowed.' They indicate different levels of access, so that you know that
@@ -89,7 +89,7 @@ yourself. This is indicated with a ``~``::
     let x = ~10;
     io::println(int::str(*x));
   }
-  
+
 You can't make another pointer to this value::
 
   fn main() {

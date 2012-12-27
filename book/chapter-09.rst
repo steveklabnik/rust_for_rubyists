@@ -72,7 +72,7 @@ Simple! What about this part?::
 
   fmt!("The monster attacks for %d damage.", self.attack)
 
-The bang on the end of fmt indicates that it's a 'synatax extension.' I don't
+The bang on the end of fmt indicates that it's a 'syntax extension.' I don't
 know what that means yet. It's basically just another function as far as I can
 tell. We'll look into it later. But it formats just like ``sprintf`` does: put
 some sort of ``%d`` into the string and pass it a digit, and you get a number
@@ -146,7 +146,7 @@ as you'd expect.
 Enums
 -----
 
-What if we want to define a few different types of things? In other langauges,
+What if we want to define a few different types of things? In other languages,
 we'd use inheritance. In Rust, it seems like Enums are a better idea. Here's
 an enum::
 
@@ -173,7 +173,7 @@ an enum::
 
 Okay, few new things here: We can see that there's some duplication here.
 Obviously this isn't the best way to do it, but I wanted to try this out before
-we got to the better implemenation. We make an ``Enum`` that defines two
+we got to the better implementation. We make an ``Enum`` that defines two
 different things, and then we use this ``match`` expression to decompose
 things.
 
@@ -215,7 +215,7 @@ can destruct it::
   match p {
     Point(x, y) => io::println(fmt!("X: %d, Y: %d", x, y))
   }
-  
+
 We name the two fields of a ``Point`` ``x`` and ``y``, and those names are
 valid within the match expression.
 
@@ -226,4 +226,3 @@ Before we build some monsters, let's look at the right way to implement them.
 We can do this with Traits, but that's the next chapter.
 
 .. _DwemthysArray: http://mislav.uniqpath.com/poignant-guide/dwemthy/
-

@@ -21,8 +21,8 @@ lines to this:
 
 ::
 
-  url 'http://dl.rust-lang.org/dist/rust-0.5.tar.gz'                            
-  sha256 'd326d22707f0562d669c11efbc33ae812ddbf76ab78f07087fc5beb095a8928a'     
+  url 'http://dl.rust-lang.org/dist/rust-0.5.tar.gz'
+  sha256 'd326d22707f0562d669c11efbc33ae812ddbf76ab78f07087fc5beb095a8928a'
 
 Then, install it:
 
@@ -47,7 +47,7 @@ shortly.
 
 I'll try to keep these instructions up to date, but it's easy enough to find
 and install the latest version; just change these two lines. The version I show
-you above is the latst version I tested the code on; The language has settled
+you above is the latest version I tested the code on; The language has settled
 down by now, but Rust 0.6.x is expected to have a more final syntax, so some
 things will change.
 

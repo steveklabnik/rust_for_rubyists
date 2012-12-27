@@ -10,7 +10,7 @@ If you haven't done the previous chapter's worth of setup, please copy the
 Makefile we built into your current directory: we'll be assuming you've set
 that up in this chapter.
 
-If you're not famillar, FizzBuzz is a simple programming problem::
+If you're not familiar, FizzBuzz is a simple programming problem::
 
   > "Write a program that prints the numbers from 1 to 100. But for multiples of three print “Fizz” instead of the number and for the multiples of five print “Buzz”. For numbers which are multiples of both three and five print “FizzBuzz”."
 
@@ -245,7 +245,7 @@ get::
   fizzbuzz.rs:41 }
   error: aborting due to 3 previous errors
   make: *** [build-test] Error 101
- 
+
 Basically, ending an expression in Rust with a semicolon ignores the value of
 that expression. This is kinda weird. I don't know how I feel about it. But it
 is something you should know about.
@@ -281,7 +281,7 @@ the numbers from one to 100. It's easy!
       io::println("num");
     }
   }
-  
+
 Step one: print _something_ 100 times. If you run this with ``make`` (not ``make
 test``!) you should see ``num`` printed 100 times. Note that our tests didn't
 actually run. Not only are they not run, they're actually not even in
@@ -290,7 +290,7 @@ the executable::
   $ rustc fizzbuzz.rs --test
   warning: no debug symbols in executable (-arch x86_64)
 
-  $ nm fizzbuzz | grep test 
+  $ nm fizzbuzz | grep test
   00000001000014a0 t __ZN22test_is_five_with_five16_9f1419ad40c33243_00E
   0000000100001170 t __ZN24test_is_three_with_three16_9f1419ad40c33243_00E
   0000000100001340 t __ZN26test_is_five_with_not_five16_9f1419ad40c33243_00E
@@ -307,13 +307,12 @@ the executable::
   0000000100003210 t __ZN6__test5tests4anon12expr_fn_2917E
   0000000100003240 t __ZN6__test5tests4anon12expr_fn_2921E
 
-  $ rustc fizzbuzz.rs       
+  $ rustc fizzbuzz.rs
   warning: no debug symbols in executable (-arch x86_64)
 
-  steve at thoth in ~/tmp
   $ nm fizzbuzz | grep test
 
-  $ 
+  $
 
 Crazy, huh? Rust is smart.
 
@@ -336,7 +335,7 @@ without ``for``::
 
 Note the extra parens. Typing out ``});`` really sucks, and having the ``({`` is
 also awkward. Just like Ruby, Rust has special syntax when you're passing a
-single closure to a method. Awesome. And it shouldn't suprise Rubyists that you
+single closure to a method. Awesome. And it shouldn't surprise Rubyists that you
 can pass a closure (read: block) to a method, and have it loop. Let's print
 out the numbers now. First step: we need to get the number of the current
 iteration. Rubyists will do a double take::
@@ -494,7 +493,7 @@ We can shorten this up a bit with this syntax::
 
   fn main() {
     for int::range(0, 100) |num| {
-      let mut answer = 
+      let mut answer =
         if is_fifteen(num){
           "FizzBuzz"
         }
@@ -517,7 +516,7 @@ that this _also_ makes answer immutable, so we can remove the ``mut``::
 
   fn main() {
     for int::range(0, 100) |num| {
-      let answer = 
+      let answer =
         if is_fifteen(num){
           "FizzBuzz"
         }
@@ -541,7 +540,7 @@ is::
 
   fn main() {
     for int::range(0, 100) |num| {
-      let answer = 
+      let answer =
         if is_fifteen(num){
           ~"FizzBuzz"
         }
@@ -560,7 +559,7 @@ is::
 
 Remember that the tilde has an effect that we haven't talked about yet. I added
 it because running without it gives an error message that implies you need it:
-give it a shot. Because our variables are typed, we have to coerece the number
+give it a shot. Because our variables are typed, we have to coerce the number
 in the ``else`` case to a string. In Ruby we'd just let it be a ``Fixnum`` if
 it was a number. Oh well.
 
@@ -577,7 +576,7 @@ Because the ``if`` returns a value, we could also do something like this::
     }
   }
 
-It's more compact, and removes the intermediate variable alltogether. 
+It's more compact, and removes the intermediate variable all together.
 
 We can do one other thing too: this whole ``if/fail`` thing seems too complex.
 Why do we have to write if over and over and over again? Meet ``assert``::
@@ -647,4 +646,3 @@ method, but we're just learning. ;) Here's my full final code::
       );
     }
   }
-
