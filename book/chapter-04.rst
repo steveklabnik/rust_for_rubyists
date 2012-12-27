@@ -47,7 +47,7 @@ Bam! Now let's make it fail::
 
   #[test]
   fn this_tests_code() {
-    io::println("")
+    fail();
   }
 
 And the output::
