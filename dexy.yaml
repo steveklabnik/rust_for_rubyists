@@ -41,6 +41,13 @@ buy.rst|jinja|rst2html:
     - rst2html:
         { clargs: "--template=buy_template.html" }
 
+error.rst|jinja|rst2html:
+    - code
+    - songs
+    - assets
+    - rst2html:
+        { clargs: "--template=error_template.html" }
+
 book/*.rst|jinja|rst2html|calibre:
     - code
     - songs
