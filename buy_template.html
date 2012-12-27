@@ -8,7 +8,7 @@
     <meta name="author" content="Steve Klabnik">
 
     <!-- Le styles -->
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -46,7 +46,7 @@
         margin-top: 28px;
       }
     </style>
-    <link href="../css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -67,28 +67,45 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li><a href="../index.html">Home</a></li>
-          <li><a href="../buy.html">Buy a copy</a></li>
-          <li class="active"><a href="index.html">Read Online</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li class="active"><a href="#">Buy a copy</a></li>
+          <li><a href="book/index.html">Read Online</a></li>
         </ul>
         <h3 class="muted">Rust for Rubyists</h3>
       </div>
 
       <hr>
 
-      <div class="row-fluid marketing">
-        <div class="span16">
-          %(body_pre_docinfo)s
-        </div>
-        <div class="span16">
-          %(body)s
+      <div class="row-fluid">
+        <div class="span12">
+          <h1>Buy a copy of Rust for Rubyists</h1>
+          <p>My student loan creditors thank you.</p>
+          <p>You have three options:</p>
+          <ul>
+            <li><a href="https://rust-for-rubyists.dpdcart.com/cart/buy?product_id=52113&product_price_id=52910&quantity=1&gateway=creditcard">Buy a PDF for $3.</a></li>
+            <li><a href="https://rust-for-rubyists.dpdcart.com/cart/buy?product_id=52114&product_price_id=52911">Buy a MOBI for $3.</a></li>
+            <li><a href="https://rust-for-rubyists.dpdcart.com/cart/buy?product_id=52115&product_price_id=52912&quantity=1&gateway=creditcard">Buy both for $5.</a></li>
+          </ul>
+
+          <hr />
+          <h4>What do I get?</h4>
+          <p>You get a .pdf, .mobi, or both. The same content that <a href="book/index.html">you can read online</a>, if you'd like a preview.</p>
+
+          <h4>What about updates?</h4>
+          <p>When I update the book, you'll get an email with a new download link that will let you grab the new verison of the book.</p>
+
+          <h4>What if I don't like it?</h4>
+          <p>Well, you should have read it online. :p More seriously, I'll give you your money back; it's not worth arguing over $5. Just trying to pay some bills here.</p>
+
+          <h4>Why not contribute to the official docs?</h4>
+          <p>I plan to. Anything that's useful here will be contributed back when I can. I &lt;3 Open Source.</p>
         </div>
       </div>
 
       <hr>
 
       <div class="footer">
-        <p>&copy; Steve Klabnik 2012</p>
+        <p>&copy; <a href="http://steveklabnik.com/">Steve Klabnik</a> 2012</p>
       </div>
 
     </div> <!-- /container -->
@@ -97,7 +114,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
   </body>
 </html>
