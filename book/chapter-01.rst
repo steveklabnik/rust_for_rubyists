@@ -6,9 +6,9 @@ Why care about Rust?
 You already write software in Ruby. It pays your bills. You enjoy it. Why
 should you care about Rust?
 
-Someone once said:
+Alan Perlis once said::
 
-    A programming language that doesn't teach you something isn't worth learning.
+  A language that doesn't affect the way you think about programming is not worth knowing.
 
 Let's think about Ruby for a minute: what's its biggest weakness? For me, it's
 these things:
