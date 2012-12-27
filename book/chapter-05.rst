@@ -23,7 +23,7 @@ Let's start off by running it::
    
 Yep. Great error. Make can't find a Makefile. So let's make one::
 
-  defult:
+  default:
     echo "hello world"
 
 Yep. We define a target, in this case, 'default,' and then a colon, indent, and
@@ -37,7 +37,7 @@ Make will spit out all the commands it runs, so we see the echo and the result
 of the echo. Let's tell ``make`` how to build our project. Since we're going to
 build FizzBuzz in the next example, let's call it ``fizzbuzz.rs``::
 
-  defult:
+  default:
     rustc fizzbuzz.rs
 
 If we run ``make``, we get this output::
@@ -45,7 +45,7 @@ If we run ``make``, we get this output::
   $ make
   rustc fizzbuzz.rs
   error: error opening fizzbuzz.rs
-  make: *** [defult] Error 101
+  make: *** [default] Error 101
 
 Let's make ``fizzbuzz.rs`` with the following contents::
 
@@ -63,7 +63,7 @@ And run make::
 Awesome! It worked. This will build our project. Now we want to build it with
 tests. We can do this::
 
-  defult:
+  default:
     rustc fizzbuzz.rs
 
   test:
@@ -82,7 +82,7 @@ And build it both ways::
 Bam! So now we're compiling, but we're not running. Let's add the execution
 into each of our tasks::
 
-  defult:
+  default:
     rustc fizzbuzz.rs
     ./fizzbuzz
 
@@ -110,7 +110,7 @@ Now we can run it::
 This is cool, but what about duplication? We had to repeat that line. We can
 fix this by making tasks depend on other tasks. Check this out::
 
-  defult: build run
+  default: build run
 
   test: build-test run
 
