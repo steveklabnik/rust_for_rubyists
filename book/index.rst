@@ -1,49 +1,31 @@
-The Orkestrix Manual
-********************
+Rust for Rubyists
+*****************
 
-This is a simple demo of doing a book that has three output formats:
+Currently, **Rust for Rubyists** is nine chapters long. More to come in the
+future.
 
-1. A single PDF_ with all chapters in it.
-2. A single HTML_ page with all chapters in it.
-3. This page with each chapter separate.
-
-Current Structure Of A Book
----------------------------
-
-If you grab the github_ repo you'll see that there's two basic
-levels of doing a "website that has a book":
-
-1. The root of the project which is just the website, matching up with orkestrix.org.  This has all the javascript and stylesheets and its own template.
-2. A ``book/`` directory with the book in it.
-
-In the ``book/`` directory you have:
-
-* ``book.rst`` -- This encapsulates the full PDF_ or HTML_ of all chapters and you manually import each chapter you need in the order you want.
-* ``index.rst`` -- That's this page, and it lets you do links to each chapter as individual files.
-* ``chapter-*.rst`` -- Each chapter that you're writing.  These actually could be called anything with .rst, but to keep it sane I went with ``chapter-*.rst``.  This way it doesn't conflict with ``book.rst`` or ``index.rst``.
-* ``template.html`` -- A separate template so you can style the book differently than the rest of the site.  Usually books have different navigation and need to be wider so they need their own template.
-
-What ``book.rst`` Contains
---------------------------
-
-To setup the ``book.rst`` you just use a simple Jinja include of the
-chapters you want in the order you want using::
-
-    {% raw %}
-    {% include "book/chapter-01.rst" %}
-    {% endraw %}
-
-These can be called anything you want, so it could be ``chapter-the-cool-stuff.rst``, and if you don't like starting it with ``chapter`` you can just change the ``dexy.yaml`` to use a different name.
-
-With that the rST system will produce the table of contents for you and you're done.
+You can also check out the `all in one version`_ :.
 
 Table Of Contents
 -----------------
 
-* `Chapter 1`_ A Sample Chapter
+* `Chapter 1`_ : Why care about Rust?
+* `Chapter 2`_ : Installing Rust
+* `Chapter 3`_ : Writing Your First Rust Program
+* `Chapter 4`_ : Testing
+* `Chapter 5`_ : Build Toolchain
+* `Chapter 6`_ : FizzBuzz
+* `Chapter 7`_ : Tasks in Rust
+* `Chapter 8`_ : Boxes, Pointers, and Ownership
+* `Chapter 9`_ : Structs and Methods
 
 .. _Chapter 1: chapter-01.html
-.. _PDF: book.pdf
-.. _HTML: book.html
-.. _github: http://github.org/zedshaw/orkestrix
-
+.. _Chapter 2: chapter-02.html
+.. _Chapter 3: chapter-03.html
+.. _Chapter 4: chapter-04.html
+.. _Chapter 5: chapter-05.html
+.. _Chapter 6: chapter-06.html
+.. _Chapter 7: chapter-07.html
+.. _Chapter 8: chapter-08.html
+.. _Chapter 9: chapter-09.html
+.. _All in one version: book.html
