@@ -14,7 +14,7 @@ Pointer recap
 When you create a variable, you're really giving a name to a chunk of
 memory somewhere. We'll use C syntax for these examples:
 
-``int i = 5; int j = 6;```
+``int i = 5; int j = 6;``
 
 ======== =====
 location value
@@ -26,7 +26,7 @@ location value
 This is of course slightly simplified. Anyway, we can introduce indirection by
 making a pointer:
 
-``int i = 5; int j = 6; int *pi = &i;```
+``int i = 5; int j = 6; int *pi = &i;``
 
 ======== ========
 location value
