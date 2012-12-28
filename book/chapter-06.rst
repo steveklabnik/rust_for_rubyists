@@ -442,7 +442,7 @@ Anyway, now we have 1 to 3. We need 1 to 100. Typing out all of that would
 suck... what to do? This::
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       io::println(num.to_str());
     }
   }
@@ -455,7 +455,7 @@ sense: We're not doing anything that's negative.
 Now we can put the two together::
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       let mut answer;
       if is_fifteen(num){
         answer = "FizzBuzz";
@@ -492,7 +492,7 @@ called 'region analysis.'
 We can shorten this up a bit with this syntax::
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       let mut answer =
         if is_fifteen(num){
           "FizzBuzz"
@@ -515,7 +515,7 @@ the semicolons again; that lets the expression give its value to ``answer.`` Not
 that this _also_ makes answer immutable, so we can remove the ``mut``::
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       let answer =
         if is_fifteen(num){
           "FizzBuzz"
@@ -539,7 +539,7 @@ Of course, this version gives us lots of empty lines, so what we actually want
 is::
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       let answer =
         if is_fifteen(num){
           ~"FizzBuzz"
@@ -566,7 +566,7 @@ it was a number. Oh well.
 Because the ``if`` returns a value, we could also do something like this::
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       io::println(
         if is_fifteen(num) { ~"FizzBuzz" }
         else if is_three(num) { ~"Fizz" }
@@ -637,7 +637,7 @@ method, but we're just learning. ;) Here's my full final code::
 
 
   fn main() {
-    for int::range(0, 100) |num| {
+    for int::range(1, 101) |num| {
       io::println(
         if is_fifteen(num) { ~"FizzBuzz" }
         else if is_three(num) { ~"Fizz" }
