@@ -50,7 +50,7 @@ Bam! Now let's make it fail::
     fail;
   }
 
-And the output::
+Recompile, and the output should be::
 
   $ ./testing
 
