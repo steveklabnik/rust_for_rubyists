@@ -573,7 +573,7 @@ the monsters and their stats.
 
 I'll wait. It took me a little while to write this: this is the hardest part of
 the book so far. Work through it; it'll be painful. Don't be afraid to ask for
-help. I had to `ask the rust IRC`_ for help once while doing it. They're
+help. I had to ask `the rust IRC`_ for help once while doing it. They're
 friendly, don't worry.
 
 Done? Here's mine::
