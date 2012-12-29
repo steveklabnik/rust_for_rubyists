@@ -7,7 +7,7 @@ Now that we understand a type that's sorta generic, vectors, we can talk about
 how generic functions work. Then, we can use traits to make functions that work
 on generic monsters.
 
-Writing functinos that work with vectors
+Writing functions that work with vectors
 ----------------------------------------
 
 Because you're still getting used to Rust code, let's implement two versions of
