@@ -165,7 +165,15 @@ The default is to run the tests. If the tests pass, run the program:
   ./fizzbuzz
   Hello from Rust!
 
-Let's add a failing test to prove we've got it all::
+Let's add a failing test to prove we've got it all. Edit
+``fizzbuzz.rs`` and add this failing test at the end::
+
+  #[test]
+  fn this_tests_code() {
+      fail ~"We just fail every time :-("
+  }
+
+Now, try our default ``make``::
 
   $ make
   rustc --test fizzbuzz.rs -o test-fizzbuzz
