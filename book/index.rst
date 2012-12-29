@@ -19,6 +19,7 @@ Table Of Contents
 * `Chapter 8`_ : Boxes, Pointers, and Ownership
 * `Chapter 9`_ : Structs and Methods
 * `Chapter 10`_ : Vectors
+* `Chapter 11`_ : Generics and Traits
 
 .. _Chapter 1: chapter-01.html
 .. _Chapter 2: chapter-02.html
@@ -30,4 +31,6 @@ Table Of Contents
 .. _Chapter 8: chapter-08.html
 .. _Chapter 9: chapter-09.html
 .. _Chapter 10: chapter-10.html
+.. _Chapter 11: chapter-11.html
+
 .. _All in one version: book.html
