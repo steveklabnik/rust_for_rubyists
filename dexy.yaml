@@ -56,6 +56,15 @@ book/*.rst|jinja|rst2html|calibre:
     - rst2html:
         { clargs: "--template=template.html" }
 
+book/*.rst|jinja|rst2html|calibre|-epub:
+    - code
+    - songs
+    - assets
+    - tex-assets
+    - calibre: { "ext" : ".epub" }
+    - rst2html:
+        { clargs: "--template=template.html" }
+
 book/*.rst|jinja|rst2html:
     - code
     - songs
