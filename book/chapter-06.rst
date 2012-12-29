@@ -235,15 +235,7 @@ get::
   fizzbuzz.rs:3 fn is_three(num: int) -> bool {
   fizzbuzz.rs:4   num % 3 == 0;
   fizzbuzz.rs:5 }
-  fizzbuzz.rs:21:0: 23:1 error: not all control paths return a value
-  fizzbuzz.rs:21 fn is_five(num: int) -> bool {
-  fizzbuzz.rs:22   num % 5 == 0;
-  fizzbuzz.rs:23 }
-  fizzbuzz.rs:39:0: 41:1 error: not all control paths return a value
-  fizzbuzz.rs:39 fn is_fifteen(num: int) -> bool {
-  fizzbuzz.rs:40   num % 15 == 0;
-  fizzbuzz.rs:41 }
-  error: aborting due to 3 previous errors
+  error: aborting due to 1 previous error
   make: *** [build-test] Error 101
 
 Basically, ending an expression in Rust with a semicolon ignores the value of
