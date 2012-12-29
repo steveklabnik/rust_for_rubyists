@@ -132,10 +132,28 @@ run. Awesome. Let's run it::
   warning: no debug symbols in executable (-arch x86_64)
   ./fizzbuzz
 
-  $ make test
-  rustc fizzbuzz.rs --test
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
+Let's add a failing test to prove we've got it all. Edit
+``fizzbuzz.rs`` and add this failing test at the end::
+
+  #[test]
+  fn this_tests_code() {
+      fail ~"We just fail every time :-("
+  }
+
+Now, try our default ``make``::
+
+  $ make
+  rustc --test fizzbuzz.rs -o test-fizzbuzz
+  ./test-fizzbuzz
+
+  running 1 test
+  rust: task failed at 'We just fail every time :-(', fizzbuzz.rs:9
+  test this_tests_code ... FAILED
+
+  failures:
+      this_tests_code
+
+  result: FAILED. 0 passed; 1 failed; 0 ignored
 
   running 0 tests
 
