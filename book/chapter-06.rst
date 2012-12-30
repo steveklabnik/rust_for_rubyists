@@ -435,7 +435,7 @@ suck... what to do? This::
 
   fn main() {
     for int::range(1, 101) |num| {
-      io::println(num.to_str());
+      io::println(int::str(num));
     }
   }
 
