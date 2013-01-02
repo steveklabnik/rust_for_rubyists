@@ -274,7 +274,7 @@ the numbers from one to 100. It's easy!
     }
   }
 
-Step one: print _something_ 100 times. If you run this with ``make`` (not ``make
+Step one: print **something** 100 times. If you run this with ``make`` (not ``make
 test``!) you should see ``num`` printed 100 times. Note that our tests didn't
 actually run. Not only are they not run, they're actually not even in
 the executable::
@@ -338,7 +338,7 @@ iteration. Rubyists will do a double take::
     };
   }
 
-Almost the same syntax, but with the pipes _outside_ of the curlies. But, if you
+Almost the same syntax, but with the pipes *outside* of the curlies. But, if you
 try to run this, you'll get an error::
 
   $ make
@@ -415,7 +415,7 @@ compile and give you output::
 Bam! Whew. We had to fight with the compiler a bit, and the errors weren't
 great, but that wasn't too bad.
 
-What I _will_ tell you is that this took me _forever_ to figure out. The
+What I *will* tell you is that this took me *forever* to figure out. The
 documentation for ``each`` says this::
 
   Method each

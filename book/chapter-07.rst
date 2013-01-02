@@ -155,7 +155,7 @@ in the background, we can send it bunches of values::
 Pretty simple. Our task is always waiting for work. If you run this, you'll get
 some weird output at the end::
 
-  $ make                                                                    ✘
+  $ make
   rustc fizzbuzz.rs
   warning: no debug symbols in executable (-arch x86_64)
   ./fizzbuzz
