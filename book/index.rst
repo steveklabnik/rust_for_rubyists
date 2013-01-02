@@ -20,6 +20,7 @@ Table Of Contents
 * `Chapter 9`_ : Structs and Methods
 * `Chapter 10`_ : Vectors
 * `Chapter 11`_ : Generics and Traits
+* `Chapter 12`_ : Standard Input
 
 .. _Chapter 1: chapter-01.html
 .. _Chapter 2: chapter-02.html
@@ -32,5 +33,6 @@ Table Of Contents
 .. _Chapter 9: chapter-09.html
 .. _Chapter 10: chapter-10.html
 .. _Chapter 11: chapter-11.html
+.. _Chapter 12: chapter-12.html
 
 .. _All in one version: book.html
