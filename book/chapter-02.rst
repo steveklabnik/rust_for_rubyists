@@ -3,9 +3,12 @@
 Installing Rust
 ===============
 
-Most Rubyists use OSX, and I haven't personally installed Rust on other
-platforms yet, so I'm just covering OSX for now. I'll add Windows and Linux
+Most Rubyists use OS X, and I haven't personally installed Rust on other
+platforms yet, so I'm just covering OS X for now. I'll add Windows and Linux
 instructions once I've tried them out myself.
+
+Mac OS X
+--------
 
 The easiest way to get Rust going is Homebrew, which you probably already use.
 There's one tricky bit, though: Their Rust is out of date, which is acceptable
@@ -30,8 +33,13 @@ Then, install it:
 
   $ brew install rust
 
-If you don't use Homebrew, install it. Seriously. But if you **MUST** compile
-Rust yourself, it does the Standard Unix Thing:
+If you don't use Homebrew, install it. Seriously.
+
+
+Linux
+-----
+
+Rust does the Standard Unix Thing.
 
 ::
 
@@ -41,6 +49,12 @@ Rust yourself, it does the Standard Unix Thing:
   $ ./configure
   $ make
   $ sudo make install
+
+Most package managers I've checked out either have no package or a really old
+package, so you'll probably want to just install from source.
+
+Future Proofing
+---------------
 
 The 0.5 release of Rust has broken the Rust REPL, so a 0.5.1 is expected
 shortly.
