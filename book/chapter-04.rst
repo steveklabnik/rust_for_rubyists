@@ -76,6 +76,8 @@ Awesome. We can give it a failure message::
     fail ~"This test has failed because of <%= @reason %>";
   }
 
+(We're not doing anything with ERB here, I'm just `making a joke`_.)
+
 Note the tilde before the string. We'll talk about that later. For now, let's
 focus on the test. This will output something like this::
 
@@ -100,3 +102,5 @@ Super simple. That's all you need to know to get started. But before we build
 our first 'real' Rust app with tests, we should deal with this whole
 compilation bit. It's really annoying to keep typing two commands just to run
 things. Let's build a bit of infrastructure first.
+
+.. _making a joke: http://www.slate.com/blogs/future_tense/2012/07/26/twitter_down_error_message_says_twitter_is_down_for_reason_will_be_back_up_in_deadline_.html
