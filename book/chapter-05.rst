@@ -23,14 +23,14 @@ Let's start off by running it::
 
 Yep. Great error. We didn't tell ``make`` what we wanted ("No targets") and
 there's no Makefile to provide a default target. We want ``fizzbuzz``.
-Let's ask make for ``fizzbuzz``. Does make know what to do?
+Let's ask make for ``fizzbuzz``. Does make know what to do?::
 
   $ make fizzbuzz
   make: *** No rule to make target `fizzbuzz'.  Stop.
 
 We've been mean to make. We haven't even given it a source file to
 work with. Let's play nice for just a moment and give it something old
-and familiar, a C program.
+and familiar, a C program.::
 
   $ echo 'main() {}' > fizzbuzz.c
   $ make fizzbuzz
@@ -55,28 +55,28 @@ and the compiled program::
   make: *** No rule to make target `fizzbuzz'.  Stop.
 
 Hmm, we've been here before. Make does not know about Rust programs.
-We need to give it a rule. Create ``Makefile`` with two lines in it:
+We need to give it a rule. Create ``Makefile`` with two lines in it::
 
   fizzbuzz: fizzbuzz.rs
-	rustc fizzbuzz.rs
+  rustc fizzbuzz.rs
 
-Does it work?
+Does it work?::
 
   $ make fizzbuzz
   rustc fizzbuzz.rs
 
 Cool! We're, um, back where we started. We can compile a Rust program.
 Boring. Let's run it, too. Add two more lines at the top of
-``Makefile`` like this:
+``Makefile`` like this::
 
   run: fizzbuzz
-	./fizzbuzz
+  ./fizzbuzz
 
   fizzbuzz: fizzbuzz.rs
-	rustc fizzbuzz.rs
+  rustc fizzbuzz.rs
 
 We've added a rule ``run`` that depends on ``fizzbuzz``. Also, the
-first rule in ``Makefile`` is the default.
+first rule in ``Makefile`` is the default.::
 
   $ make
   ./fizzbuzz
@@ -93,14 +93,14 @@ this right. Edit fizzbuzz.rs to add a println statement::
       io::println("Hello from Rust!");
   }
 
-What does make do now?
+What does make do now?::
 
   $ make
   rustc fizzbuzz.rs
   ./fizzbuzz
   Hello from Rust!
 
-Compile and run! Try it again?
+Compile and run! Try it again?::
 
   $ make
   ./fizzbuzz
@@ -117,7 +117,7 @@ build, like this::
   test-fizzbuzz: fizzbuzz.rs
 	rustc --test fizzbuzz.rs -o test-fizzbuzz
 
-Does this work?
+Does this work?::
 
   $ make test-fizzbuzz
   rustc --test fizzbuzz.rs -o test-fizzbuzz
@@ -127,7 +127,7 @@ Nice! Now add a "test" rule to run the tests::
   test: test-fizzbuzz
 	./test-fizzbuzz
 
-And give it a go:
+And give it a go::
 
   $ make test
   ./test-fizzbuzz
@@ -153,7 +153,7 @@ the whole ``Makefile``::
   test-fizzbuzz: fizzbuzz.rs
 	rustc --test fizzbuzz.rs -o test-fizzbuzz
 
-The default is to run the tests. If the tests pass, run the program:
+The default is to run the tests. If the tests pass, run the program::
 
   $ make
   ./test-fizzbuzz
