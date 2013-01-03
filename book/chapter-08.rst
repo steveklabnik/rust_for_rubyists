@@ -126,7 +126,7 @@ the move happens. Neat. We can make a copy::
 This will work, though it will tell us that ``y`` was never used. And they
 point at two different copies of 10, not the same one.
 
-Because you have the one pointer to a owned box, you can send the pointer to
+Because you have the one pointer to an owned box, you can send the pointer to
 another task with ``move``::
 
   use task::spawn;
