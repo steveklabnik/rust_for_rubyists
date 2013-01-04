@@ -27,20 +27,6 @@ code:
     - .rst|idio|pn:
         - idio: { "lexer" : "rst+jinja" }
 
-index.rst|jinja|rst2html:
-    - code
-    - songs
-    - assets
-    - rst2html:
-        { clargs: "--template=template.html" }
-
-buy.rst|jinja|rst2html:
-    - code
-    - songs
-    - assets
-    - rst2html:
-        { clargs: "--template=buy_template.html" }
-
 error.rst|jinja|rst2html:
     - code
     - songs
@@ -86,4 +72,18 @@ book/book.rst|jinja|rst2latex|xetex:
 tex-assets:
     - book/*.tex
     - book/*.sty|jinja
+
+index.rst|jinja|rst2html:
+    - code
+    - songs
+    - assets
+    - rst2html:
+        { clargs: "--template=template.html" }
+
+buy.rst|jinja|rst2html:
+    - code
+    - songs
+    - assets
+    - rst2html:
+        { clargs: "--template=buy_template.html" }
 
