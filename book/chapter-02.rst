@@ -11,30 +11,11 @@ Mac OS X
 --------
 
 The easiest way to get Rust going is Homebrew, which you probably already use.
-There's one tricky bit, though: Their Rust is out of date, which is acceptable
-because a new version of Rust just came out yesterday. It's easy enough to
-modify though:
-
-::
-
-  $ brew edit rust
-
-This will open up the Formula to build Rust. Change the ``url`` and ``sha256``
-lines to this:
-
-::
-
-  url 'http://dl.rust-lang.org/dist/rust-0.5.tar.gz'
-  sha256 'd326d22707f0562d669c11efbc33ae812ddbf76ab78f07087fc5beb095a8928a'
-
-Then, install it:
-
-::
+Just do this::
 
   $ brew install rust
 
 If you don't use Homebrew, install it. Seriously.
-
 
 Linux
 -----
@@ -52,6 +33,12 @@ Rust does the Standard Unix Thing.
 
 Most package managers I've checked out either have no package or a really old
 package, so you'll probably want to just install from source.
+
+Windows
+-------
+
+I have not tried to install Rust on Windows, but I hear it works well. You can
+use the installer_.
 
 Future Proofing
 ---------------
@@ -72,3 +59,5 @@ If you run
   $ rustc
 
 and it spits out a bunch of help information, you're good to go with Rust.
+
+.. _installer: http://static.rust-lang.org/dist/rust-0.5-install.exe
