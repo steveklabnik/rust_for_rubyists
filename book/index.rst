@@ -1,7 +1,7 @@
 Rust for Rubyists
 *****************
 
-Currently, **Rust for Rubyists** is ten chapters long. More to come in the
+Currently, **Rust for Rubyists** is twelve chapters long. More to come in the
 future.
 
 You can also check out the `all in one version`_ :.
