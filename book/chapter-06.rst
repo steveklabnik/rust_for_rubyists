@@ -441,8 +441,7 @@ suck... what to do? This::
 
 
 Okay. Range takes two numbers and makes them into a range, then we iterate over
-it. Peachy. The ``uint`` part means we're using an unsigned integer, which makes
-sense: We're not doing anything that's negative.
+it. Peachy. The ``int`` part means we're using an integer.
 
 Now we can put the two together::
 
