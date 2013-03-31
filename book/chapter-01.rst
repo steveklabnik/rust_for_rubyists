@@ -1,4 +1,4 @@
-{% import 'macros/ork.jinja' as ork with context %}
+{% from "dexy.jinja" import code, codes, ext with context %}
 
 Why care about Rust?
 ====================
@@ -47,7 +47,7 @@ teach us a lot.
 
 Here's "Hello World" in Rust:
 
-{{ ork.code('examples/hello_world.rs') }}
+{{ code('examples/hello_world.rs|pyg') }}
 
 Here's a parallel "Hello World" in Rust:
 

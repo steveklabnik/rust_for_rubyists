@@ -5,12 +5,6 @@ assets:
     - .png
 
 code:
-    - .py|idio|l
-    - .py|idio|h
-    - .py|idio|pn:
-        - idio: { 'add-new-files' : True, 'line_numbers' : True }
-    - .py|py:
-        - .py
     - .yaml|idio|l
     - .yaml|idio|h
     - .yaml|idio|pn:
@@ -28,6 +22,9 @@ code:
         - idio: { "lexer" : "rst+jinja" }
     - .rs|rustc
     - .rs|pyg
+    - .rs|pyg|h 
+    - .rs|pyg|l
+    - .rs|pyg|pn
 
 error.rst|jinja|rst2html:
     - code
