@@ -1,4 +1,4 @@
-{% import 'macros/ork.jinja' as ork with context %}
+{% from "dexy.jinja" import code, codes, ext with context %}
 
 Writing Your First Rust Program
 ===============================
@@ -15,11 +15,7 @@ end in ``.rs``:
 
 Put this in it::
 
-  use io::println;
-
-  fn main() {
-      println("Hello, world.");
-  }
+{{ code('examples/hello.rs|pyg') }}
 
 
 And compile it with ``rustc``::
