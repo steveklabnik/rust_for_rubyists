@@ -47,11 +47,7 @@ teach us a lot.
 
 Here's "Hello World" in Rust:
 
-::
-
-  fn main() {
-      io::println("hello?");
-  }
+{{ ork.code('examples/hello_world.rs') }}
 
 Here's a parallel "Hello World" in Rust:
 
