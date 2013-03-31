@@ -5,3 +5,4 @@ artifacts
 logs
 *.pyc
 .DS_Store
+.cache
