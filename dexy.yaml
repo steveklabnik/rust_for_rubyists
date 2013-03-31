@@ -27,6 +27,7 @@ code:
     - .rst|idio|pn:
         - idio: { "lexer" : "rst+jinja" }
     - .rs|rustc
+    - .rs|pyg
 
 error.rst|jinja|rst2html:
     - code
