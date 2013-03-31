@@ -25,6 +25,11 @@ code:
     - .rs|pyg|h 
     - .rs|pyg|l
     - .rs|pyg|pn
+    - .rb|rb
+    - .rb|pyg
+    - .rb|pyg|h 
+    - .rb|pyg|l
+    - .rb|pyg|pn
 
 error.rst|jinja|rst2html:
     - code

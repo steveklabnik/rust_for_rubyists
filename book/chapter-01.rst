@@ -51,30 +51,11 @@ Here's "Hello World" in Rust:
 
 Here's a parallel "Hello World" in Rust:
 
-::
-
-  use task::spawn;
-
-  fn main() {
-
-      for 10.times {
-          do spawn {
-            let greeting_message = "Hello?";
-            io::println(greeting_message);
-          }
-      }
-  }
+{{ code('examples/hello_world_roflscale.rs|pyg') }}
 
 Here's a rough port to Ruby:
 
-::
-
-  10.times do
-    Thread.new do
-      greeting_message = "Hello?"
-      puts greeting_message
-    end
-  end
+{{ code('examples/hello_world.rb|pyg') }}
 
 That's it. Note the stuff that's *similar* to Ruby:
 
