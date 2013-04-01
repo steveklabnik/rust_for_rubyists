@@ -15,7 +15,7 @@ end in ``.rs``:
 
 Put this in it::
 
-{{ code('examples/hello.rs|pyg') }}
+{{ code('examples/03/hello.rs|pyg') }}
 
 
 And compile it with ``rustc``::

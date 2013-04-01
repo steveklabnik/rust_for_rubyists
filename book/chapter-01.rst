@@ -47,15 +47,15 @@ teach us a lot.
 
 Here's "Hello World" in Rust:
 
-{{ code('examples/hello_world.rs|pyg') }}
+{{ code('examples/01/hello_world.rs|pyg') }}
 
 Here's a parallel "Hello World" in Rust:
 
-{{ code('examples/hello_world_roflscale.rs|pyg') }}
+{{ code('examples/01/hello_world_roflscale.rs|pyg') }}
 
 Here's a rough port to Ruby:
 
-{{ code('examples/hello_world.rb|pyg') }}
+{{ code('examples/01/hello_world.rb|pyg') }}
 
 That's it. Note the stuff that's *similar* to Ruby:
 
