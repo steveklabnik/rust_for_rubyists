@@ -1,4 +1,4 @@
-{% import 'macros/ork.jinja' as ork with context %}
+{% from "dexy.jinja" import code, codes, ext with context %}
 
 FizzBuzz
 ========
@@ -19,17 +19,7 @@ printing to standard output, and a host of other simple things.
 
 First, a test. This will go in fizzbuzz.rs::
 
-  extern mod std;
-
-  #[test]
-  fn test_is_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
-  }
-
-  fn main() {
-  }
+{{ code('examples/06/01fizzbuzz.rs|pyg') }}
 
 And run it::
 
@@ -44,21 +34,7 @@ And run it::
 
 This makes sense: We haven't defined any functions yet. Let's define one::
 
-  extern mod std;
-
-  fn is_three(num: int) -> bool {
-    return true;
-  }
-
-  #[test]
-  fn test_is_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
-  }
-
-  fn main() {
-  }
+{{ code('examples/06/02fizzbuzz.rs|pyg') }}
 
 Okay. Here's some new syntax. The ``num: int`` says that we take one argument,
 ``num``, and that it's of an integer type. The ``-> bool`` says that we return a
@@ -95,21 +71,7 @@ Rust is kind enough to give us a warning: we never used the ``num`` argument. We
 then get our failure, "One is not three", because we returned true. Now that
 we have a failing test, let's make it pass::
 
-  extern mod std;
-
-  fn is_three(num: int) -> bool {
-    return false;
-  }
-
-  #[test]
-  fn test_is_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
-  }
-
-  fn main() {
-  }
+{{ code('examples/06/03fizzbuzz.rs|pyg') }}
 
 TDD means do the simplest thing! And run it::
 
@@ -129,28 +91,7 @@ TDD means do the simplest thing! And run it::
 Awesome! We pass! We still have that warning, though... let's write another
 test, and see what happens::
 
-  extern mod std;
-
-  fn is_three(num: int) -> bool {
-    return false;
-  }
-
-  #[test]
-  fn test_is_three_with_not_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
-  }
-
-  #[test]
-  fn test_is_three_with_three() {
-    if !is_three(3) {
-      fail ~"Three should be three";
-    }
-  }
-
-  fn main() {
-  }
+{{ code('examples/06/04fizzbuzz.rs|pyg') }}
 
   $ make test
   rustc fizzbuzz.rs --test
@@ -178,33 +119,7 @@ test, and see what happens::
 Great! It showed that our first test passed, and that our second one failed.
 Let's make both tests pass::
 
-  extern mod std;
-
-  fn is_three(num: int) -> bool {
-    if num % 3 == 0 {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  #[test]
-  fn test_is_three_with_not_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
-  }
-
-  #[test]
-  fn test_is_three_with_three() {
-    if !is_three(3) {
-      fail ~"Three should be three";
-    }
-  }
-
-  fn main() {
-  }
+{{ code('examples/06/04fizzbuzz.rs|pyg') }}
 
   $ make test
   rustc fizzbuzz.rs --test
@@ -266,13 +181,7 @@ Okay! Let's talk about the main program now. We've got the tools to build
 FizzBuzz, let's make it work. First thing we need to do is print out all
 the numbers from one to 100. It's easy!
 
-::
-
-  fn main() {
-    for 100.times {
-      io::println("num");
-    }
-  }
+{{ code('examples/06/06fizzbuzz.rs|pyg') }}
 
 Step one: print **something** 100 times. If you run this with ``make`` (not ``make
 test``!) you should see ``num`` printed 100 times. Note that our tests didn't
@@ -310,20 +219,12 @@ Crazy, huh? Rust is smart.
 
 Anywho, where were we? Oh, iteration::
 
-  fn main() {
-    for 100.times {
-      io::println("num");
-    }
-  }
+{{ code('examples/06/06fizzbuzz.rs|pyg') }}
 
 Let's talk about ``for``. ``for`` is actually syntax sugar. Here's the equivalent
 without ``for``::
 
-  fn main() {
-    100.times({
-      io::println("num");
-    });
-  }
+{{ code('examples/06/no_for.rs|pyg') }}
 
 Note the extra parens. Typing out ``});`` really sucks, and having the ``({`` is
 also awkward. Just like Ruby, Rust has special syntax when you're passing a
@@ -332,11 +233,7 @@ can pass a closure (read: block) to a method, and have it loop. Let's print
 out the numbers now. First step: we need to get the number of the current
 iteration. Rubyists will do a double take::
 
-  fn main() {
-    for 100.times |num| {
-      io::println("num");
-    };
-  }
+{{ code('examples/06/no_for_with_lambda.rs|pyg') }}
 
 Almost the same syntax, but with the pipes *outside* of the curlies. But, if you
 try to run this, you'll get an error::
@@ -371,11 +268,7 @@ especially since we don't get them at all in Ruby.
 
 Anyway, we need a different function::
 
-  fn main() {
-    for [1,2,3].each |&num| {
-      io::println(num)
-    }
-  }
+{{ code('examples/06/01each.rs|pyg') }}
 
 Okay. The ``[]`` s indicate a 'vector', which is kind of like a Ruby array. The
 ampersand before the block argument is sort of like the tilde before that
@@ -394,11 +287,7 @@ within the closure. If we run this, we get another error message::
 Mismatched types: expected &/str but found integral value. It wants a string,
 but we gave it a number. Whoops! Let's coerce it::
 
-  fn main() {
-    for [1,2,3].each |&num| {
-      io::println(int::str(num))
-    }
-  }
+{{ code('examples/06/02each.rs|pyg') }}
 
 Awesome. Those double colons are just like Ruby: namespacing. The io namespace
 has a println function, the int namespace has a str function. This should
@@ -416,13 +305,14 @@ Bam! Whew. We had to fight with the compiler a bit, and the errors weren't
 great, but that wasn't too bad.
 
 What I *will* tell you is that this took me *forever* to figure out. The
-documentation for ``each`` says this::
+documentation for ``each`` said this::
 
   Method each
 
   fn each(blk: &fn(v: &A) -> bool)
 
-That's it. See yourself: http://static.rust-lang.org/doc/0.5/core/iter.html
+That's it. See yourself:
+http://static.rust-lang.org/doc/0.5/core/iter.html
 
 What's worse is that each _used_ to have a different signature, and not return
 a boolean. So all the examples I could find were just wrong. Rust has changed
@@ -433,36 +323,14 @@ why you're reading this book!
 Anyway, now we have 1 to 3. We need 1 to 100. Typing out all of that would
 suck... what to do? This::
 
-  fn main() {
-    for int::range(1, 101) |num| {
-      io::println(int::str(num));
-    }
-  }
-
+{{ code('examples/06/range.rs|pyg') }}
 
 Okay. Range takes two numbers and makes them into a range, then we iterate over
 it. Peachy. The ``int`` part means we're using an integer.
 
 Now we can put the two together::
 
-  fn main() {
-    for int::range(1, 101) |num| {
-      let mut answer;
-      if is_fifteen(num){
-        answer = "FizzBuzz";
-      }
-      else if is_three(num) {
-        answer = "Fizz";
-      }
-      else if is_five(num) {
-        answer = "Buzz";
-      }
-      else {
-        answer = "";
-      };
-      io::println(answer)
-    }
-  }
+{{ code('examples/06/07fizzbuzz.rs|pyg') }}
 
 Uhhhh ``let mut``? ``let`` is the way that we make a local variable. ``mut`` means
 we plan to mutate that variable: yes, variables are immutable by default.
@@ -482,71 +350,20 @@ called 'region analysis.'
 
 We can shorten this up a bit with this syntax::
 
-  fn main() {
-    for int::range(1, 101) |num| {
-      let mut answer =
-        if is_fifteen(num){
-          "FizzBuzz"
-        }
-        else if is_three(num) {
-          "Fizz"
-        }
-        else if is_five(num) {
-          "Buzz"
-        }
-        else {
-          ""
-        };
-      io::println(answer)
-    }
-  }
+{{ code('examples/06/08fizzbuzz.rs|pyg') }}
 
 We've made the ``if`` assign the value to answer. Note that we had to remove
 the semicolons again; that lets the expression give its value to ``answer.`` Note
 that this _also_ makes answer immutable, so we can remove the ``mut``::
 
-  fn main() {
-    for int::range(1, 101) |num| {
-      let answer =
-        if is_fifteen(num){
-          "FizzBuzz"
-        }
-        else if is_three(num) {
-          "Fizz"
-        }
-        else if is_five(num) {
-          "Buzz"
-        }
-        else {
-          ""
-        };
-      io::println(answer)
-    }
-  }
+{{ code('examples/06/09fizzbuzz.rs|pyg') }}
 
 Not too shabby! I love eliminating mutable state.
 
 Of course, this version gives us lots of empty lines, so what we actually want
 is::
 
-  fn main() {
-    for int::range(1, 101) |num| {
-      let answer =
-        if is_fifteen(num){
-          ~"FizzBuzz"
-        }
-        else if is_three(num) {
-          ~"Fizz"
-        }
-        else if is_five(num) {
-          ~"Buzz"
-        }
-        else {
-          int::str(num)
-        };
-      io::println(answer)
-    }
-  }
+{{ code('examples/06/10fizzbuzz.rs|pyg') }}
 
 Remember that the tilde has an effect that we haven't talked about yet. I added
 it because running without it gives an error message that implies you need it:
@@ -556,16 +373,7 @@ it was a number. Oh well.
 
 Because the ``if`` returns a value, we could also do something like this::
 
-  fn main() {
-    for int::range(1, 101) |num| {
-      io::println(
-        if is_fifteen(num) { ~"FizzBuzz" }
-        else if is_three(num) { ~"Fizz" }
-        else if is_five(num) { ~"Buzz" }
-        else { int::str(num) }
-      );
-    }
-  }
+{{ code('examples/06/11fizzbuzz.rs|pyg') }}
 
 It's more compact, and removes the intermediate variable all together.
 
@@ -582,58 +390,4 @@ This will fail if it gets false, and pass if it gets true. Simple!
 Anyway, awesome! We've conquered FizzBuzz. ``is_fifteen`` isn't the best named
 method, but we're just learning. ;) Here's my full final code::
 
-  extern mod std;
-
-  fn is_three(num: int) -> bool {
-    num % 3 == 0
-  }
-
-  #[test]
-  fn test_is_three_with_not_three() {
-    assert !is_three(1)
-  }
-
-  #[test]
-  fn test_is_three_with_three() {
-    assert is_three(3)
-  }
-
-  fn is_five(num: int) -> bool {
-    num % 5 == 0
-  }
-
-  #[test]
-  fn test_is_five_with_not_five() {
-    assert !is_five(1)
-  }
-
-  #[test]
-  fn test_is_five_with_five() {
-    assert is_five(5)
-  }
-
-  fn is_fifteen(num: int) -> bool {
-    num % 15 == 0
-  }
-
-  #[test]
-  fn test_is_fifteen_with_not_fifteen() {
-    assert !is_fifteen(1)
-  }
-
-  #[test]
-  fn test_is_fifteen_with_fifteen() {
-    assert is_fifteen(15)
-  }
-
-
-  fn main() {
-    for int::range(1, 101) |num| {
-      io::println(
-        if is_fifteen(num) { ~"FizzBuzz" }
-        else if is_three(num) { ~"Fizz" }
-        else if is_five(num) { ~"Buzz" }
-        else { int::str(num) }
-      );
-    }
-  }
+{{ code('examples/06/12fizzbuzz.rs|pyg') }}
