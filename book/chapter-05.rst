@@ -1,4 +1,4 @@
-{% import 'macros/ork.jinja' as ork with context %}
+{% from "dexy.jinja" import code, codes, ext with context %}
 
 Build toolchain
 ===============
@@ -42,10 +42,7 @@ about Rust? (Doesn't seem likely, does it?)
 
 Let's make ``fizzbuzz.rs`` with the following contents::
 
-  extern mod std;
-
-  fn main() {
-  }
+{{ code('examples/05/01fizzbuzz.rs|pyg') }}
 
 And, don't forget to get the C program out of the way, both the source
 and the compiled program::
@@ -87,11 +84,7 @@ that the compiled ``fizzbuzz`` is newer than the source file
 ``fizzbuzz.rs``. No new compilation needed! Let's check that make gets
 this right. Edit fizzbuzz.rs to add a println statement::
 
-  extern mod std;
-
-  fn main() {
-      io::println("Hello from Rust!");
-  }
+{{ code('examples/05/02fizzbuzz.rs|pyg') }}
 
 What does make do now?::
 
