@@ -36,23 +36,6 @@ error.rst|jinja|rst2html:
     - rst2html:
         { clargs: "--template=error_template.html" }
 
-book/*.rst|jinja|rst2html|calibre:
-    - code
-    - songs
-    - assets
-    - tex-assets
-    - rst2html:
-        { clargs: "--template=template.html" }
-
-book/*.rst|jinja|rst2html|calibre|-epub:
-    - code
-    - songs
-    - assets
-    - tex-assets
-    - calibre: { "ext" : ".epub" }
-    - rst2html:
-        { clargs: "--template=template.html" }
-
 book/*.rst|jinja|rst2html:
     - code
     - songs
@@ -71,6 +54,24 @@ book/book.rst|jinja|rst2latex|xetex:
                    --documentoptions=letterpaper \
                    --latex-preamble='\\include{preamble}' \
                    --stylesheet=orkestrix" }
+
+book/book.rst|jinja|rst2html|calibre:
+    - code
+    - songs
+    - assets
+    - tex-assets
+    - rst2html:
+        { clargs: "--template=template.html" }
+
+book/book.rst|jinja|rst2html|calibre|-epub:
+    - code
+    - songs
+    - assets
+    - tex-assets
+    - calibre: { "ext" : ".epub" }
+    - rst2html:
+        { clargs: "--template=template.html" }
+
 tex-assets:
     - book/*.tex
     - book/*.sty|jinja
