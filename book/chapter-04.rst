@@ -1,4 +1,4 @@
-{% import 'macros/ork.jinja' as ork with context %}
+{% from "dexy.jinja" import code, codes, ext with context %}
 
 Testing
 =======
@@ -18,12 +18,7 @@ You'll note that tests take no arguments and return nothing. If the method
 runs, the test passes, and if it errors in some way, the test fails. Let's
 give it a shot: Open up ``testing.rs`` and put this in it::
 
-  extern mod std;
-
-  #[test]
-  fn this_tests_code() {
-    io::println("")
-  }
+{{ code('examples/04/01testing.rs|pyg') }}
 
 Let's ignore that ``extern mod`` for now. Then, compile it with the ``--test``
 flag, and run it::
@@ -43,12 +38,7 @@ You should get some output that looks like this::
 
 Bam! Now let's make it fail::
 
-  extern mod std;
-
-  #[test]
-  fn this_tests_code() {
-    fail;
-  }
+{{ code('examples/04/02testing.rs|pyg') }}
 
 Recompile, and the output should be::
 
@@ -69,12 +59,7 @@ Recompile, and the output should be::
 
 Awesome. We can give it a failure message::
 
-  extern mod std;
-
-  #[test]
-  fn this_tests_code() {
-    fail ~"This test has failed because of <%= @reason %>";
-  }
+{{ code('examples/04/03testing.rs|pyg') }}
 
 (We're not doing anything with ERB here, I'm just `making a joke`_.)
 
