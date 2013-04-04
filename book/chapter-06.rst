@@ -17,7 +17,7 @@ If you're not familiar, FizzBuzz is a simple programming problem::
 This will give us a good excuse to go over some basics of Rust: Looping, tests,
 printing to standard output, and a host of other simple things.
 
-First, a test. This will go in fizzbuzz.rs::
+First, a test. This will go in fizzbuzz.rs:
 
 {{ code('examples/06/01fizzbuzz.rs|pyg') }}
 
@@ -32,7 +32,7 @@ And run it::
   make: *** [build-test] Error 101
 
 
-This makes sense: We haven't defined any functions yet. Let's define one::
+This makes sense: We haven't defined any functions yet. Let's define one:
 
 {{ code('examples/06/02fizzbuzz.rs|pyg') }}
 
@@ -69,7 +69,7 @@ Now that we've got that cleared up, let's run our tests::
 
 Rust is kind enough to give us a warning: we never used the ``num`` argument. We
 then get our failure, "One is not three", because we returned true. Now that
-we have a failing test, let's make it pass::
+we have a failing test, let's make it pass:
 
 {{ code('examples/06/03fizzbuzz.rs|pyg') }}
 
@@ -89,7 +89,7 @@ TDD means do the simplest thing! And run it::
   result: ok. 1 passed; 0 failed; 0 ignored
 
 Awesome! We pass! We still have that warning, though... let's write another
-test, and see what happens::
+test, and see what happens:
 
 {{ code('examples/06/04fizzbuzz.rs|pyg') }}
 
@@ -117,7 +117,7 @@ test, and see what happens::
   make: *** [run] Error 101
 
 Great! It showed that our first test passed, and that our second one failed.
-Let's make both tests pass::
+Let's make both tests pass:
 
 {{ code('examples/06/04fizzbuzz.rs|pyg') }}
 
@@ -217,12 +217,12 @@ the executable::
 
 Crazy, huh? Rust is smart.
 
-Anywho, where were we? Oh, iteration::
+Anywho, where were we? Oh, iteration:
 
 {{ code('examples/06/06fizzbuzz.rs|pyg') }}
 
 Let's talk about ``for``. ``for`` is actually syntax sugar. Here's the equivalent
-without ``for``::
+without ``for``:
 
 {{ code('examples/06/no_for.rs|pyg') }}
 
@@ -231,7 +231,7 @@ also awkward. Just like Ruby, Rust has special syntax when you're passing a
 single closure to a method. Awesome. And it shouldn't surprise Rubyists that you
 can pass a closure (read: block) to a method, and have it loop. Let's print
 out the numbers now. First step: we need to get the number of the current
-iteration. Rubyists will do a double take::
+iteration. Rubyists will do a double take:
 
 {{ code('examples/06/no_for_with_lambda.rs|pyg') }}
 
@@ -266,7 +266,7 @@ Expected ``fn()`` but got ``fn(<V0>)``. It wants no parameters, but we gave it o
 Whoops! These kind of crazy compiler errors are a little hard to read,
 especially since we don't get them at all in Ruby.
 
-Anyway, we need a different function::
+Anyway, we need a different function:
 
 {{ code('examples/06/01each.rs|pyg') }}
 
@@ -285,7 +285,7 @@ within the closure. If we run this, we get another error message::
   make: *** [build] Error 101
 
 Mismatched types: expected &/str but found integral value. It wants a string,
-but we gave it a number. Whoops! Let's coerce it::
+but we gave it a number. Whoops! Let's coerce it:
 
 {{ code('examples/06/02each.rs|pyg') }}
 
@@ -321,14 +321,14 @@ version of Rust, it may just plain not compile. It's very frustrating. That's
 why you're reading this book!
 
 Anyway, now we have 1 to 3. We need 1 to 100. Typing out all of that would
-suck... what to do? This::
+suck... what to do? This:
 
 {{ code('examples/06/range.rs|pyg') }}
 
 Okay. Range takes two numbers and makes them into a range, then we iterate over
 it. Peachy. The ``int`` part means we're using an integer.
 
-Now we can put the two together::
+Now we can put the two together:
 
 {{ code('examples/06/07fizzbuzz.rs|pyg') }}
 
@@ -348,20 +348,20 @@ Neat! We never use that default, so might as well not set it. Rust knows that
 we never read it due to crazy magic stuff that I don't fully understand yet
 called 'region analysis.'
 
-We can shorten this up a bit with this syntax::
+We can shorten this up a bit with this syntax:
 
 {{ code('examples/06/08fizzbuzz.rs|pyg') }}
 
 We've made the ``if`` assign the value to answer. Note that we had to remove
 the semicolons again; that lets the expression give its value to ``answer.`` Note
-that this _also_ makes answer immutable, so we can remove the ``mut``::
+that this _also_ makes answer immutable, so we can remove the ``mut``:
 
 {{ code('examples/06/09fizzbuzz.rs|pyg') }}
 
 Not too shabby! I love eliminating mutable state.
 
 Of course, this version gives us lots of empty lines, so what we actually want
-is::
+is:
 
 {{ code('examples/06/10fizzbuzz.rs|pyg') }}
 
@@ -371,7 +371,7 @@ give it a shot. Because our variables are typed, we have to coerce the number
 in the ``else`` case to a string. In Ruby we'd just let it be a ``Fixnum`` if
 it was a number. Oh well.
 
-Because the ``if`` returns a value, we could also do something like this::
+Because the ``if`` returns a value, we could also do something like this:
 
 {{ code('examples/06/11fizzbuzz.rs|pyg') }}
 
@@ -388,6 +388,6 @@ Why do we have to write if over and over and over again? Meet ``assert``::
 This will fail if it gets false, and pass if it gets true. Simple!
 
 Anyway, awesome! We've conquered FizzBuzz. ``is_fifteen`` isn't the best named
-method, but we're just learning. ;) Here's my full final code::
+method, but we're just learning. ;) Here's my full final code:
 
 {{ code('examples/06/12fizzbuzz.rs|pyg') }}

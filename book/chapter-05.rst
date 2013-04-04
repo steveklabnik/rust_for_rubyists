@@ -40,7 +40,7 @@ There we go! Make knows how to compile C programs. Notice that make
 printed out the compile command that it ran. Is make going to know
 about Rust? (Doesn't seem likely, does it?)
 
-Let's make ``fizzbuzz.rs`` with the following contents::
+Let's make ``fizzbuzz.rs`` with the following contents:
 
 {{ code('examples/05/01fizzbuzz.rs|pyg') }}
 
@@ -82,7 +82,7 @@ Just typing ``make`` ran our program. What happened to the compile
 step? We told make that ``run`` depends on ``fizzbuzz``. Make noticed
 that the compiled ``fizzbuzz`` is newer than the source file
 ``fizzbuzz.rs``. No new compilation needed! Let's check that make gets
-this right. Edit fizzbuzz.rs to add a println statement::
+this right. Edit fizzbuzz.rs to add a println statement:
 
 {{ code('examples/05/02fizzbuzz.rs|pyg') }}
 

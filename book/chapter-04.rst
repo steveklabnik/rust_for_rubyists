@@ -16,7 +16,7 @@ In Rust, you annotate test methods like such::
 
 You'll note that tests take no arguments and return nothing. If the method
 runs, the test passes, and if it errors in some way, the test fails. Let's
-give it a shot: Open up ``testing.rs`` and put this in it::
+give it a shot: Open up ``testing.rs`` and put this in it:
 
 {{ code('examples/04/01testing.rs|pyg') }}
 
@@ -36,7 +36,7 @@ You should get some output that looks like this::
 
   result: ok. 1 passed; 0 failed; 0 ignored
 
-Bam! Now let's make it fail::
+Bam! Now let's make it fail:
 
 {{ code('examples/04/02testing.rs|pyg') }}
 
@@ -57,7 +57,7 @@ Recompile, and the output should be::
   rust: domain main @0x7fa941008c10 root task failed
   rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
 
-Awesome. We can give it a failure message::
+Awesome. We can give it a failure message:
 
 {{ code('examples/04/03testing.rs|pyg') }}
 

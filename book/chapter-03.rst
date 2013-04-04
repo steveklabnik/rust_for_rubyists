@@ -13,7 +13,7 @@ end in ``.rs``:
   $ vim hello.rs
 
 
-Put this in it::
+Put this in it:
 
 {{ code('examples/03/hello.rs|pyg') }}
 
