@@ -23,23 +23,26 @@ As a Rubyist, you probably don't know anything about that, so let's talk code
 first, and get into what exactly all that means later. Here's some code that
 prints "Hello" 100 times::
 
+  use core::io::println;
+
   fn main() {
-    for 100.times {
-      io::println("Hello");
-    }
+      for 100.times {
+          println("Hello");
+      }
   }
 
 You may remember this from earlier. This loops 100 times, printing "Hello." Now
 let's make it roflscale with tasks::
 
-  use task::spawn;
+  use core::task::spawn;
+  use core::io::println;
 
   fn main() {
-    for 100.times {
-      do spawn {
-        io::println("Hello");
+      for 100.times {
+          do spawn {
+              println("Hello");
+          }
       }
-    }
   }
 
 That's it! We spin up 100 tasks that print stuff. If you inspect your output,
@@ -73,30 +76,34 @@ communicate between tasks with pipes. Pipes have two ends: a channel that sends
 info down the pipe, and a port that receives info. Here's an example of a
 task that sends us back a 10::
 
-  use task::spawn;
-  use pipes::stream;
-  use pipes::Port;
-  use pipes::Chan;
+  use core::task::spawn;
+  use core::pipes::stream;
+  use core::pipes::Port;
+  use core::pipes::Chan;
+  use core::io::println;
 
   fn main() {
-    let (port, chan): (Port<int>, Chan<int>) = stream();
+      let (port, chan): (Port<int>, Chan<int>) = stream();
 
-    do spawn |move chan| {
-        chan.send(10);
-    }
+      do spawn {
+          chan.send(10);
+      }
 
-    io::println(int::str(port.recv()));
+      println(int::to_str(port.recv()));
   }
 
 You can imagine that instead of sending 10, we might be doing some sort of
 complex calculation. It could be doing that work in the background while we
 did more important things.
 
-What about that ``move chan`` bit? We want to give our task ownership of the
-``chan`` variable, so we tell Rust that we have no interest in doing anything
-with it anymore. That's how Rust is able to move the task around if it needs
-to: even though we defined ``chan`` here, we relinquished ownership. We'll
-talk more about this in the next section.
+What about that ``chan.send`` bit? Well, the task inherits the ``chan``
+variable we set up before, so it's just matter of using it. This is similar
+to Ruby's blocks::
+
+  foo = 10
+  2.times do
+    puts foo
+  end
 
 This is really only one-way transit, though: what if we want to communicate
 back and forth? Setting up two ports and channels each time would be pretty
@@ -105,27 +112,28 @@ annoying, so we have some standard library code for this: ``DuplexStream``::
   extern mod std;
   use std::comm::DuplexStream;
 
-  use task::spawn;
+  use core::task::spawn;
+  use core::io::println;
 
   fn plus_one(channel: &DuplexStream<int, int>) {
-    let mut value: int;
-    loop {
-      value = channel.recv();
-      channel.send(value + 1);
-    }
+      let mut value: int;
+      loop {
+          value = channel.recv();
+          channel.send(value + 1);
+      }
   }
 
   fn main() {
-    let (from_child, to_child) = DuplexStream();
+      let (from_child, to_child) = DuplexStream();
 
-    do spawn |move to_child| {
-        plus_one(&to_child);
-    };
+      do spawn {
+          plus_one(&to_child);
+      };
 
-    from_child.send(22);
+      from_child.send(22);
 
-    let twenty_three = from_child.recv();
-    io::println(int::str(twenty_three));
+      let twenty_three = from_child.recv();
+      println(int::to_str(twenty_three));
   }
 
 We make a function that just loops forever, gets an ``int`` off of the port,
@@ -135,22 +143,23 @@ then send it a ``22``, and print out the result. Because this task is running
 in the background, we can send it bunches of values::
 
   fn main() {
-    let (from_child, to_child) = DuplexStream();
+      let (from_child, to_child) = DuplexStream();
 
-    do spawn |move to_child| {
-        plus_one(&to_child);
-    };
+      do spawn {
+          plus_one(&to_child);
+      };
 
-    from_child.send(22);
-    from_child.send(23);
-    from_child.send(24);
-    from_child.send(25);
+      from_child.send(22);
+      from_child.send(23);
+      from_child.send(24);
+      from_child.send(25);
 
-    for 4.times {
-      let answer = from_child.recv();
-      io::println(int::str(answer));
-    }
+      for 4.times {
+          let answer = from_child.recv();
+          println(int::to_str(answer));
+      }
   }
+
 
 Pretty simple. Our task is always waiting for work. If you run this, you'll get
 some weird output at the end::
@@ -176,21 +185,22 @@ We can fix this for now by telling our child to die::
   extern mod std;
   use std::comm::DuplexStream;
 
-  use task::spawn;
+  use core::task::spawn;
+  use core::io::println;
 
   fn plus_one(channel: &DuplexStream<int, int>) {
-    let mut value: int;
-    loop {
-      value = channel.recv();
-      channel.send(value + 1);
-      if value == 0 { break; }
-    }
+      let mut value: int;
+      loop {
+          value = channel.recv();
+          channel.send(value + 1);
+          if value == 0 { break; }
+      }
   }
 
   fn main() {
     let (from_child, to_child) = DuplexStream();
 
-    do spawn |move to_child| {
+    do spawn {
         plus_one(&to_child);
     };
 
@@ -201,8 +211,8 @@ We can fix this for now by telling our child to die::
     from_child.send(0);
 
     for 4.times {
-      let answer = from_child.recv();
-      io::println(int::str(answer));
+        let answer = from_child.recv();
+        println(int::to_str(answer));
     }
   }
 
