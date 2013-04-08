@@ -15,13 +15,15 @@ Examples
 
 See if this looks familliar::
 
+  use core::io::println;
+
   fn main() {
-    let your_favorite_numbers = @[1,2,3];
-    let my_favorite_numbers = @[4,5,6];
+      let your_favorite_numbers = @[1,2,3];
+      let my_favorite_numbers = @[4,5,6];
 
-    let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
+      let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
 
-    io::println(fmt!("The third favorite number is %d.", our_favorite_numbers[2]))
+      println(fmt!("The third favorite number is %d.", our_favorite_numbers[2]))
   }
 
 Seems like business as usual: ``+`` adds two vectors, ``[]`` does an indexing
@@ -44,35 +46,38 @@ Mutability inheritance
 
 You can mutate vectors if you make them so::
 
-  fn main() {
-    let a_vector = @[1,2,3];
-    let mut another_vector = @[];
-    another_vector += a_vector;
+  use core::io::println;
 
-    io::println(fmt!("The first number is %d.", another_vector[0]))
+  fn main() {
+      let a_vector = @[1,2,3];
+      let mut another_vector = @[];
+      another_vector += a_vector;
+
+      println(fmt!("The first number is %d.", another_vector[0]))
   }
 
 Of course, changing an element of a vector doesn't make sense::
 
-  fn main() {
-    let a_vector = ~[1,2,3];
-    a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: assigning to immutable vec content
+  use core::io::println;
 
-    io::println(fmt!("The first number is %d.", a_vector[0]))
+  fn main() {
+      let a_vector = ~[1,2,3];
+      a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: assigning to immutable vec content
+
+      println(fmt!("The first number is %d.", a_vector[0]))
   }
 
 But you can move it to a mutable one and then change it::
 
+  use core::io::println;
+
   fn main() {
-    let a_vector = ~[1,2,3];
-    let mut mut_vector = move a_vector;
-    mut_vector[0] = 5;
+      let a_vector = ~[1,2,3];
+      let mut mut_vector = a_vector;
+      mut_vector[0] = 5;
 
-    io::println(fmt!("The first number is %d.", mut_vector[0]))
+      println(fmt!("The first number is %d.", mut_vector[0]))
   }
-
-Of course, this only works for owned vectors: if you don't own it, you can't
-move it! No mutating things while other people may have a reference!
 
 When you make an immutable vector mutable, it's called 'thawing' the vector,
 and the opposite is 'freezing' a vector.
