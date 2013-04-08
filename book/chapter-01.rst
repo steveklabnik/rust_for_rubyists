@@ -53,7 +53,7 @@ Here's a parallel "Hello World" in Rust:
 
 ::
 
-  use task::spawn;
+  use core::task::spawn;
 
   fn main() {
 
