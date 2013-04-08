@@ -62,9 +62,11 @@ Managed Boxes
 Managed boxes are heap allocated and garbage collected. They have a ``@``
 prefix. Check it out::
 
+  use core::io::println;
+
   fn main() {
-    let x = @10;
-    io::println(int::str(*x));
+      let x = @10;
+      println(int::to_str(*x));
   }
 
 This prints 10. The ``*`` dereferences, just like in C. The "@10" makes a
@@ -85,17 +87,21 @@ If you don't want your values to get GC'd, you can use an owned box. This tells
 Rust that you own a reference to something, and you'll take care of it
 yourself. This is indicated with a ``~``::
 
+  use core::io::println;
+
   fn main() {
-    let x = ~10;
-    io::println(int::str(*x));
+      let x = ~10;
+      println(int::to_str(*x));
   }
 
 You can't make another pointer to this value::
 
+  use core::io::println;
+
   fn main() {
-    let x = ~10;
-    let y = x;
-    io::println(int::str(*x));
+      let x = ~10;
+      let y = x;
+      println(int::to_str(*x));
   }
 
 This yields::
@@ -117,98 +123,63 @@ This yields::
 It tells us that we moved the value of ``x`` to ``y`` and points out where
 the move happens. Neat. We can make a copy::
 
+  use core::io::println;
+
   fn main() {
-    let x = ~10;
-    let y = copy x;
-    io::println(int::str(*x));
+      let x = ~10;
+      let y = copy x;
+      println(int::to_str(*x));
   }
 
 This will work, though it will tell us that ``y`` was never used. And they
 point at two different copies of 10, not the same one.
-
-Because you have the one pointer to an owned box, you can send the pointer to
-another task with ``move``::
-
-  use task::spawn;
-
-  fn main() {
-    let x = ~10;
-
-    do spawn |move x| {
-      io::println(int::str(*x));
-    }
-  }
-
-If we tried to use ``x`` after the ``move``, it will fail::
-
-  use task::spawn;
-
-  fn main() {
-    let x = ~10;
-
-    do spawn |move x| {
-      io::println(int::str(*x));
-    }
-
-    io::println(int::str(*x));
-  }
-
-with::
-
-  $ make
-  rustc fizzbuzz.rs
-  fizzbuzz.rs:10:24: 10:25 error: use of moved variable: `x`
-  fizzbuzz.rs:10   io::println(int::str(*x));
-                                         ^
-  fizzbuzz.rs:6:5: 8:3 note: move of variable occurred here
-  fizzbuzz.rs:6   do spawn |move x| {
-  fizzbuzz.rs:7     io::println(int::str(*x));
-  fizzbuzz.rs:8   }
-  error: aborting due to previous error
-  make: *** [build] Error 101
-
-You've already moved it!
 
 Borrowed Pointers
 -----------------
 
 Imagine we had this::
 
+  use core::io::println;
+
   fn plus_one(x: int) -> int {
-    x + 1
+      x + 1
   }
 
   fn main() {
-    let x = @10;
+      let x = @10;
 
-    io::println(int::str(plus_one(*x)));
+      println(int::to_str(plus_one(*x)));
   }
 
 Now, this works just fine. But what if we don't want to copy the value of x
 when we call ``plus_one``? We'd want to pass a pointer. Easy enough::
 
+  use core::io::println;
+
   fn plus_one(x: @int) -> int {
-    *x + 1
+      *x + 1
   }
 
   fn main() {
     let x = @10;
 
-    io::println(int::str(plus_one(x)));
+    println(int::to_str(plus_one(x)));
   }
 
 Seems fine. But what about this?::
 
+  use core::io::println;
+
   fn plus_one(x: @int) -> int {
-    *x + 1
+      *x + 1
   }
 
   fn main() {
-    let x = @10;
-    let y = ~10;
+      let x = @10;
+      let y = ~10;
 
-    io::println(int::str(plus_one(x)));
-    io::println(int::str(plus_one(y))); // uhhhhhhh
+      println(int::to_str(plus_one(x)));
+      println(int::to_str(plus_one(y))); // uhhhhhhh
   }
 
 ``plus_one`` takes a managed box, but we're giving it a unique box. If we try
@@ -224,20 +195,22 @@ to compile this, we get this::
 
 Makes sense. Expected ``@-ptr`` but found ``~-ptr``. We could do this::
 
+  use core::io::println;
+
   fn plus_one_managed(x: @int) -> int {
-    *x + 1
+      *x + 1
   }
 
   fn plus_one_unique(x: ~int) -> int {
-    *x + 1
+      *x + 1
   }
 
   fn main() {
-    let x = @10;
-    let y = ~10;
+      let x = @10;
+      let y = ~10;
 
-    io::println(int::str(plus_one_managed(x)));
-    io::println(int::str(plus_one_unique(y)));
+      println(int::to_str(plus_one_managed(x)));
+      println(int::to_str(plus_one_unique(y)));
   }
 
 This is pretty obviously a terrible idea. What we want is to take either kind
@@ -246,16 +219,18 @@ value for a while.
 
 Enter borrowed pointers::
 
+  use core::io::println;
+
   fn plus_one(x: &int) -> int {
-    *x + 1
+      *x + 1
   }
 
   fn main() {
-    let x = @10;
-    let y = ~10;
+      let x = @10;
+      let y = ~10;
 
-    io::println(int::str(plus_one(x)));
-    io::println(int::str(plus_one(y)));
+      println(int::to_str(plus_one(x)));
+      println(int::to_str(plus_one(y)));
   }
 
 Borrowed pointers use an ``&``, as you can see. They don't change any ownership
