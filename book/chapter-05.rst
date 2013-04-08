@@ -195,7 +195,7 @@ the tests::
   ./fizzbuzz
   Hello from Rust!
 
-You can do a lot more crazy stuff with Make, such as pattern rules. I
+You can do a lot more complex stuff with Make, such as pattern rules. I
 don't want to teach you everything about Make, this is a book about
 Rust. So we'll just leave it like this for now. This recipe will serve
 you well until you get to more than one file.
