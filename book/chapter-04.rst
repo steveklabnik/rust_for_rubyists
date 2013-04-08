@@ -11,7 +11,7 @@ In Rust, you annotate test methods like such::
 
   #[test]
   fn this_tests_code() {
-    SOMETHING HERE
+      SOMETHING HERE
   }
 
 You'll note that tests take no arguments and return nothing. If the method
@@ -22,8 +22,12 @@ give it a shot: Open up ``testing.rs`` and put this in it::
 
   #[test]
   fn this_tests_code() {
-    io::println("")
+      println("")
   }
+
+  fn main() {
+  }
+
 
 Let's ignore that ``extern mod`` for now. Then, compile it with the ``--test``
 flag, and run it::
@@ -47,8 +51,12 @@ Bam! Now let's make it fail::
 
   #[test]
   fn this_tests_code() {
-    fail;
+      fail!(~"Fail!");
   }
+
+  fn main() {
+  }
+
 
 Recompile, and the output should be::
 
@@ -67,24 +75,13 @@ Recompile, and the output should be::
   rust: domain main @0x7fa941008c10 root task failed
   rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
 
-Awesome. We can give it a failure message::
-
-  extern mod std;
-
-  #[test]
-  fn this_tests_code() {
-    fail ~"This test has failed because of <%= @reason %>";
-  }
-
-(We're not doing anything with ERB here, I'm just `making a joke`_.)
-
 Note the tilde before the string. We'll talk about that later. For now, let's
 focus on the test. This will output something like this::
 
   $ ./testing
 
   running 1 test
-  rust: task failed at 'This test has failed because of <%= @reason %>', testing.rs:5
+  rust: task failed at 'Fail!', testing.rs:5
   test this_tests_code ... FAILED
 
   failures:
@@ -102,5 +99,3 @@ Super simple. That's all you need to know to get started. But before we build
 our first 'real' Rust app with tests, we should deal with this whole
 compilation bit. It's really annoying to keep typing two commands just to run
 things. Let's build a bit of infrastructure first.
-
-.. _making a joke: http://www.slate.com/blogs/future_tense/2012/07/26/twitter_down_error_message_says_twitter_is_down_for_reason_will_be_back_up_in_deadline_.html
