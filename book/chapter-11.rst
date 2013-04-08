@@ -17,9 +17,9 @@ generic form.
 Let's do an exercise. You have this code::
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
   }
 
 Implement ``print_vec`` so that it puts out ``1 2 3`` with newlines between
@@ -30,10 +30,12 @@ I'll wait.
 
 Done? I got this::
 
+  use core::io::println;
+
   fn print_vec(v: &[int]) {
 
     for v.each |&i| {
-      io::println(int::str(i))
+      println(int::to_str(i))
     }
   }
 
@@ -49,41 +51,41 @@ Pretty straightforward. We take a slice (remember, 'borrowed vector' ==
 Round two: Implement this::
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec_str(str_vec);
+      print_vec_str(str_vec);
   }
 
 You'll often be seeing owned boxes with strings. Go ahead. You can do it!
 
 I got this::
 
-  fn print_vec(v: &[int]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(int::str(i))
-    }
+  fn print_vec(v: &[int]) {
+      for v.each |&i| {
+          println(int::to_str(i))
+      }
   }
 
   fn print_vec_str(v: &[~str]) {
-
-    for v.each |&i| {
-      io::println(i)
-    }
+      for v.each |&i| {
+          println(i)
+      }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec_str(str_vec);
+      print_vec_str(str_vec);
   }
 
 You'll notice we had to declare what type of ``str`` we had. See, strings
@@ -95,28 +97,30 @@ Okay, obviously, this situation sucks! What can we do? Well, the first thing
 is that we don't have the same method body. We're doing different things to
 convert our arguments to a string. Here's the answer::
 
+  use core::io::println;
+
   fn print_vec(v: &[int]) {
 
     for v.each |&i| {
-      io::println(i.to_str())
+        println(i.to_str())
     }
   }
 
   fn print_vec_str(v: &[~str]) {
 
     for v.each |&i| {
-      io::println(i.to_str())
+        println(i.to_str())
     }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec_str(str_vec);
+      print_vec_str(str_vec);
   }
 
 Now that you know about methods, you can see how this works: there's a method
@@ -126,21 +130,22 @@ And now that we have the same method body, our types are almost the same...
 
 Let's fix that::
 
-  fn print_vec<T>(v: &[T]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+  fn print_vec<T>(v: &[T]) {
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec(str_vec);
+      print_vec(str_vec);
   }
 
 This won't compile, but it is closer. Let's examine that signature more
@@ -172,21 +177,22 @@ Traits
 
 This **will** work::
 
-  fn print_vec<T: ToStr>(v: &[T]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+  fn print_vec<T: ToStr>(v: &[T]) {
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec(str_vec);
+      print_vec(str_vec);
   }
 
 The ``<T: ToStr>`` says: "We take any type ``T`` that implements the ``ToStr``
@@ -241,11 +247,12 @@ The right way to look at it is that by giving the compiler more information
 about our code, it can make certain optimizations. Check this out::
 
   $ cat fizzbuzz.rs
-  fn print_vec<T: ToStr>(v: &[T]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+  fn print_vec<T: ToStr>(v: &[T]) {
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn main() {
@@ -294,17 +301,18 @@ about our code, it can make certain optimizations. Check this out::
 
   steve at thoth in ~/tmp
   $ cat fizzbuzz.rs
-  fn print_vec<T: ToStr>(v: &[T]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+  fn print_vec<T: ToStr>(v: &[T]) {
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
   }
 
   steve at thoth in ~/tmp
@@ -397,47 +405,48 @@ actually use. No generating code that's useless. This process is called
 'monomorphism,' which basically means we take one thing (mono) and change it
 (morphism) into other things. To simplify, the compiler takes this code::
 
-  fn print_vec<T: ToStr>(v: &[T]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+  fn print_vec<T: ToStr>(v: &[T]) {
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec(vec);
+      print_vec(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec(str_vec);
+      print_vec(str_vec);
   }
 
 And turns it into::
 
-  fn print_vec_str(v: &[~str]) {
+  use core::io::println;
 
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+  fn print_vec_str(v: &[~str]) {
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn print_vec_int(v: &[int]) {
-
-    for v.each |&i| {
-      io::println(i.to_str())
-    }
+      for v.each |&i| {
+          println(i.to_str())
+      }
   }
 
   fn main() {
-    let vec = [1,2,3];
+      let vec = [1,2,3];
 
-    print_vec_int(vec);
+      print_vec_int(vec);
 
-    let str_vec = [~"hey", ~"there", ~"yo"];
+      let str_vec = [~"hey", ~"there", ~"yo"];
 
-    print_vec_str(str_vec);
+      print_vec_str(str_vec);
   }
 
 Complete with changing the calls at each call site to call the special version
@@ -484,66 +493,67 @@ This says that the ``Monster`` trait guarantees we have one method available
 on any type that implements the trait, ``attack``. Here's how we make one::
 
   trait Monster {
-    fn attack(&self);
+      fn attack(&self);
   }
 
   struct IndustrialRaverMonkey {
-    strength: int
+      strength: int
   }
 
   impl IndustrialRaverMonkey: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The monkey attacks for %d.", self.strength))
-    }
+      fn attack(&self) {
+          println(fmt!("The monkey attacks for %d.", self.strength))
+      }
   }
 
   fn main() {
-    let monkey = IndustrialRaverMonkey {strength:35};
+      let monkey = IndustrialRaverMonkey {strength:35};
 
-    monkey.attack();
+      monkey.attack();
   }
 
 Now we're cooking with gas! Remember our old implementation?::
 
   impl Monster {
-    fn attack(&self) {
-
-      match *self {
-        ScubaArgentine(l, s, c, w) => io::println(fmt!("The monster attacks for %d damage.", w)),
-        IndustrialRaverMonkey(l, s, c, w) => io::println(fmt!("The monster attacks for %d damage.", w))
+      fn attack(&self) {
+          match *self {
+              ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
+              IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
+          }
       }
-    }
   }
 
 Ugh. This is way better. No de-structuring on types. We can write an
 implementation for absolutely anything::
 
+  use core::io::println;
+
   trait Monster {
-    fn attack(&self);
+      fn attack(&self);
   }
 
   struct IndustrialRaverMonkey {
-    strength: int
+      strength: int
   }
 
-  impl IndustrialRaverMonkey: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The monkey attacks for %d.", self.strength))
-    }
+  impl Monster for IndustrialRaverMonkey {
+      fn attack(&self) {
+          println(fmt!("The monkey attacks for %d.", self.strength))
+      }
   }
 
-  impl int: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The int attacks for %d.", *self))
-    }
+  impl Monster for int {
+      fn attack(&self) {
+          println(fmt!("The int attacks for %d.", *self))
+      }
   }
 
   fn main() {
-    let monkey = IndustrialRaverMonkey {strength:35};
-    monkey.attack();
+      let monkey = IndustrialRaverMonkey {strength:35};
+      monkey.attack();
 
-    let i = 10;
-    i.attack();
+      let i = 10;
+      i.attack();
   }
 
 Heh. Check it::
@@ -578,127 +588,128 @@ friendly, don't worry.
 
 Done? Here's mine::
 
+  use core::io::println;
+
   trait Monster {
-    fn attack(&self);
-    static fn new() -> self;
+      fn attack(&self);
+      fn new() -> Self;
   }
 
   struct IndustrialRaverMonkey {
-    life: int,
-    strength: int,
-    charisma: int,
-    weapon: int,
+      life: int,
+      strength: int,
+      charisma: int,
+      weapon: int,
   }
 
   struct DwarvenAngel {
-    life: int,
-    strength: int,
-    charisma: int, 
-    weapon: int,
+      life: int,
+      strength: int,
+      charisma: int, 
+      weapon: int,
   }
 
   struct AssistantViceTentacleAndOmbudsman {
-    life: int,
-    strength: int,
-    charisma: int, 
-    weapon: int,
+      life: int,
+      strength: int,
+      charisma: int, 
+      weapon: int,
   }
 
   struct TeethDeer {
-    life: int,
-    strength: int,
-    charisma: int,
-    weapon: int,
+      life: int,
+      strength: int,
+      charisma: int,
+      weapon: int,
   }
 
   struct IntrepidDecomposedCyclist {
-    life: int,
-    strength: int,
-    charisma: int, 
-    weapon: int,
+      life: int,
+      strength: int,
+      charisma: int, 
+      weapon: int,
   }
 
   struct Dragon {
-    life: int,
-    strength: int,
-    charisma: int, 
-    weapon: int,
+      life: int,
+      strength: int,
+      charisma: int, 
+      weapon: int,
   }
 
-  impl IndustrialRaverMonkey: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The monkey attacks for %d.", self.strength))
-    }
+  impl Monster for IndustrialRaverMonkey {
+      fn attack(&self) {
+          println(fmt!("The monkey attacks for %d.", self.strength))
+      }
 
-    static fn new() -> IndustrialRaverMonkey {
-      IndustrialRaverMonkey {life: 46, strength: 35, charisma: 91, weapon: 2}
-    }
+      fn new() -> IndustrialRaverMonkey {
+          IndustrialRaverMonkey {life: 46, strength: 35, charisma: 91, weapon: 2}
+      }
   }
 
-  impl DwarvenAngel: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The angel attacks for %d.", self.strength))
-    }
-    static fn new() -> DwarvenAngel {
-      DwarvenAngel {life: 540, strength: 6, charisma: 144, weapon: 50}
-    }
+  impl Monster for DwarvenAngel {
+      fn attack(&self) {
+          println(fmt!("The angel attacks for %d.", self.strength))
+      }
+      fn new() -> DwarvenAngel {
+          DwarvenAngel {life: 540, strength: 6, charisma: 144, weapon: 50}
+      }
   }
 
-  impl AssistantViceTentacleAndOmbudsman: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The tentacle attacks for %d.", self.strength))
-    }
-    static fn new() -> AssistantViceTentacleAndOmbudsman {
-      AssistantViceTentacleAndOmbudsman {life: 320, strength: 6, charisma: 144, weapon: 50}
-    }
+  impl Monster for AssistantViceTentacleAndOmbudsman {
+      fn attack(&self) {
+          println(fmt!("The tentacle attacks for %d.", self.strength))
+      }
+      fn new() -> AssistantViceTentacleAndOmbudsman {
+          AssistantViceTentacleAndOmbudsman {life: 320, strength: 6, charisma: 144, weapon: 50}
+      }
   }
 
-  impl TeethDeer: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The deer attacks for %d.", self.strength))
-    }
-    static fn new() -> TeethDeer {
-      TeethDeer {life: 655, strength: 192, charisma: 19, weapon: 109}
-    }
+  impl Monster for TeethDeer {
+      fn attack(&self) {
+          println(fmt!("The deer attacks for %d.", self.strength))
+      }
+      fn new() -> TeethDeer {
+          TeethDeer {life: 655, strength: 192, charisma: 19, weapon: 109}
+      }
   }
 
-  impl IntrepidDecomposedCyclist: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The cyclist attacks for %d.", self.strength))
-    }
-    static fn new() -> IntrepidDecomposedCyclist {
-      IntrepidDecomposedCyclist {life: 901, strength: 560, charisma: 422, weapon: 105}
-    }
+  impl Monster for IntrepidDecomposedCyclist {
+      fn attack(&self) {
+          println(fmt!("The cyclist attacks for %d.", self.strength))
+      }
+      fn new() -> IntrepidDecomposedCyclist {
+          IntrepidDecomposedCyclist {life: 901, strength: 560, charisma: 422, weapon: 105}
+      }
   }
 
-  impl Dragon: Monster {
-    fn attack(&self) {
-      io::println(fmt!("The dragon attacks for %d.", self.strength))
-    }
-    static fn new() -> Dragon {
-      Dragon {life: 1340, strength: 451, charisma: 1020, weapon: 939}
-    }
+  impl Monster for Dragon {
+      fn attack(&self) {
+          println(fmt!("The dragon attacks for %d.", self.strength))
+      }
+      fn new() -> Dragon {
+          Dragon {life: 1340, strength: 451, charisma: 1020, weapon: 939}
+      }
   }
 
   fn monsters_attack(monsters: &[@Monster]) {
-    for monsters.each |monster| {
-      monster.attack();
-    }
+      for monsters.each |monster| {
+          monster.attack();
+      }
   }
 
   fn main() {
-    let monkey: @IndustrialRaverMonkey               = @Monster::new();
-    let angel: @DwarvenAngel                         = @Monster::new();
-    let tentacle: @AssistantViceTentacleAndOmbudsman = @Monster::new();
-    let deer: @TeethDeer                             = @Monster::new();
-    let cyclist: @IntrepidDecomposedCyclist          = @Monster::new();
-    let dragon: @Dragon                              = @Monster::new();
+      let monkey: @IndustrialRaverMonkey               = @Monster::new();
+      let angel: @DwarvenAngel                         = @Monster::new();
+      let tentacle: @AssistantViceTentacleAndOmbudsman = @Monster::new();
+      let deer: @TeethDeer                             = @Monster::new();
+      let cyclist: @IntrepidDecomposedCyclist          = @Monster::new();
+      let dragon: @Dragon                              = @Monster::new();
 
-    let dwemthys_vector: @[@Monster] = @[monkey as @Monster, angel as @Monster, tentacle as @Monster, deer as @Monster, cyclist as @Monster, dragon as @Monster];
+      let dwemthys_vector: @[@Monster] = @[monkey as @Monster, angel as @Monster, tentacle as @Monster, deer as @Monster, cyclist as @Monster, dragon as @Monster];
 
-    monsters_attack(dwemthys_vector);
+      monsters_attack(dwemthys_vector);
   }
-
 
 Congrats! You've mastered Traits. They're pretty awesome, right?
 
