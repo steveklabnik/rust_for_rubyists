@@ -23,9 +23,9 @@ First, a test. This will go in fizzbuzz.rs::
 
   #[test]
   fn test_is_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
+      if is_three(1) {
+          fail!(~"One is not three");
+      }
   }
 
   fn main() {
@@ -52,13 +52,14 @@ This makes sense: We haven't defined any functions yet. Let's define one::
 
   #[test]
   fn test_is_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
+      if is_three(1) {
+          fail!(~"One is not three");
+      }
   }
 
   fn main() {
   }
+  
 
 Okay. Here's some new syntax. The ``num: int`` says that we take one argument,
 ``num``, and that it's of an integer type. The ``-> bool`` says that we return a
@@ -101,11 +102,12 @@ we have a failing test, let's make it pass::
     return false;
   }
 
+
   #[test]
   fn test_is_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
+      if is_three(1) {
+          fail!(~"One is not three");
+      }
   }
 
   fn main() {
@@ -132,20 +134,20 @@ test, and see what happens::
   extern mod std;
 
   fn is_three(num: int) -> bool {
-    return false;
+      return false;
   }
 
   #[test]
   fn test_is_three_with_not_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
+      if is_three(1) {
+        fail!(~"One is not three");
+      }
   }
 
   #[test]
   fn test_is_three_with_three() {
     if !is_three(3) {
-      fail ~"Three should be three";
+      fail!(~"Three should be three");
     }
   }
 
@@ -177,30 +179,29 @@ test, and see what happens::
 
 Great! It showed that our first test passed, and that our second one failed.
 Let's make both tests pass::
-
-  extern mod std;
+extern mod std;
 
   fn is_three(num: int) -> bool {
-    if num % 3 == 0 {
-      return true;
-    }
-    else {
-      return false;
-    }
+      if num % 3 == 0 {
+          return true;
+      }
+      else {
+          return false;
+      }
   }
 
   #[test]
   fn test_is_three_with_not_three() {
-    if is_three(1) {
-      fail ~"One is not three";
-    }
+      if is_three(1) {
+          fail!(~"One is not three");
+      }
   }
 
   #[test]
   fn test_is_three_with_three() {
-    if !is_three(3) {
-      fail ~"Three should be three";
-    }
+      if !is_three(3) {
+          fail!(~"Three should be three");
+      }
   }
 
   fn main() {
@@ -222,7 +223,7 @@ Awesome! This shows off how elses work, as well. It's probably what you expected
 Done? How'd you do? Here's mine::
 
   fn is_three(num: int) -> bool {
-    num % 3 == 0
+      num % 3 == 0
   }
 
 Wait, whaaaat? Yep, the last thing in a function is a return in Rust, but
@@ -233,7 +234,7 @@ get::
   rustc fizzbuzz.rs --test
   fizzbuzz.rs:3:0: 5:1 error: not all control paths return a value
   fizzbuzz.rs:3 fn is_three(num: int) -> bool {
-  fizzbuzz.rs:4   num % 3 == 0;
+  fizzbuzz.rs:4     num % 3 == 0;
   fizzbuzz.rs:5 }
   error: aborting due to 1 previous error
   make: *** [build-test] Error 101
@@ -268,10 +269,12 @@ the numbers from one to 100. It's easy!
 
 ::
 
+  use core::io::println;
+
   fn main() {
-    for 100.times {
-      io::println("num");
-    }
+      for 100.times {
+          println("num");
+      }
   }
 
 Step one: print **something** 100 times. If you run this with ``make`` (not ``make
@@ -310,19 +313,23 @@ Crazy, huh? Rust is smart.
 
 Anywho, where were we? Oh, iteration::
 
+  use core::io::println;
+
   fn main() {
-    for 100.times {
-      io::println("num");
-    }
+      for 100.times {
+          println("num");
+      }
   }
 
 Let's talk about ``for``. ``for`` is actually syntax sugar. Here's the equivalent
 without ``for``::
 
+  use core::io::println;
+
   fn main() {
-    100.times({
-      io::println("num");
-    });
+      100.times({
+          println("num");
+      });
   }
 
 Note the extra parens. Typing out ``});`` really sucks, and having the ``({`` is
@@ -332,10 +339,12 @@ can pass a closure (read: block) to a method, and have it loop. Let's print
 out the numbers now. First step: we need to get the number of the current
 iteration. Rubyists will do a double take::
 
+  use core::io::println;
+
   fn main() {
-    for 100.times |num| {
-      io::println("num");
-    };
+      for 100.times |num| {
+          println("num");
+      };
   }
 
 Almost the same syntax, but with the pipes *outside* of the curlies. But, if you
@@ -371,10 +380,12 @@ especially since we don't get them at all in Ruby.
 
 Anyway, we need a different function::
 
+  use core::io::println;
+
   fn main() {
-    for [1,2,3].each |&num| {
-      io::println(num)
-    }
+      for [1,2,3].each |&num| {
+          println(num)
+      }
   }
 
 Okay. The ``[]`` s indicate a 'vector', which is kind of like a Ruby array. The
@@ -394,10 +405,12 @@ within the closure. If we run this, we get another error message::
 Mismatched types: expected &/str but found integral value. It wants a string,
 but we gave it a number. Whoops! Let's coerce it::
 
+  use core::io::println;
+
   fn main() {
-    for [1,2,3].each |&num| {
-      io::println(int::str(num))
-    }
+      for [1,2,3].each |&num| {
+          println(int::to_str(num))
+      }
   }
 
 Awesome. Those double colons are just like Ruby: namespacing. The io namespace
@@ -433,10 +446,12 @@ why you're reading this book!
 Anyway, now we have 1 to 3. We need 1 to 100. Typing out all of that would
 suck... what to do? This::
 
+  use core::io::println;
+
   fn main() {
-    for int::range(1, 101) |num| {
-      io::println(int::str(num));
-    }
+      for int::range(1, 101) |num| {
+          println(int::to_str(num));
+      }
   }
 
 
@@ -446,22 +461,23 @@ it. Peachy. The ``int`` part means we're using an integer.
 Now we can put the two together::
 
   fn main() {
-    for int::range(1, 101) |num| {
-      let mut answer;
-      if is_fifteen(num){
-        answer = "FizzBuzz";
+      for int::range(1, 101) |num| {
+          let mut answer = "";
+
+          if is_fifteen(num){
+              answer = "FizzBuzz";
+          }
+          else if is_three(num) {
+              answer = "Fizz";
+          }
+          else if is_five(num) {
+              answer = "Buzz";
+          }
+          else {
+              answer = "";
+          };
+          println(answer)
       }
-      else if is_three(num) {
-        answer = "Fizz";
-      }
-      else if is_five(num) {
-        answer = "Buzz";
-      }
-      else {
-        answer = "";
-      };
-      io::println(answer)
-    }
   }
 
 Uhhhh ``let mut``? ``let`` is the way that we make a local variable. ``mut`` means
@@ -470,35 +486,25 @@ When I first wrote this, I wrote this::
 
   let mut answer = "";
 
-And when I compiled, Rust gave me this warning::
-
-  fizzbuzz.rs:59:12: 59:20 warning: value assigned to `answer` is never read
-  fizzbuzz.rs:59     let mut answer = "";
-                             ^~~~~~~~
-
-Neat! We never use that default, so might as well not set it. Rust knows that
-we never read it due to crazy magic stuff that I don't fully understand yet
-called 'region analysis.'
-
 We can shorten this up a bit with this syntax::
 
   fn main() {
-    for int::range(1, 101) |num| {
-      let mut answer =
-        if is_fifteen(num){
-          "FizzBuzz"
-        }
-        else if is_three(num) {
-          "Fizz"
-        }
-        else if is_five(num) {
-          "Buzz"
-        }
-        else {
-          ""
-        };
-      io::println(answer)
-    }
+      for int::range(1, 101) |num| {
+          let mut answer =
+              if is_fifteen(num){
+                  "FizzBuzz"
+              }
+              else if is_three(num) {
+                  "Fizz"
+              }
+              else if is_five(num) {
+                  "Buzz"
+              }
+              else {
+                  ""
+              };
+          println(answer)
+      }
   }
 
 We've made the ``if`` assign the value to answer. Note that we had to remove
@@ -506,22 +512,22 @@ the semicolons again; that lets the expression give its value to ``answer.`` Not
 that this _also_ makes answer immutable, so we can remove the ``mut``::
 
   fn main() {
-    for int::range(1, 101) |num| {
-      let answer =
-        if is_fifteen(num){
-          "FizzBuzz"
-        }
-        else if is_three(num) {
-          "Fizz"
-        }
-        else if is_five(num) {
-          "Buzz"
-        }
-        else {
-          ""
-        };
-      io::println(answer)
-    }
+      for int::range(1, 101) |num| {
+          let answer =
+              if is_fifteen(num){
+                  "FizzBuzz"
+              }
+              else if is_three(num) {
+                  "Fizz"
+              }
+              else if is_five(num) {
+                  "Buzz"
+              }
+              else {
+                  ""
+              };
+          println(answer)
+      }
   }
 
 Not too shabby! I love eliminating mutable state.
@@ -530,22 +536,22 @@ Of course, this version gives us lots of empty lines, so what we actually want
 is::
 
   fn main() {
-    for int::range(1, 101) |num| {
-      let answer =
-        if is_fifteen(num){
-          ~"FizzBuzz"
-        }
-        else if is_three(num) {
-          ~"Fizz"
-        }
-        else if is_five(num) {
-          ~"Buzz"
-        }
-        else {
-          int::str(num)
-        };
-      io::println(answer)
-    }
+      for int::range(1, 101) |num| {
+          let answer =
+              if is_fifteen(num){
+                  ~"FizzBuzz"
+              }
+              else if is_three(num) {
+                  ~"Fizz"
+              }
+              else if is_five(num) {
+                  ~"Buzz"
+              }
+              else {
+                  int::to_str(num)
+              };
+          println(answer)
+      }
   }
 
 Remember that the tilde has an effect that we haven't talked about yet. I added
@@ -557,24 +563,24 @@ it was a number. Oh well.
 Because the ``if`` returns a value, we could also do something like this::
 
   fn main() {
-    for int::range(1, 101) |num| {
-      io::println(
-        if is_fifteen(num) { ~"FizzBuzz" }
-        else if is_three(num) { ~"Fizz" }
-        else if is_five(num) { ~"Buzz" }
-        else { int::str(num) }
-      );
-    }
+      for int::range(1, 101) |num| {
+          println(
+            if is_fifteen(num) { ~"FizzBuzz" }
+            else if is_three(num) { ~"Fizz" }
+            else if is_five(num) { ~"Buzz" }
+            else { int::to_str(num) }
+          );
+      }
   }
 
 It's more compact, and removes the intermediate variable all together.
 
-We can do one other thing too: this whole ``if/fail`` thing seems too complex.
-Why do we have to write if over and over and over again? Meet ``assert``::
+We can do one other thing too: this whole ``if/fail!`` thing seems too complex.
+Why do we have to write if over and over and over again? Meet ``assert!``::
 
   #[test]
   fn test_is_fifteen_with_fifteen() {
-    assert is_fifteen(15)
+    assert!(is_fifteen(15))
   }
 
 This will fail if it gets false, and pass if it gets true. Simple!
@@ -583,57 +589,58 @@ Anyway, awesome! We've conquered FizzBuzz. ``is_fifteen`` isn't the best named
 method, but we're just learning. ;) Here's my full final code::
 
   extern mod std;
+  use core::io::println;
 
   fn is_three(num: int) -> bool {
-    num % 3 == 0
+      num % 3 == 0
   }
 
   #[test]
   fn test_is_three_with_not_three() {
-    assert !is_three(1)
+      assert!(!is_three(1))
   }
 
   #[test]
   fn test_is_three_with_three() {
-    assert is_three(3)
+      assert!(is_three(3))
   }
 
   fn is_five(num: int) -> bool {
-    num % 5 == 0
+      num % 5 == 0
   }
 
   #[test]
   fn test_is_five_with_not_five() {
-    assert !is_five(1)
+      assert!(!is_five(1))
   }
 
   #[test]
   fn test_is_five_with_five() {
-    assert is_five(5)
+      assert!(is_five(5))
   }
 
   fn is_fifteen(num: int) -> bool {
-    num % 15 == 0
+      num % 15 == 0
   }
 
   #[test]
   fn test_is_fifteen_with_not_fifteen() {
-    assert !is_fifteen(1)
+    assert!(!is_fifteen(1))
   }
 
   #[test]
   fn test_is_fifteen_with_fifteen() {
-    assert is_fifteen(15)
+      assert!(is_fifteen(15))
   }
 
 
   fn main() {
-    for int::range(1, 101) |num| {
-      io::println(
-        if is_fifteen(num) { ~"FizzBuzz" }
-        else if is_three(num) { ~"Fizz" }
-        else if is_five(num) { ~"Buzz" }
-        else { int::str(num) }
-      );
-    }
+      for int::range(1, 101) |num| {
+          println(
+              if is_fifteen(num) { ~"FizzBuzz" }
+              else if is_three(num) { ~"Fizz" }
+              else if is_five(num) { ~"Buzz" }
+              else { int::to_str(num) }
+          );
+      }
   }
