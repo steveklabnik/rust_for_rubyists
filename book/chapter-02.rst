@@ -24,9 +24,9 @@ Rust does the Standard Unix Thing.
 
 ::
 
-  $ curl -O http://dl.rust-lang.org/dist/rust-0.5.tar.gz
-  $ tar -xzf rust-0.5.tar.gz
-  $ cd rust-0.5
+  $ curl -O http://dl.rust-lang.org/dist/rust-0.6.tar.gz
+  $ tar -xzf rust-0.6.tar.gz
+  $ cd rust-0.6
   $ ./configure
   $ make
   $ sudo make install
@@ -43,14 +43,9 @@ use the installer_.
 Future Proofing
 ---------------
 
-The 0.5 release of Rust has broken the Rust REPL, so a 0.5.1 is expected
-shortly.
-
-I'll try to keep these instructions up to date, but it's easy enough to find
-and install the latest version; just change these two lines. The version I show
-you above is the latest version I tested the code on; The language has settled
-down by now, but Rust 0.6.x is expected to have a more final syntax, so some
-things will change.
+The version this book is written for is 0.6. The language has largely calmed
+down, so it should be pretty future-proof code. I'll be tweaking it with every
+new release.
 
 If you run
 
@@ -60,4 +55,4 @@ If you run
 
 and it spits out a bunch of help information, you're good to go with Rust.
 
-.. _installer: http://static.rust-lang.org/dist/rust-0.5-install.exe
+.. _installer: http://static.rust-lang.org/dist/rust-0.6-install.exe
