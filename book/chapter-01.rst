@@ -47,7 +47,12 @@ teach us a lot.
 
 Here's "Hello World" in Rust:
 
-{{ ork.code('examples/hello_world.rs') }}
+::
+
+  fn main() {
+      io::println(greeting_message);
+  }
+  
 
 Here's a parallel "Hello World" in Rust:
 
@@ -56,7 +61,6 @@ Here's a parallel "Hello World" in Rust:
   use core::task::spawn;
 
   fn main() {
-
       for 10.times {
           do spawn {
             let greeting_message = "Hello?";

@@ -179,7 +179,8 @@ test, and see what happens::
 
 Great! It showed that our first test passed, and that our second one failed.
 Let's make both tests pass::
-extern mod std;
+
+  extern mod std;
 
   fn is_three(num: int) -> bool {
       if num % 3 == 0 {
