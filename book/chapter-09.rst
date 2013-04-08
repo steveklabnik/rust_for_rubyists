@@ -13,6 +13,8 @@ Structs
 
 Structs are ways of packaging up multiple values into one::
 
+  use core::io::println;
+
   struct Monster {
       health: int,
       attack: int
@@ -21,8 +23,8 @@ Structs are ways of packaging up multiple values into one::
   fn main() {
     let m = Monster { health:10, attack:20 };
 
-    io::println(int::str(m.health));
-    io::println(int::str(m.attack));
+    println(int::to_str(m.health));
+    println(int::to_str(m.attack));
   }
 
 This gives::
@@ -43,6 +45,8 @@ Methods are basically functions that take a first argument named ``self``.
 Python people who are reading will be high fiving each other in droves. Let's
 add a method for our ``Monster`` s::
 
+  use core::io::println;
+
   struct Monster {
       health: int,
       attack: int
@@ -50,14 +54,14 @@ add a method for our ``Monster`` s::
 
   impl Monster {
       fn attack(&self) {
-        io::println(fmt!("The monster attacks for %d damage.", self.attack));
+          println(fmt!("The monster attacks for %d damage.", self.attack));
       }
   }
 
   fn main() {
-    let m = Monster { health:10, attack:20 };
+      let m = Monster { health:10, attack:20 };
 
-    m.attack();
+      m.attack();
   }
 
 This gives::
@@ -83,6 +87,8 @@ the ownership semantics are. That's the ``&self``, if you forgot.
 
 You can define static methods as well::
 
+  use core::io::println;
+
   struct Monster {
       health: int,
       attack: int
@@ -90,19 +96,19 @@ You can define static methods as well::
 
   impl Monster {
       fn attack(&self) {
-        io::println(fmt!("The monster attacks for %d damage.", self.attack));
+          println(fmt!("The monster attacks for %d damage.", self.attack));
       }
 
-      static fn count() {
-        io::println("There are a bunch of monsters out tonight.");
+      fn count() {
+          println("There are a bunch of monsters out tonight.");
       }
   }
 
   fn main() {
-    let m = Monster { health:10, attack:20 };
+      let m = Monster { health:10, attack:20 };
 
-    m.attack();
-    Monster::count();
+      m.attack();
+      Monster::count();
   }
 
 Right now, you need that ``static`` keyword, but eventually, the language will
@@ -110,6 +116,8 @@ just figure it out depending if you define ``self``. Neato!
 
 Constructors are a good reason to use static methods::
 
+  use core::io::println;
+
   struct Monster {
       health: int,
       attack: int
@@ -117,20 +125,20 @@ Constructors are a good reason to use static methods::
 
   impl Monster {
       fn attack(&self) {
-        io::println(fmt!("The monster attacks for %d damage.", self.attack));
+          println(fmt!("The monster attacks for %d damage.", self.attack));
       }
 
-      static fn count() {
-        io::println("There are a bunch of monsters out tonight.");
+      fn count() {
+          println("There are a bunch of monsters out tonight.");
       }
 
-      static fn new(health: int, attack: int) -> Monster {
-        Monster { health:health, attack:attack }
+      fn new(health: int, attack: int) -> Monster {
+          Monster { health:health, attack:attack }
       }
   }
 
   fn main() {
-    Monster::new(20, 40).attack();
+      Monster::new(20, 40).attack();
   }
 
 This gives::
@@ -150,26 +158,29 @@ What if we want to define a few different types of things? In other languages,
 we'd use inheritance. In Rust, it seems like Enums are a better idea. Here's
 an enum::
 
+  use core::io::println;
+
   enum Monster {
-    ScubaArgentine(int, int, int, int),
-    IndustrialRaverMonkey(int, int, int, int)
+      ScubaArgentine(int, int, int, int),
+      IndustrialRaverMonkey(int, int, int, int)
   }
 
 
   impl Monster {
-    fn attack(&self) {
+      fn attack(&self) {
 
-      match *self {
-        ScubaArgentine(l, s, c, w) => io::println(fmt!("The monster attacks for %d damage.", w)),
-        IndustrialRaverMonkey(l, s, c, w) => io::println(fmt!("The monster attacks for %d damage.", w))
+        match *self {
+            ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
+            IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
+        }
       }
-    }
   }
 
   fn main() {
-    let irm = IndustrialRaverMonkey(46, 35, 91, 2);
-    irm.attack();
+      let irm = IndustrialRaverMonkey(46, 35, 91, 2);
+      irm.attack();
   }
+
 
 Okay, few new things here: We can see that there's some duplication here.
 Obviously this isn't the best way to do it, but I wanted to try this out before
@@ -180,19 +191,21 @@ things.
 If you haven't used pattern matching in another language, you're missing out.
 It's awesome. Here's a simpler match expression::
 
+  use core::io::println;
+
   fn message(i: int) {
     match i {
-      1 => io::println("ONE!"),
-      2 => io::println("Two is a prime."),
-      3 => io::println("THREE!"),
-      _ => io::println("no idea what that is, boss")
-    }
+        1 => println("ONE!"),
+        2 => println("Two is a prime."),
+        3 => println("THREE!"),
+        _ => println("no idea what that is, boss")
+      }
   }
 
   fn main() {
-    message(1);
-    message(2);
-    message(3);
+      message(1);
+      message(2);
+      message(3);
   }
 
 Does that make sense? It's sorta like a ``case`` statement, but it's more
@@ -213,7 +226,7 @@ Neat. The cool thing is that when pattern matching on a struct, the ``match``
 can destruct it::
 
   match p {
-    Point(x, y) => io::println(fmt!("X: %d, Y: %d", x, y))
+      Point(x, y) => io::println(fmt!("X: %d, Y: %d", x, y))
   }
 
 We name the two fields of a ``Point`` ``x`` and ``y``, and those names are
