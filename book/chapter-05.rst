@@ -88,7 +88,7 @@ that the compiled ``fizzbuzz`` is newer than the source file
 this right. Edit fizzbuzz.rs to add a println statement::
 
   extern mod std;
-  use io::println;
+  use core::io::println;
 
   fn main() {
       println("Hello from Rust!");

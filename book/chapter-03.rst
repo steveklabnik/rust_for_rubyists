@@ -15,7 +15,7 @@ end in ``.rs``:
 
 Put this in it::
 
-  use io::println;
+  use core::io::println;
 
   fn main() {
       println("Hello, world.");
