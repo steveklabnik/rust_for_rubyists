@@ -24,7 +24,7 @@ Rust does the Standard Unix Thing.
 
 ::
 
-  $ curl -O http://dl.rust-lang.org/dist/rust-0.6.tar.gz
+  $ curl -O http://static.rust-lang.org/dist/rust-0.6.tar.gz
   $ tar -xzf rust-0.6.tar.gz
   $ cd rust-0.6
   $ ./configure
