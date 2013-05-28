@@ -6,8 +6,8 @@ Tasks in Rust
 One of the things that Rust is super good at is concurrency. In order to
 understand Rust's strengths, you have to understand its approach to
 concurrency, and then its approach to memory. The two are inter-related, and
-we can't stop glossing over details like "just put ``~`` in front of things
-anymore, which makes me really uncomfortable.
+we can't keep glossing over details like "just put ``~`` in front of things"
+anymore.
 
 Tasks
 -----
@@ -17,13 +17,12 @@ similar to 'lightweight' threads in Erlang or Go. Rust tasks are entirely
 isolated from one another, though. They're scheduled on an M:N basis to OS
 threads, so they're not quite green threads exactly, either: they'll be
 parallel as well as concurrent. There can be 200k Rust tasks mapped over 4 OS
-threads.
+threads (the rust scheduler by default uses one thread per core on your
+computer).
 
 As a Rubyist, you probably don't know anything about that, so let's talk code
 first, and get into what exactly all that means later. Here's some code that
 prints "Hello" 100 times::
-
-  use core::io::println;
 
   fn main() {
       for 100.times {
@@ -33,9 +32,6 @@ prints "Hello" 100 times::
 
 You may remember this from earlier. This loops 100 times, printing "Hello." Now
 let's make it roflscale with tasks::
-
-  use core::task::spawn;
-  use core::io::println;
 
   fn main() {
       for 100.times {
@@ -76,11 +72,7 @@ communicate between tasks with pipes. Pipes have two ends: a channel that sends
 info down the pipe, and a port that receives info. Here's an example of a
 task that sends us back a 10::
 
-  use core::task::spawn;
-  use core::pipes::stream;
-  use core::pipes::Port;
-  use core::pipes::Chan;
-  use core::io::println;
+  use core::pipes::{stream, Port, Chan};
 
   fn main() {
       let (port, chan): (Port<int>, Chan<int>) = stream();
@@ -92,7 +84,19 @@ task that sends us back a 10::
       println(int::to_str(port.recv()));
   }
 
-You can imagine that instead of sending 10, we might be doing some sort of
+Whoa! What's that new ``use`` syntax? It's called an import, and it's similar
+to Ruby's ``require``, although it doesn't actually pull in new source files,
+it just brings names into scope (you'll see Rust's equivalent to ``require``
+later). The braces are any easy way to import multiple things without having to
+repeat what you're importing from. Without it, you would need::
+
+  use core::pipes::stream;
+  use core::pipes::Port;
+  use core::pipes::Chan;
+
+This gets unweildy fast.
+
+Anyway, you can imagine that instead of sending 10, we might be doing some sort of
 complex calculation. It could be doing that work in the background while we
 did more important things.
 
@@ -111,9 +115,6 @@ annoying, so we have some standard library code for this: ``DuplexStream``::
 
   extern mod std;
   use std::comm::DuplexStream;
-
-  use core::task::spawn;
-  use core::io::println;
 
   fn plus_one(channel: &DuplexStream<int, int>) {
       let mut value: int;
@@ -135,6 +136,15 @@ annoying, so we have some standard library code for this: ``DuplexStream``::
       let twenty_three = from_child.recv();
       println(int::to_str(twenty_three));
   }
+
+What's this ``extern mod std`` madness? Well, that's how we ``link`` to
+external libraries. If you've used C or C++ before, you know what this means.
+If you haven't, it's essentially how you declare that your program uses a
+certain dynamic library (``.dll`` on Windows, ``.dylib`` on OS X, and ``.so``
+on other Unix systems). ``std`` is part of Rust itself, it includes extras as
+compared to ``core`` (which is automatically included in every program), such
+as JSON parsing, networking, and data structures. See
+http://static.rust-lang.org/doc/0.6/std/index.html for more.
 
 We make a function that just loops forever, gets an ``int`` off of the port,
 and sends the number plus 1 back down the channel. In the main function, we
@@ -164,19 +174,15 @@ in the background, we can send it bunches of values::
 Pretty simple. Our task is always waiting for work. If you run this, you'll get
 some weird output at the end::
 
-  $ make
-  rustc fizzbuzz.rs
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
+  $ rust run tasks.rs
   23
   24
   25
   26
-  rust: task failed at 'connection closed', fizzbuzz.rs:1
-  rust: domain main @0x7ff6eb013e10 root task failed
-  make: *** [run] Error 101
+  rust: task failed at 'connection closed', /build/src/rust-0.6/src/libcore/option.rs:300
+  rust: domain main @0x7f79c4206830 root task failed
 
-'task failed at connection closed: root task failed'. Basically, we quit the
+``task failed at 'connection closed'``. Basically, we quit the
 program without closing our child task, and so it died when our main task (the
 one running ``main``) died. By default, Rust tasks are bidirectionally linked,
 which means if one task fails, all of its children and parents fail too.
@@ -184,9 +190,6 @@ We can fix this for now by telling our child to die::
 
   extern mod std;
   use std::comm::DuplexStream;
-
-  use core::task::spawn;
-  use core::io::println;
 
   fn plus_one(channel: &DuplexStream<int, int>) {
       let mut value: int;

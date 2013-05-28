@@ -15,8 +15,6 @@ end in ``.rs``:
 
 Put this in it::
 
-  use core::io::println;
-
   fn main() {
       println("Hello, world.");
   }
@@ -29,12 +27,12 @@ And compile it with ``rustc``::
 It should compile without error. If you get one, double check that you have the
 semicolons, the curlies, and the parentheses. Errors look like this::
 
-  $ rustc hello.rs
-  hello.rs:3:0: 3:2 error: expected `;` but found `fn`
-  hello.rs:3 fn main() {
-             ^~
+    $ rustc hello.rs
+    hello.rs:2:4: 2:11 error: expected `{` but found `println`
+    hello.rs:2     println("Hello, world.");
+                   ^~~~~~~
 
-This happened when I left off the semicolon after the ``use`` statement above.
+This happened when I left off the curly brace after the ``main`` function above.
 To run your program, do the Usual UNIX Thing::
 
   $ ./hello

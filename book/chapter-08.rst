@@ -59,10 +59,8 @@ let them go wild. We'd have no idea what was going on.
 Managed Boxes
 -------------
 
-Managed boxes are heap allocated and garbage collected. They have a ``@``
-prefix. Check it out::
-
-  use core::io::println;
+Managed boxes are heap allocated and garbage collected. They are the most
+similar to Ruby object references. They have a ``@`` prefix. Check it out::
 
   fn main() {
       let x = @10;
@@ -87,16 +85,12 @@ If you don't want your values to get GC'd, you can use an owned box. This tells
 Rust that you own a reference to something, and you'll take care of it
 yourself. This is indicated with a ``~``::
 
-  use core::io::println;
-
   fn main() {
       let x = ~10;
       println(int::to_str(*x));
   }
 
 You can't make another pointer to this value::
-
-  use core::io::println;
 
   fn main() {
       let x = ~10;
@@ -106,24 +100,21 @@ You can't make another pointer to this value::
 
 This yields::
 
-  $ make
-  rustc fizzbuzz.rs
-  fizzbuzz.rs:3:6: 3:9 warning: unused variable: `y`
-  fizzbuzz.rs:3   let y = x;
-                      ^~~
-  fizzbuzz.rs:4:24: 4:25 error: use of moved variable: `x`
-  fizzbuzz.rs:4   io::println(int::str(*x));
-                                        ^
-  fizzbuzz.rs:3:10: 3:11 note: move of variable occurred here
-  fizzbuzz.rs:3   let y = x;
-                          ^
+  $ rust run owned.rs
+  owned.rs:3:8: 3:11 warning: unused variable: `y`
+  owned.rs:3     let y = x;
+                     ^~~
+  owned.rs:4:25: 4:26 error: use of moved value: `x`
+  owned.rs:4     println(int::to_str(*x));
+                                      ^
+  owned.rs:3:12: 3:13 note: `x` moved here because it has type ~int, which is moved by default (use `copy` to override)
+  owned.rs:3     let y = x;
+                         ^
   error: aborting due to previous error
-  make: *** [build] Error 101
+
 
 It tells us that we moved the value of ``x`` to ``y`` and points out where
 the move happens. Neat. We can make a copy::
-
-  use core::io::println;
 
   fn main() {
       let x = ~10;
@@ -134,19 +125,22 @@ the move happens. Neat. We can make a copy::
 This will work, though it will tell us that ``y`` was never used. And they
 point at two different copies of 10, not the same one.
 
+Genearly, you should use owned boxes where possible, rather than managed
+boxes. They are much more efficient (no GC!), because they are analyzed
+at compile-time to make sure they are used correctly. Some things just
+aren't possible without managed boxes, though.
+
 Borrowed Pointers
 -----------------
 
 Imagine we had this::
-
-  use core::io::println;
 
   fn plus_one(x: int) -> int {
       x + 1
   }
 
   fn main() {
-      let x = @10;
+      let x = ~10;
 
       println(int::to_str(plus_one(*x)));
   }
@@ -154,29 +148,25 @@ Imagine we had this::
 Now, this works just fine. But what if we don't want to copy the value of x
 when we call ``plus_one``? We'd want to pass a pointer. Easy enough::
 
-  use core::io::println;
-
-  fn plus_one(x: @int) -> int {
+  fn plus_one(x: ~int) -> int {
       *x + 1
   }
 
   fn main() {
-    let x = @10;
+    let x = ~10;
 
     println(int::to_str(plus_one(x)));
   }
 
 Seems fine. But what about this?::
 
-  use core::io::println;
-
-  fn plus_one(x: @int) -> int {
+  fn plus_one(x: ~int) -> int {
       *x + 1
   }
 
   fn main() {
-      let x = @10;
-      let y = ~10;
+      let x = ~10;
+      let y = @10;
 
       println(int::to_str(plus_one(x)));
       println(int::to_str(plus_one(y))); // uhhhhhhh
@@ -185,23 +175,20 @@ Seems fine. But what about this?::
 ``plus_one`` takes a managed box, but we're giving it a unique box. If we try
 to compile this, we get this::
 
-  $ make
-  rustc fizzbuzz.rs
-  fizzbuzz.rs:10:32: 10:33 error: mismatched types: expected `@int` but found `~<VI1>` (expected @-ptr but found ~-ptr)
-  fizzbuzz.rs:10   io::println(int::str(plus_one(y)));
-                                                 ^
+  $ rust run owned.rs
+  owned.rs:9:33: 9:34 error: mismatched types: expected `~int` but found `@<VI1>` (expected ~-ptr but found @-ptr)
+  owned.rs:9     println(int::to_str(plus_one(y)));
+                                              ^
   error: aborting due to previous error
-  make: *** [build] Error 101
 
-Makes sense. Expected ``@-ptr`` but found ``~-ptr``. We could do this::
 
-  use core::io::println;
+Makes sense. Expected ``~-ptr`` but found ``@-ptr``. We could do this::
 
   fn plus_one_managed(x: @int) -> int {
       *x + 1
   }
 
-  fn plus_one_unique(x: ~int) -> int {
+  fn plus_one_owned(x: ~int) -> int {
       *x + 1
   }
 
@@ -210,7 +197,7 @@ Makes sense. Expected ``@-ptr`` but found ``~-ptr``. We could do this::
       let y = ~10;
 
       println(int::to_str(plus_one_managed(x)));
-      println(int::to_str(plus_one_unique(y)));
+      println(int::to_str(plus_one_owned(y)));
   }
 
 This is pretty obviously a terrible idea. What we want is to take either kind
@@ -218,8 +205,6 @@ of pointer: we don't care about changing ownership. We just want to use the
 value for a while.
 
 Enter borrowed pointers::
-
-  use core::io::println;
 
   fn plus_one(x: &int) -> int {
       *x + 1

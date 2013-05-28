@@ -30,8 +30,6 @@ I'll wait.
 
 Done? I got this::
 
-  use core::io::println;
-
   fn print_vec(v: &[int]) {
 
     for v.each |&i| {
@@ -64,8 +62,6 @@ You'll often be seeing owned boxes with strings. Go ahead. You can do it!
 
 I got this::
 
-  use core::io::println;
-
   fn print_vec(v: &[int]) {
       for v.each |&i| {
           println(int::to_str(i))
@@ -97,8 +93,6 @@ Okay, obviously, this situation sucks! What can we do? Well, the first thing
 is that we don't have the same method body. We're doing different things to
 convert our arguments to a string. Here's the answer::
 
-  use core::io::println;
-
   fn print_vec(v: &[int]) {
 
     for v.each |&i| {
@@ -129,8 +123,6 @@ This is much nicer than our ``int::str`` calls from before, in my opinion.
 And now that we have the same method body, our types are almost the same...
 
 Let's fix that::
-
-  use core::io::println;
 
   fn print_vec<T>(v: &[T]) {
       for v.each |&i| {
@@ -176,8 +168,6 @@ Traits
 ------
 
 This **will** work::
-
-  use core::io::println;
 
   fn print_vec<T: ToStr>(v: &[T]) {
       for v.each |&i| {
@@ -247,8 +237,6 @@ The right way to look at it is that by giving the compiler more information
 about our code, it can make certain optimizations. Check this out::
 
   $ cat fizzbuzz.rs
-  use core::io::println;
-
   fn print_vec<T: ToStr>(v: &[T]) {
       for v.each |&i| {
           println(i.to_str())
@@ -301,8 +289,6 @@ about our code, it can make certain optimizations. Check this out::
 
   steve at thoth in ~/tmp
   $ cat fizzbuzz.rs
-  use core::io::println;
-
   fn print_vec<T: ToStr>(v: &[T]) {
       for v.each |&i| {
           println(i.to_str())
@@ -405,8 +391,6 @@ actually use. No generating code that's useless. This process is called
 'monomorphism,' which basically means we take one thing (mono) and change it
 (morphism) into other things. To simplify, the compiler takes this code::
 
-  use core::io::println;
-
   fn print_vec<T: ToStr>(v: &[T]) {
       for v.each |&i| {
           println(i.to_str())
@@ -424,8 +408,6 @@ actually use. No generating code that's useless. This process is called
   }
 
 And turns it into::
-
-  use core::io::println;
 
   fn print_vec_str(v: &[~str]) {
       for v.each |&i| {
@@ -526,8 +508,6 @@ Now we're cooking with gas! Remember our old implementation?::
 Ugh. This is way better. No de-structuring on types. We can write an
 implementation for absolutely anything::
 
-  use core::io::println;
-
   trait Monster {
       fn attack(&self);
   }
@@ -587,8 +567,6 @@ help. I had to ask `the rust IRC`_ for help once while doing it. They're
 friendly, don't worry.
 
 Done? Here's mine::
-
-  use core::io::println;
 
   trait Monster {
       fn attack(&self);

@@ -15,8 +15,6 @@ Examples
 
 See if this looks familliar::
 
-  use core::io::println;
-
   fn main() {
       let your_favorite_numbers = @[1,2,3];
       let my_favorite_numbers = @[4,5,6];
@@ -46,8 +44,6 @@ Mutability inheritance
 
 You can mutate vectors if you make them so::
 
-  use core::io::println;
-
   fn main() {
       let a_vector = @[1,2,3];
       let mut another_vector = @[];
@@ -58,8 +54,6 @@ You can mutate vectors if you make them so::
 
 Of course, changing an element of a vector doesn't make sense::
 
-  use core::io::println;
-
   fn main() {
       let a_vector = ~[1,2,3];
       a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: assigning to immutable vec content
@@ -68,8 +62,6 @@ Of course, changing an element of a vector doesn't make sense::
   }
 
 But you can move it to a mutable one and then change it::
-
-  use core::io::println;
 
   fn main() {
       let a_vector = ~[1,2,3];

@@ -19,13 +19,11 @@ I pick this example because it's fun, not too hard, and lets us do text-based
 I/O with a teeny bit of logic. Let's go!
 
 Using ``stdin()``
----------------
+-----------------
 
 Turns out getting text input is pretty simple. Just try this::
 
-  use core::io::{Reader,ReaderUtil};
-  use core::io::println;
-
+  use core::io::{Reader, ReaderUtil};
   fn main() {
       println("INPUT:");
       let in = io::stdin().read_line();
@@ -138,7 +136,7 @@ at the top::
 We want to link against the core library, and then import all the default stuff
 into scope. This is why we need::
 
-  use io::{Reader,ReaderUtil};
+  use io::{Reader, ReaderUtil};
 
 We're bringing these two interfaces into scope. Not everything in ``io`` needs
 them, so they're not imported by default. And we use the ``{,}`` syntax in
@@ -150,8 +148,7 @@ Casting to integer
 So, I was trying to cast a string to an integer to get this program going. So
 I wrote this::
 
-  use core::io::{Reader,ReaderUtil};
-  use core::io::println;
+  use core::io::{Reader, ReaderUtil};
 
   fn main() {
       let in = io::stdin().read_line();
@@ -167,7 +164,7 @@ This threw an error::
   $ make
   rustc fizzbuzz.rs
   fizzbuzz.rs:125:23: 125:41 error: mismatched types: expected `int` but found `core::option::Option<int>` (expected int but found enum core::option::Option)
-  fizzbuzz.rs:125   io::println(int::str(int::from_str(in)));
+  fizzbuzz.rs:125   println(int::str(int::from_str(in)));
                                          ^~~~~~~~~~~~~~~~~~
   error: aborting due to previous error
   make: *** [build] Error 101
@@ -177,8 +174,7 @@ doesn't make any sense as an integer. For example: ``"foo"``. So it doesn't
 actually return a string, it returns an ``Option``. We can then use pattern
 matching to handle both cases. Observe::
 
-  use core::io::{Reader,ReaderUtil};
-  use core::io::println;
+  use core::io::{Reader, ReaderUtil};
 
   fn main() {
       let in = io::stdin().read_line();
@@ -234,7 +230,6 @@ Random Number Generation
 Random number generation isn't too bad::
 
   use core::rand::RngUtil;
-  use core::io::println;
 
   fn main() {
       let rng = rand::Rng();
@@ -245,7 +240,6 @@ This will print out a different number each time you run it. But you'll get
 biiiiiiig numbers. If we want 1-100, of course we have to do this::
 
   use core::rand::RngUtil;
-  use core::io::println;
 
   fn main() {
       let rng = rand::Rng();
@@ -256,7 +250,6 @@ biiiiiiig numbers. If we want 1-100, of course we have to do this::
 One issue with this: We can get negatives too. ``abs`` to the rescue!!!::
 
   use core::rand::RngUtil;
-  use core::io::println;
   use core::int::abs;
 
   fn main() {
@@ -276,9 +269,8 @@ My version
 Okay! That took me... about half an hour. Maybe 45 minutes. I decided to use
 some pointer stuff...  Check it out::
 
-  use core::io::{Reader,ReaderUtil};
+  use core::io::{Reader, ReaderUtil};
   use core::rand::RngUtil;
-  use core::io::println;
   use core::int::abs;
   
   fn generate_secret_number() -> int {
@@ -331,9 +323,8 @@ shouldn't really be worrying about mutating ``guesses``, which leads to all
 kinds of awkward pointer stuff, as you can see. After asking on IRC, 'strcat'
 gave me this version::
 
-  use core::io::{Reader,ReaderUtil};
+  use core::io::{Reader, ReaderUtil};
   use core::rand::RngUtil;
-  use core::io::println;
   use core::int::abs;
 
   fn generate_secret_number() -> int {

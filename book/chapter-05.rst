@@ -8,6 +8,20 @@ building and then running with Ruby, and while it's not a big deal to type
 two things, we probably want to make it one step. Eventually, CI servers and
 things will want a one-step build process, anyway.
 
+``rust run``
+------------
+
+The simplest way to build and run a rust program, as of rust 0.6, is to use
+the ``rust`` wrapper program. It will do everything needed. For example::
+
+  $ rust run hello.rs
+  $ rust test testing.rs
+  $ rust help # see all the things it can do for you!
+
+This can make running or testing simple rust programs easy. There's another
+option, though, that's more flexible, and provides many more options for
+customization down the road.
+
 Make
 ----
 
@@ -41,8 +55,6 @@ printed out the compile command that it ran. Is make going to know
 about Rust? (Doesn't seem likely, does it?)
 
 Let's make ``fizzbuzz.rs`` with the following contents::
-
-  extern mod std;
 
   fn main() {
   }
@@ -87,9 +99,6 @@ that the compiled ``fizzbuzz`` is newer than the source file
 ``fizzbuzz.rs``. No new compilation needed! Let's check that make gets
 this right. Edit fizzbuzz.rs to add a println statement::
 
-  extern mod std;
-  use core::io::println;
-
   fn main() {
       println("Hello from Rust!");
   }
@@ -107,7 +116,7 @@ Compile and run! Try it again?::
   ./fizzbuzz
   Hello from Rust!
 
-Ran it! And no compile needed.
+Ran it! And no recompile needed.
 
 Now, we want to setup for running tests as well. To keep things
 simple, we'll just have a single source file ``fizzbuzz.rs`` for both
@@ -173,7 +182,7 @@ Let's add a failing test to prove we've got it all::
   ./test-fizzbuzz
 
   running 1 test
-  rust: task failed at 'We just fail every time :-(', fizzbuzz.rs:9
+  rust: task failed at 'We just fail every time :-(', fizzbuzz.rs:3
   test this_tests_code ... FAILED
 
   failures:
@@ -181,10 +190,8 @@ Let's add a failing test to prove we've got it all::
 
   result: FAILED. 0 passed; 1 failed; 0 ignored
 
-  rust: task failed at 'Some tests failed', /tmp/rust-0.5/src/libstd/test.rs:62
-  rust: domain main @0x15f0c00 root task failed
-  rust: task failed at 'killed', /tmp/rust-0.5/src/libcore/task/mod.rs:570
-  make: *** [test] Error 101
+  rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
+  rust: domain main @0xa529c0 root task failed
 
 Yup. The failing test failed. And, make did not continue on to compile
 and run the program. We still can ask make to run the program without
@@ -198,6 +205,6 @@ the tests::
 You can do a lot more complex stuff with Make, such as pattern rules. I
 don't want to teach you everything about Make, this is a book about
 Rust. So we'll just leave it like this for now. This recipe will serve
-you well until you get to more than one file.
+you well until you get to much more complex projects.
 
 Next up: TDD-ing Fizzbuzz.

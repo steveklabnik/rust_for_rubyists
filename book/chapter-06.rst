@@ -6,9 +6,9 @@ FizzBuzz
 Of course, the first thing that your job interview for that cushy new Rust job
 will task you with is building FizzBuzz. Let's do it!
 
-If you haven't done the previous chapter's worth of setup, please copy the
-Makefile we built into your current directory: we'll be assuming you've set
-that up in this chapter.
+We'll be assuming you're using the ``rust`` wrapper program, but if you want
+you can copy the ``Makefile`` from the previous chapter and use ``make``;
+either work.
 
 If you're not familiar, FizzBuzz is a simple programming problem::
 
@@ -19,35 +19,25 @@ printing to standard output, and a host of other simple things.
 
 First, a test. This will go in fizzbuzz.rs::
 
-  extern mod std;
-
   #[test]
   fn test_is_three() {
       if is_three(1) {
           fail!(~"One is not three");
       }
-  }
-
-  fn main() {
   }
 
 And run it::
 
-  $ make test
-  rustc fizzbuzz.rs --test
-  fizzbuzz.rs:5:5: 5:13 error: unresolved name: is_three
-  fizzbuzz.rs:5   if is_three(1) {
-                     ^~~~~~~~
+  $ rust test fizzbuzz.rs
+  fizzbuzz.rs:3:7: 3:15 error: unresolved name `is_three`.
+  fizzbuzz.rs:3     if is_three(1) {
+                       ^~~~~~~~
   error: aborting due to previous error
-  make: *** [build-test] Error 101
-
 
 This makes sense: We haven't defined any functions yet. Let's define one::
 
-  extern mod std;
-
   fn is_three(num: int) -> bool {
-    return true;
+      return true;
   }
 
   #[test]
@@ -56,10 +46,6 @@ This makes sense: We haven't defined any functions yet. Let's define one::
           fail!(~"One is not three");
       }
   }
-
-  fn main() {
-  }
-  
 
 Okay. Here's some new syntax. The ``num: int`` says that we take one argument,
 ``num``, and that it's of an integer type. The ``-> bool`` says that we return a
@@ -70,16 +56,13 @@ expect, but we have curly braces rather than our friends ``do/end``.
 
 Now that we've got that cleared up, let's run our tests::
 
-  $ make test
-  rustc fizzbuzz.rs --test
-  fizzbuzz.rs:3:12: 3:16 warning: unused variable: `num`
-  fizzbuzz.rs:3 fn is_three(num: int) -> bool {
+  $ rust test fizzbuzz.rs
+  fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
+  fizzbuzz.rs:1 fn is_three(num: int) -> bool {
                             ^~~~
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
 
   running 1 test
-  rust: task failed at 'One is not three', fizzbuzz.rs:10
+  rust: task failed at 'One is not three', fizzbuzz.rs:8
   test test_is_three ... FAILED
 
   failures:
@@ -87,21 +70,17 @@ Now that we've got that cleared up, let's run our tests::
 
   result: FAILED. 0 passed; 1 failed; 0 ignored
 
-  rust: task failed at 'Some tests failed', /private/tmp/rust-w7Y4/rust-0.5/src/libstd/test.rs:62
-  rust: domain main @0x7fbd04800010 root task failed
-  rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
-  make: *** [run] Error 101
+  rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
+  rust: domain main @0x85d9c0 root task failed
+
 
 Rust is kind enough to give us a warning: we never used the ``num`` argument. We
 then get our failure, "One is not three", because we returned true. Now that
 we have a failing test, let's make it pass::
 
-  extern mod std;
-
   fn is_three(num: int) -> bool {
     return false;
   }
-
 
   #[test]
   fn test_is_three() {
@@ -110,18 +89,12 @@ we have a failing test, let's make it pass::
       }
   }
 
-  fn main() {
-  }
-
 TDD means do the simplest thing! And run it::
 
-  $ make test
-  rustc fizzbuzz.rs --test
-  fizzbuzz.rs:3:12: 3:16 warning: unused variable: `num`
-  fizzbuzz.rs:3 fn is_three(num: int) -> bool {
+  $ rust test fizzbuzz.rs
+  fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
+  fizzbuzz.rs:1 fn is_three(num: int) -> bool {
                             ^~~~
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
 
   running 1 test
   test test_is_three ... ok
@@ -130,8 +103,6 @@ TDD means do the simplest thing! And run it::
 
 Awesome! We pass! We still have that warning, though... let's write another
 test, and see what happens::
-
-  extern mod std;
 
   fn is_three(num: int) -> bool {
       return false;
@@ -151,20 +122,14 @@ test, and see what happens::
     }
   }
 
-  fn main() {
-  }
-
-  $ make test
-  rustc fizzbuzz.rs --test
-  fizzbuzz.rs:3:12: 3:16 warning: unused variable: `num`
-  fizzbuzz.rs:3 fn is_three(num: int) -> bool {
+  $ rust test fizzbuzz.rs
+  fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
+  fizzbuzz.rs:1 fn is_three(num: int) -> bool {
                             ^~~~
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
 
   running 2 tests
-  rust: task failed at 'Three should be three', fizzbuzz.rs:17
   test test_is_three_with_not_three ... ok
+  rust: task failed at 'Three should be three', fizzbuzz.rs:15
   test test_is_three_with_three ... FAILED
 
   failures:
@@ -172,21 +137,17 @@ test, and see what happens::
 
   result: FAILED. 1 passed; 1 failed; 0 ignored
 
-  rust: task failed at 'Some tests failed', /private/tmp/rust-w7Y4/rust-0.5/src/libstd/test.rs:62
-  rust: domain main @0x7fe21b008c10 root task failed
-  rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
-  make: *** [run] Error 101
+  rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
+  rust: domain main @0x15109c0 root task failed
+
 
 Great! It showed that our first test passed, and that our second one failed.
 Let's make both tests pass::
 
-  extern mod std;
-
   fn is_three(num: int) -> bool {
       if num % 3 == 0 {
           return true;
-      }
-      else {
+      } else {
           return false;
       }
   }
@@ -205,21 +166,16 @@ Let's make both tests pass::
       }
   }
 
-  fn main() {
-  }
-
-  $ make test
-  rustc fizzbuzz.rs --test
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
+  $ rustc test fizzbuzz.rs
 
   running 2 tests
-  test test_is_three_with_three ... ok
   test test_is_three_with_not_three ... ok
+  test test_is_three_with_three ... ok
 
   result: ok. 2 passed; 0 failed; 0 ignored
 
-Awesome! This shows off how elses work, as well. It's probably what you expected. Go ahead and try to refactor this into a one-liner.
+Awesome! This shows off how elses work, as well. It's probably what you
+expected. Go ahead and try to refactor this into a one-liner.
 
 Done? How'd you do? Here's mine::
 
@@ -231,14 +187,12 @@ Wait, whaaaat? Yep, the last thing in a function is a return in Rust, but
 there's one wrinkle: note there's no semicolon here. If you had one, you'd
 get::
 
-  $ make test
-  rustc fizzbuzz.rs --test
-  fizzbuzz.rs:3:0: 5:1 error: not all control paths return a value
-  fizzbuzz.rs:3 fn is_three(num: int) -> bool {
-  fizzbuzz.rs:4     num % 3 == 0;
-  fizzbuzz.rs:5 }
-  error: aborting due to 1 previous error
-  make: *** [build-test] Error 101
+  $ rust test fizzbuzz.rs
+  fizzbuzz.rs:1:0: 3:1 error: not all control paths return a value
+  fizzbuzz.rs:1 fn is_three(num: int) -> bool {
+  fizzbuzz.rs:2     num % 3 == 0;
+  fizzbuzz.rs:3 }
+  error: aborting due to previous error
 
 Basically, ending an expression in Rust with a semicolon ignores the value of
 that expression. This is kinda weird. I don't know how I feel about it. But it
@@ -248,10 +202,7 @@ Okay, now try to TDD out an ``is_five`` and ``is_fifteen`` methods.
 They should work the same way, but this will let you get practice actually
 writing it out. Once you see this, you're ready to advance::
 
-  $ make test
-  rustc fizzbuzz.rs --test
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
+  $ rust test fizzbuzz.rs
 
   running 6 tests
   test test_is_five_with_not_five ... ok
@@ -270,51 +221,44 @@ the numbers from one to 100. It's easy!
 
 ::
 
-  use core::io::println;
-
   fn main() {
       for 100.times {
           println("num");
       }
   }
 
-Step one: print **something** 100 times. If you run this with ``make`` (not ``make
-test``!) you should see ``num`` printed 100 times. Note that our tests didn't
-actually run. Not only are they not run, they're actually not even in
-the executable::
+Step one: print **something** 100 times. If you run this with ``rust run`` or
+``make`` (not ``make test``!) you should see ``num`` printed 100 times. Note
+that our tests didn't actually run. Not only are they not run, they're actually
+not even in the executable::
 
-  $ rustc fizzbuzz.rs --test
-  warning: no debug symbols in executable (-arch x86_64)
+  $ rustc --test fizzbuzz.rs
+  $ nm -C fizzbuzz | grep test
+  0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
+  0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
+  0000000000403c10 t test_is_five_with_not_five::_79fbef3fc431adf6::_00
+  0000000000403ee0 t test_is_fifteen_with_fifteen::_79fbef3fc431adf6::_00
+  0000000000403a00 t test_is_three_with_not_three::_79fbef3fc431adf6::_00
+  0000000000403e20 t test_is_fifteen_with_not_fifteen::_79fbef3fc431adf6::_00
+                   U test::test_main_static::_e5d562a4bc8c4dd6::_06
+  000000000040fea0 T __test::main::_79fbef3fc431adf6::_00
+  0000000000614890 D __test::tests::_7c31a8a9617a6a::_00
 
-  $ nm fizzbuzz | grep test
-  00000001000014a0 t __ZN22test_is_five_with_five16_9f1419ad40c33243_00E
-  0000000100001170 t __ZN24test_is_three_with_three16_9f1419ad40c33243_00E
-  0000000100001340 t __ZN26test_is_five_with_not_five16_9f1419ad40c33243_00E
-  00000001000017d0 t __ZN28test_is_fifteen_with_fifteen16_9f1419ad40c33243_00E
-  0000000100000e60 t __ZN28test_is_three_with_not_three16_9f1419ad40c33243_00E
-  0000000100001660 t __ZN32test_is_fifteen_with_not_fifteen16_9f1419ad40c33243_00E
-                   U __ZN4test9test_main16_d49dbca63e2e5743_05E
-  0000000100001950 T __ZN6__test4main16_9f1419ad40c33243_00E
-  0000000100001c30 T __ZN6__test5tests16_fea9bebe46b6e9c3_00E
-  0000000100003150 t __ZN6__test5tests4anon12expr_fn_2901E
-  0000000100003180 t __ZN6__test5tests4anon12expr_fn_2905E
-  00000001000031b0 t __ZN6__test5tests4anon12expr_fn_2909E
-  00000001000031e0 t __ZN6__test5tests4anon12expr_fn_2913E
-  0000000100003210 t __ZN6__test5tests4anon12expr_fn_2917E
-  0000000100003240 t __ZN6__test5tests4anon12expr_fn_2921E
 
   $ rustc fizzbuzz.rs
-  warning: no debug symbols in executable (-arch x86_64)
-
-  $ nm fizzbuzz | grep test
+  $ nm -C fizzbuzz | grep test
 
   $
 
 Crazy, huh? Rust is smart.
 
-Anywho, where were we? Oh, iteration::
+(The ``nm`` program lists all the symbols in a binary (executable or library).
+The ``-C`` option is important, it "de-mangles" the symbol names. Rust uses the
+same mangling scheme as C++, so it's compatible with all the existing tools.
+How it works isn't that important, though. It's cool low-level stuff if you're
+into that sort of thing.)
 
-  use core::io::println;
+Anywho, where were we? Oh, iteration::
 
   fn main() {
       for 100.times {
@@ -324,8 +268,6 @@ Anywho, where were we? Oh, iteration::
 
 Let's talk about ``for``. ``for`` is actually syntax sugar. Here's the equivalent
 without ``for``::
-
-  use core::io::println;
 
   fn main() {
       100.times({
@@ -340,8 +282,6 @@ can pass a closure (read: block) to a method, and have it loop. Let's print
 out the numbers now. First step: we need to get the number of the current
 iteration. Rubyists will do a double take::
 
-  use core::io::println;
-
   fn main() {
       for 100.times |num| {
           println("num");
@@ -351,37 +291,34 @@ iteration. Rubyists will do a double take::
 Almost the same syntax, but with the pipes *outside* of the curlies. But, if you
 try to run this, you'll get an error::
 
-  $ make
-  rustc fizzbuzz.rs
-  fizzbuzz.rs:58:10: 61:3 error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
-  fizzbuzz.rs:58   for 100.times |num| {
-  fizzbuzz.rs:59     //io::println(int::str(num))
-  fizzbuzz.rs:60     io::println("num")
-  fizzbuzz.rs:61   }
-  fizzbuzz.rs:58:10: 61:3 error: mismatched types: expected `&fn() -> bool` but found `&fn(<V0>) -> bool` (incorrect number of function parameters)
-  fizzbuzz.rs:58   for 100.times |num| {
-  fizzbuzz.rs:59     //io::println(int::str(num))
-  fizzbuzz.rs:60     io::println("num")
-  fizzbuzz.rs:61   }
-  fizzbuzz.rs:58:10: 61:3 error: Unconstrained region variable #12
-  fizzbuzz.rs:58   for 100.times |num| {
-  fizzbuzz.rs:59     //io::println(int::str(num))
-  fizzbuzz.rs:60     io::println("num")
-  fizzbuzz.rs:61   }
+  $ rust build fizzbuzz.rs
+  fizzbuzz.rs:45:12: 47:5 error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
+  fizzbuzz.rs:45     for 100.times |num| {
+  fizzbuzz.rs:46         println("num");
+  fizzbuzz.rs:47     }
+  fizzbuzz.rs:45:12: 47:5 error: mismatched types: expected `&fn() -> bool` but found `&fn(<V0>) -> bool` (incorrect number of function parameters)
+  fizzbuzz.rs:45     for 100.times |num| {
+  fizzbuzz.rs:46         println("num");
+  fizzbuzz.rs:47     }
+  fizzbuzz.rs:45:12: 47:5 error: Unconstrained region variable #3
+  fizzbuzz.rs:45     for 100.times |num| {
+  fizzbuzz.rs:46         println("num");
+  fizzbuzz.rs:47     }
   error: aborting due to 3 previous errors
-  make: *** [build] Error 101
+
 
 The big one is this::
 
   error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
 
-Expected ``fn()`` but got ``fn(<V0>)``. It wants no parameters, but we gave it one.
-Whoops! These kind of crazy compiler errors are a little hard to read,
-especially since we don't get them at all in Ruby.
+Expected ``fn()`` but got ``fn(<V0>)``. It wants no parameters, but we gave it
+one.  Whoops! These kind of crazy compiler errors are a little hard to read,
+especially since we don't get them at all in Ruby. The ``<V0>`` is just rust
+trying to tell us that it doesn't quite know what type we want: it's the first
+(index 0) inferred type it encountered in the program. There is also ``<VIx>``,
+for any ``x``, which meants it thought the inferred type was an integer.
 
 Anyway, we need a different function::
-
-  use core::io::println;
 
   fn main() {
       for [1,2,3].each |&num| {
@@ -395,22 +332,19 @@ string we found before: it modifies the declaration somehow. We're going to
 skim over that until the next section. But that gives us a variable, ``num``,
 within the closure. If we run this, we get another error message::
 
-  $ make
-  rustc fizzbuzz.rs
-  fizzbuzz.rs:60:16: 60:19 error: mismatched types: expected `&/str` but found `<VI2>` (expected &/str but found integral variable)
-  fizzbuzz.rs:60     io::println(num)
+  $ rust build fizzbuzz.rs
+  fizzbuzz.rs:46:16: 46:19 error: mismatched types: expected `&str` but found `<VI2>` (expected &str but found integral variable)
+  fizzbuzz.rs:46         println(num);
                                  ^~~
   error: aborting due to previous error
-  make: *** [build] Error 101
 
-Mismatched types: expected &/str but found integral value. It wants a string,
-but we gave it a number. Whoops! Let's coerce it::
-
-  use core::io::println;
+Mismatched types: expected &str but found integral value. It wants a string,
+but we gave it a number. Whoops! Now, there's two ways to fix this. The first
+is to use the ``to_str`` method::
 
   fn main() {
       for [1,2,3].each |&num| {
-          println(int::to_str(num))
+          println(num.to_str())
       }
   }
 
@@ -418,36 +352,44 @@ Awesome. Those double colons are just like Ruby: namespacing. The io namespace
 has a println function, the int namespace has a str function. This should
 compile and give you output::
 
-  $ make
-  rustc fizzbuzz.rs
-  warning: no debug symbols in executable (-arch x86_64)
-  ./fizzbuzz
+  $ rust run fizzbuzz.rs
   1
   2
   3
 
 Bam! Whew. We had to fight with the compiler a bit, and the errors weren't
-great, but that wasn't too bad.
+great, but that wasn't too bad. The other way to do it is to use the ``fmt!``
+function. At least, it looks like a function to me. Here it is::
 
-What I *will* tell you is that this took me *forever* to figure out. The
-documentation for ``each`` says this::
+  fn main() {
+    for [1, 2, 3].each |&num| {
+      println(fmt!("%d", num));
+    }
+  }
+
+``fmt!`` is similar to ``str % arg``, or the ``format`` and ``sprintf``
+functions in ``Kernel``: it takes a format string, some arguments, and
+makes a string out of them. A cool feature of rust that sets it apart from
+C or C++, which also have this, is that the format strings are type-checked at
+compile time. No more broken format strings!
+
+It took me *forever* to figure out how to use ``each``. The documentation for
+``each`` says this::
 
   Method each
 
-  fn each(blk: &fn(v: &A) -> bool)
+  fn each(&self, blk: &fn(v: &A) -> bool)
 
-That's it. See yourself: http://static.rust-lang.org/doc/0.5/core/iter.html
+That's it. See yourself: http://static.rust-lang.org/doc/0.6/core/iter.html#trait-baseiter
 
 What's worse is that each _used_ to have a different signature, and not return
 a boolean. So all the examples I could find were just wrong. Rust has changed
-a lot from 0.1 to 0.5, and so if you don't have an example for the right
+a lot from 0.1 to 0.6, and so if you don't have an example for the right
 version of Rust, it may just plain not compile. It's very frustrating. That's
 why you're reading this book!
 
 Anyway, now we have 1 to 3. We need 1 to 100. Typing out all of that would
 suck... what to do? This::
-
-  use core::io::println;
 
   fn main() {
       for int::range(1, 101) |num| {
@@ -557,7 +499,7 @@ is::
 
 Remember that the tilde has an effect that we haven't talked about yet. I added
 it because running without it gives an error message that implies you need it:
-give it a shot. Because our variables are typed, we have to coerce the number
+give it a shot. Because our variables are typed, we have to convert the number
 in the ``else`` case to a string. In Ruby we'd just let it be a ``Fixnum`` if
 it was a number. Oh well.
 
@@ -576,21 +518,27 @@ Because the ``if`` returns a value, we could also do something like this::
 
 It's more compact, and removes the intermediate variable all together.
 
-We can do one other thing too: this whole ``if/fail!`` thing seems too complex.
-Why do we have to write if over and over and over again? Meet ``assert!``::
+We can do one other thing too: this whole ``if/fail!`` thing so common in tests
+seems too complex.  Why do we have to write if over and over and over again?
+Meet ``assert!``::
 
   #[test]
   fn test_is_fifteen_with_fifteen() {
     assert!(is_fifteen(15))
   }
 
-This will fail if it gets false, and pass if it gets true. Simple!
+This will fail if it gets false, and pass if it gets true. Simple! You can also
+give it a message to be printed when the assertion fails, mostly useful when you
+are using ``assert!`` to for preconditions and such::
+
+  fn main() {
+    assert!(1 == 0, "1 does not equal 0!");
+  }
+
+Try running it.
 
 Anyway, awesome! We've conquered FizzBuzz. ``is_fifteen`` isn't the best named
 method, but we're just learning. ;) Here's my full final code::
-
-  extern mod std;
-  use core::io::println;
 
   fn is_three(num: int) -> bool {
       num % 3 == 0
@@ -633,7 +581,6 @@ method, but we're just learning. ;) Here's my full final code::
   fn test_is_fifteen_with_fifteen() {
       assert!(is_fifteen(15))
   }
-
 
   fn main() {
       for int::range(1, 101) |num| {

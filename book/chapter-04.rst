@@ -11,28 +11,22 @@ In Rust, you annotate test methods like such::
 
   #[test]
   fn this_tests_code() {
-      SOMETHING HERE
+      // SOMETHING HERE
   }
 
 You'll note that tests take no arguments and return nothing. If the method
 runs, the test passes, and if it errors in some way, the test fails. Let's
 give it a shot: Open up ``testing.rs`` and put this in it::
 
-  extern mod std;
-
   #[test]
   fn this_tests_code() {
       println("")
   }
 
-  fn main() {
-  }
 
+Then, compile it with the ``--test`` flag, and run it::
 
-Let's ignore that ``extern mod`` for now. Then, compile it with the ``--test``
-flag, and run it::
-
-  $ rustc testing.rs --test
+  $ rustc --test testing.rs --test
   $ ./testing
 
 You should get some output that looks like this::
@@ -47,23 +41,17 @@ You should get some output that looks like this::
 
 Bam! Now let's make it fail::
 
-  extern mod std;
-
   #[test]
   fn this_tests_code() {
       fail!(~"Fail!");
   }
-
-  fn main() {
-  }
-
 
 Recompile, and the output should be::
 
   $ ./testing
 
   running 1 test
-  rust: task failed at 'explicit failure', testing.rs:5
+  rust: task failed at 'Fail!', testing.rs:3
   test this_tests_code ... FAILED
 
   failures:
@@ -71,31 +59,16 @@ Recompile, and the output should be::
 
   result: FAILED. 0 passed; 1 failed; 0 ignored
 
-  rust: task failed at 'Some tests failed', /private/tmp/rust-w7Y4/rust-0.5/src/libstd/test.rs:62
-  rust: domain main @0x7fa941008c10 root task failed
-  rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
+  rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
+  rust: domain main @0x1ca49c0 root task failed
+
 
 Note the tilde before the string. We'll talk about that later. For now, let's
-focus on the test. This will output something like this::
-
-  $ ./testing
-
-  running 1 test
-  rust: task failed at 'Fail!', testing.rs:5
-  test this_tests_code ... FAILED
-
-  failures:
-      this_tests_code
-
-  result: FAILED. 0 passed; 1 failed; 0 ignored
-
-  rust: task failed at 'Some tests failed', /private/tmp/rust-w7Y4/rust-0.5/src/libstd/test.rs:62
-  rust: domain main @0x7fd53b808c10 root task failed
-  rust: task failed at 'killed', /private/tmp/rust-w7Y4/rust-0.5/src/libcore/task/mod.rs:570
-
-You can see it gives us the message, the file name, and the line number. Great.
+just focus on the test.  You can see it gives us the message, the file name,
+and the line number. Great.
 
 Super simple. That's all you need to know to get started. But before we build
 our first 'real' Rust app with tests, we should deal with this whole
 compilation bit. It's really annoying to keep typing two commands just to run
 things. Let's build a bit of infrastructure first.
+
