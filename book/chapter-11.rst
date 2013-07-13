@@ -24,16 +24,15 @@ Let's do an exercise. You have this code::
 
 Implement ``print_vec`` so that it puts out ``1 2 3`` with newlines between
 them. Hint: You can write 'I want an array of ints' with ``&[int]``. Remember
-how functions often use borrowed pointers?
+how functions can often use borrowed pointers?
 
 I'll wait.
 
 Done? I got this::
 
   fn print_vec(v: &[int]) {
-
-    for v.each |&i| {
-      println(int::to_str(i))
+    for v.iter().advance |&i| {
+      println(i.to_str())
     }
   }
 
@@ -63,13 +62,13 @@ You'll often be seeing owned boxes with strings. Go ahead. You can do it!
 I got this::
 
   fn print_vec(v: &[int]) {
-      for v.each |&i| {
-          println(int::to_str(i))
+      for v.iter().advance |&i| {
+          println(i.to_str())
       }
   }
 
   fn print_vec_str(v: &[~str]) {
-      for v.each |&i| {
+      for v.iter().advance |&i| {
           println(i)
       }
   }
@@ -84,25 +83,24 @@ I got this::
       print_vec_str(str_vec);
   }
 
-You'll notice we had to declare what type of ``str`` we had. See, strings
-are actually implemented as vectors of characters, so while they are sorta a
-type, you can't have just ``str`` as a type. You gotta say what kind of box
-they're in.
+You'll notice we had to declare what type of ``str`` we had. See, strings are
+actually implemented as vectors of characters (encoded in UTF-8), so while
+they are sorta a type, you can't have just ``str`` as a type. You gotta say
+what kind of box they're in.
 
 Okay, obviously, this situation sucks! What can we do? Well, the first thing
 is that we don't have the same method body. We're doing different things to
 convert our arguments to a string. Here's the answer::
 
   fn print_vec(v: &[int]) {
-
-    for v.each |&i| {
+    for v.iter().advance |&i| {
         println(i.to_str())
     }
   }
 
   fn print_vec_str(v: &[~str]) {
 
-    for v.each |&i| {
+    for v.iter().advance |&i| {
         println(i.to_str())
     }
   }
@@ -117,15 +115,11 @@ convert our arguments to a string. Here's the answer::
       print_vec_str(str_vec);
   }
 
-Now that you know about methods, you can see how this works: there's a method
-on strings and on vectors called ``to_str``, and it converts it to a string.
-This is much nicer than our ``int::str`` calls from before, in my opinion.
 And now that we have the same method body, our types are almost the same...
-
 Let's fix that::
 
   fn print_vec<T>(v: &[T]) {
-      for v.each |&i| {
+      for v.iter().advance |&i| {
           println(i.to_str())
       }
   }
@@ -153,7 +147,7 @@ If you try to compile this, you'll get an error::
   $ make
   rustc fizzbuzz.rs
   fizzbuzz.rs:4:16: 4:27 error: type `'a` does not implement any method in scope named `to_str`
-  fizzbuzz.rs:4     io::println(i.to_str())
+  fizzbuzz.rs:4     println(i.to_str())
                                 ^~~~~~~~~~~
   error: aborting due to previous error
   make: *** [build] Error 101
@@ -170,7 +164,7 @@ Traits
 This **will** work::
 
   fn print_vec<T: ToStr>(v: &[T]) {
-      for v.each |&i| {
+      for v.iter().advance |i| {
           println(i.to_str())
       }
   }
@@ -238,7 +232,7 @@ about our code, it can make certain optimizations. Check this out::
 
   $ cat fizzbuzz.rs
   fn print_vec<T: ToStr>(v: &[T]) {
-      for v.each |&i| {
+      for v.iter().advance |i| {
           println(i.to_str())
       }
   }
@@ -266,23 +260,38 @@ about our code, it can make certain optimizations. Check this out::
   yo
 
   steve at thoth in ~/tmp
-  $ nm fizzbuzz | grep vec
-  00000001000010e0 t __ZN14print_vec_183116_7451ef3beba84213_00E
-  0000000100001930 t __ZN14print_vec_18314anon12expr_fn_1887E
-  0000000100001c70 t __ZN14print_vec_191917_3a74ff88f1eb6fd73_00E
-  0000000100002290 t __ZN14print_vec_19194anon12expr_fn_1945E
-  0000000100001150 t __ZN3vec14__extensions__9each_183417_4665ed5b2714d02e3_00E
-  0000000100001890 t __ZN3vec14__extensions__9each_18344anon12expr_fn_1885E
-  0000000100001ce0 t __ZN3vec14__extensions__9each_192217_e0ecf3d9b9b0715e3_00E
-  00000001000021f0 t __ZN3vec14__extensions__9each_19224anon12expr_fn_1943E
-  00000001000012a0 t __ZN3vec15as_imm_buf_184017_fd547453b8ba742f3_00E
-  0000000100001e30 t __ZN3vec15as_imm_buf_192815_373c391b86ef533_00E
-  0000000100001200 t __ZN3vec9each_183717_9abf2ac654d785153_00E
-  0000000100001550 t __ZN3vec9each_18374anon12expr_fn_1865E
-  0000000100001d90 t __ZN3vec9each_192516_19945ee2203b48c3_00E
-  0000000100002010 t __ZN3vec9each_19254anon12expr_fn_1935E
-  0000000100001670 t __ZN4cast22copy_lifetime_vec_186717_8dfcb0f579fd27b63_00E
-  0000000100002130 t __ZN4cast22copy_lifetime_vec_193717_7ef7e3f59d8b71db3_00E
+  $ nm -C fizzbuzz | grep vec
+  0000000000401500 t print_vec_2912::_85e5a3bc2d3e1a83::_00
+  0000000000401ee0 t print_vec_2912::anon::expr_fn_2970
+  0000000000404cd0 t print_vec_3218::_f1e1b4437dbb28a::_00
+  0000000000405480 t print_vec_3218::anon::expr_fn_3252
+  0000000000402c50 t vec::__extensions__::reserve_3030::_de1a9d6344b57ab::_00
+  0000000000402d70 t vec::__extensions__::capacity_3032::_824484774e7757::_00
+  0000000000404b50 t
+  vec::__extensions__::push_fast_3194::_5cf6fa3bfa6090d7::_00
+  0000000000404ae0 t
+  vec::__extensions__::reserve_at_least_3192::_de1a9d6344b57ab::_00
+  0000000000404840 t
+  vec::__extensions__::reserve_no_inline_3182::_24c451fdab89623e::_00
+  0000000000401c50 t vec::__extensions__::len_2959::_824484774e7757::_00
+  0000000000401e80 t vec::__extensions__::len_2959::anon::expr_fn_2968
+  00000000004048b0 t vec::__extensions__::len_3185::_824484774e7757::_00
+  0000000000404a80 t vec::__extensions__::len_3185::anon::expr_fn_3190
+  00000000004051f0 t vec::__extensions__::len_3243::_824484774e7757::_00
+  0000000000405420 t vec::__extensions__::len_3243::anon::expr_fn_3250
+  0000000000401a50 t vec::__extensions__::iter_2947::_d7a5bdd54e5e6f77::_00
+  00000000004050a0 t vec::__extensions__::iter_3237::_55446721964a82e1::_00
+  0000000000401680 t vec::__extensions__::next_2919::_5079d793a0f371c9::_00
+  0000000000404e50 t vec::__extensions__::next_3224::_b423b136d356fe1d::_00
+  0000000000404790 t vec::__extensions__::push_3179::_a91dd4803fb62a::_00
+  0000000000401d00 t vec::as_imm_buf_2961::_caa46d7965b990b9::_00
+  0000000000404970 t vec::as_imm_buf_3187::_62a416e4b98acea8::_00
+  00000000004052a0 t vec::as_imm_buf_3245::_cb6b3bad8005286::_00
+  0000000000401b30 t vec::raw::to_ptr_2950::_1df29a3554bbd95b::_00
+  0000000000405180 t vec::raw::to_ptr_3240::_8c11f86a3948f562::_00
+                   U
+                   vec::rustrt::vec_reserve_shared_actual::_c688b9b8fd5bf21::_07
+
 
   steve at thoth in ~/tmp
   $ mvim fizzbuzz.rs
@@ -305,15 +314,30 @@ about our code, it can make certain optimizations. Check this out::
   $ rustc fizzbuzz.rs
   warning: no debug symbols in executable (-arch x86_64)
 
-  $ nm fizzbuzz | grep vec
-  0000000100000fe0 t __ZN14print_vec_182716_7451ef3beba84213_00E
-  0000000100001830 t __ZN14print_vec_18274anon12expr_fn_1883E
-  0000000100001050 t __ZN3vec14__extensions__9each_183017_4665ed5b2714d02e3_00E
-  0000000100001790 t __ZN3vec14__extensions__9each_18304anon12expr_fn_1881E
-  00000001000011a0 t __ZN3vec15as_imm_buf_183617_fd547453b8ba742f3_00E
-  0000000100001100 t __ZN3vec9each_183317_9abf2ac654d785153_00E
-  0000000100001450 t __ZN3vec9each_18334anon12expr_fn_1861E
-  0000000100001570 t __ZN4cast22copy_lifetime_vec_186317_8dfcb0f579fd27b63_00E
+  $ nm -C fizzbuzz | grep vec
+  00000000004012d0 t print_vec_2908::_85e5a3bc2d3e1a83::_00
+  0000000000401cb0 t print_vec_2908::anon::expr_fn_2966
+  0000000000402a20 t vec::__extensions__::reserve_3026::_de1a9d6344b57ab::_00
+  0000000000402b40 t vec::__extensions__::capacity_3028::_824484774e7757::_00
+  0000000000404920 t
+  vec::__extensions__::push_fast_3190::_5cf6fa3bfa6090d7::_00
+  00000000004048b0 t
+  vec::__extensions__::reserve_at_least_3188::_de1a9d6344b57ab::_00
+  0000000000404610 t
+  vec::__extensions__::reserve_no_inline_3178::_24c451fdab89623e::_00
+  0000000000401a20 t vec::__extensions__::len_2955::_824484774e7757::_00
+  0000000000401c50 t vec::__extensions__::len_2955::anon::expr_fn_2964
+  0000000000404680 t vec::__extensions__::len_3181::_824484774e7757::_00
+  0000000000404850 t vec::__extensions__::len_3181::anon::expr_fn_3186
+  0000000000401820 t vec::__extensions__::iter_2943::_d7a5bdd54e5e6f77::_00
+  0000000000401450 t vec::__extensions__::next_2915::_5079d793a0f371c9::_00
+  0000000000404560 t vec::__extensions__::push_3175::_a91dd4803fb62a::_00
+  0000000000401ad0 t vec::as_imm_buf_2957::_caa46d7965b990b9::_00
+  0000000000404740 t vec::as_imm_buf_3183::_62a416e4b98acea8::_00
+  0000000000401900 t vec::raw::to_ptr_2946::_1df29a3554bbd95b::_00
+                   U
+                   vec::rustrt::vec_reserve_shared_actual::_c688b9b8fd5bf21::_07
+
 
 Okay. So the first time we have our code, we have two calls to ``print_vec``,
 one for a vector of strings and one for a vector of ints. The call to ``nm``...
@@ -370,15 +394,15 @@ Back to our regularly scheduled investigation
 
 Here's the important part of the two outputs of nm::
 
-  00000001000010e0 t __ZN14print_vec_183116_7451ef3beba84213_00E
-  0000000100001930 t __ZN14print_vec_18314anon12expr_fn_1887E
-  0000000100001c70 t __ZN14print_vec_191917_3a74ff88f1eb6fd73_00E
-  0000000100002290 t __ZN14print_vec_19194anon12expr_fn_1945E
+  0000000000401500 t print_vec_2912::_85e5a3bc2d3e1a83::_00
+  0000000000401ee0 t print_vec_2912::anon::expr_fn_2970
+  0000000000404cd0 t print_vec_3218::_f1e1b4437dbb28a::_00
+  0000000000405480 t print_vec_3218::anon::expr_fn_3252
 
 and::
 
-  0000000100000fe0 t __ZN14print_vec_182716_7451ef3beba84213_00E
-  0000000100001830 t __ZN14print_vec_18274anon12expr_fn_1883E
+  00000000004012d0 t print_vec_2908::_85e5a3bc2d3e1a83::_00
+  0000000000401cb0 t print_vec_2908::anon::expr_fn_2966
 
 See how they both have ``print_vec``? These are the functions we made. And
 without even knowing what's happening, you can see the difference: in the
@@ -388,11 +412,11 @@ we have one version.
 
 Neat! We get specialized versions, but only specialized for the types we
 actually use. No generating code that's useless. This process is called
-'monomorphism,' which basically means we take one thing (mono) and change it
-(morphism) into other things. To simplify, the compiler takes this code::
+'monomorphization,' which basically means we take one thing (mono) and change it
+(morph) into other things. To simplify, the compiler takes this code::
 
   fn print_vec<T: ToStr>(v: &[T]) {
-      for v.each |&i| {
+      for v.iter().advance |i| {
           println(i.to_str())
       }
   }
@@ -410,13 +434,13 @@ actually use. No generating code that's useless. This process is called
 And turns it into::
 
   fn print_vec_str(v: &[~str]) {
-      for v.each |&i| {
+      for v.iter().advance |i| {
           println(i.to_str())
       }
   }
 
   fn print_vec_int(v: &[int]) {
-      for v.each |&i| {
+      for v.iter().advance |i| {
           println(i.to_str())
       }
   }
@@ -482,7 +506,7 @@ on any type that implements the trait, ``attack``. Here's how we make one::
       strength: int
   }
 
-  impl IndustrialRaverMonkey: Monster {
+  impl Monster for IndustrialRaverMonkey {
       fn attack(&self) {
           println(fmt!("The monkey attacks for %d.", self.strength))
       }
@@ -505,7 +529,7 @@ Now we're cooking with gas! Remember our old implementation?::
       }
   }
 
-Ugh. This is way better. No de-structuring on types. We can write an
+Ugh. This is way better. No destructuring on types. We can write an
 implementation for absolutely anything::
 
   trait Monster {
@@ -538,8 +562,7 @@ implementation for absolutely anything::
 
 Heh. Check it::
 
-  $ make
-  rustc fizzbuzz.rs
+  $ rust run dwemthy.rs
   warning: no debug symbols in executable (-arch x86_64)
   ./fizzbuzz
   The monkey attacks for 35.
@@ -550,7 +573,7 @@ Amusing.
 One last issue: Due to the way Rust is right now, if you want a vector of
 things as a trait, you need to do this::
 
-  let dwemthys_vector: @[@Monster] = @[monkey as @Monster, angel as @Monster, tentacle as @Monster, deer as @Monster, cyclist as @Monster, dragon as @Monster];
+  let dwemthys_vector: ~[@Monster] = ~[monkey as @Monster, angel as @Monster, tentacle as @Monster, deer as @Monster, cyclist as @Monster, dragon as @Monster];
 
 Get that? We make a vector that's a shared pointer of shared pointers to
 ``Monster`` s. We have to declare that we want them that way by saying ``as
@@ -671,7 +694,7 @@ Done? Here's mine::
   }
 
   fn monsters_attack(monsters: &[@Monster]) {
-      for monsters.each |monster| {
+      for monsters.iter().advance |monster| {
           monster.attack();
       }
   }

@@ -22,7 +22,7 @@ First, a test. This will go in fizzbuzz.rs::
   #[test]
   fn test_is_three() {
       if is_three(1) {
-          fail!(~"One is not three");
+          fail!("One is not three");
       }
   }
 
@@ -43,7 +43,7 @@ This makes sense: We haven't defined any functions yet. Let's define one::
   #[test]
   fn test_is_three() {
       if is_three(1) {
-          fail!(~"One is not three");
+          fail!("One is not three");
       }
   }
 
@@ -85,7 +85,7 @@ we have a failing test, let's make it pass::
   #[test]
   fn test_is_three() {
       if is_three(1) {
-          fail!(~"One is not three");
+          fail!("One is not three");
       }
   }
 
@@ -111,7 +111,7 @@ test, and see what happens::
   #[test]
   fn test_is_three_with_not_three() {
       if is_three(1) {
-        fail!(~"One is not three");
+        fail!("One is not three");
       }
   }
 
@@ -155,14 +155,14 @@ Let's make both tests pass::
   #[test]
   fn test_is_three_with_not_three() {
       if is_three(1) {
-          fail!(~"One is not three");
+          fail!("One is not three");
       }
   }
 
   #[test]
   fn test_is_three_with_three() {
       if !is_three(3) {
-          fail!(~"Three should be three");
+          fail!("Three should be three");
       }
   }
 
@@ -195,8 +195,10 @@ get::
   error: aborting due to previous error
 
 Basically, ending an expression in Rust with a semicolon ignores the value of
-that expression. This is kinda weird. I don't know how I feel about it. But it
-is something you should know about.
+that expression. Another way to think about it is that the semicolon turns the
+expression into a statement, and statements don't have values. This is kinda
+weird. I don't know how I feel about it. But it is something you should know
+about.
 
 Okay, now try to TDD out an ``is_five`` and ``is_fifteen`` methods.
 They should work the same way, but this will let you get practice actually
@@ -316,21 +318,29 @@ one.  Whoops! These kind of crazy compiler errors are a little hard to read,
 especially since we don't get them at all in Ruby. The ``<V0>`` is just rust
 trying to tell us that it doesn't quite know what type we want: it's the first
 (index 0) inferred type it encountered in the program. There is also ``<VIx>``,
-for any ``x``, which meants it thought the inferred type was an integer.
+for any ``x``, which meants it thought the inferred type was an integer, and
+``<VFx>`` for floats.
 
 Anyway, we need a different function::
 
   fn main() {
-      for [1,2,3].each |&num| {
+      for [1,2,3].iter().advance |&num| {
           println(num)
       }
   }
 
-Okay. The ``[]`` s indicate a 'vector', which is kind of like a Ruby array. The
-ampersand before the block argument is sort of like the tilde before that
-string we found before: it modifies the declaration somehow. We're going to
-skim over that until the next section. But that gives us a variable, ``num``,
-within the closure. If we run this, we get another error message::
+Yuck! Unfortunately, Rust 0.7 was released during a "limbo" period between two
+styles of iterators. Eventually, the ``for`` won't be the syntax sugar it is
+now, it will wrap something called ``external iterators`` (basically an object
+,with a ``next`` method) and the code above will become ``for &num in [1, 2,
+3]``, or something similar to it (the exact syntax is still undecided). Until
+then, we're stuck with the old stuff, and the ugly ``.iter().advance`` hack.
+
+Anyway, the ``[]`` s indicate a 'vector', which is kind of like a Ruby array.
+The ampersand before the block argument modifies the declaration somehow.
+We're going to skim over that until the next section. But that gives us a
+variable, ``num``, within the closure. If we run this, we get another error
+message::
 
   $ rust build fizzbuzz.rs
   fizzbuzz.rs:46:16: 46:19 error: mismatched types: expected `&str` but found `<VI2>` (expected &str but found integral variable)
@@ -340,17 +350,19 @@ within the closure. If we run this, we get another error message::
 
 Mismatched types: expected &str but found integral value. It wants a string,
 but we gave it a number. Whoops! Now, there's two ways to fix this. The first
-is to use the ``to_str`` method::
+is to use the ``to_str`` function::
 
   fn main() {
-      for [1,2,3].each |&num| {
-          println(num.to_str())
+      for [1i,2,3].iter().advance |&num| {
+          println(nom.to_str())
       }
   }
 
-Awesome. Those double colons are just like Ruby: namespacing. The io namespace
-has a println function, the int namespace has a str function. This should
-compile and give you output::
+Awesome. The ``i`` suffix tells Rust that we want the vector to contains
+``int``. Otherwise, it wouldn't know which of the various numeric types
+(``uint``, ``float``, ``u32``, etc) to use for the ``to_str`` method. The cool
+thing about rust's type system is that you only need to provide the "type hint"
+once, rather than on every value. Let's run it::
 
   $ rust run fizzbuzz.rs
   1
@@ -373,26 +385,11 @@ makes a string out of them. A cool feature of rust that sets it apart from
 C or C++, which also have this, is that the format strings are type-checked at
 compile time. No more broken format strings!
 
-It took me *forever* to figure out how to use ``each``. The documentation for
-``each`` says this::
-
-  Method each
-
-  fn each(&self, blk: &fn(v: &A) -> bool)
-
-That's it. See yourself: http://static.rust-lang.org/doc/0.6/core/iter.html#trait-baseiter
-
-What's worse is that each _used_ to have a different signature, and not return
-a boolean. So all the examples I could find were just wrong. Rust has changed
-a lot from 0.1 to 0.6, and so if you don't have an example for the right
-version of Rust, it may just plain not compile. It's very frustrating. That's
-why you're reading this book!
-
 Anyway, now we have 1 to 3. We need 1 to 100. Typing out all of that would
 suck... what to do? This::
 
   fn main() {
-      for int::range(1, 101) |num| {
+      for std::int::range(1, 101) |num| {
           println(int::to_str(num));
       }
   }
@@ -404,7 +401,7 @@ it. Peachy. The ``int`` part means we're using an integer.
 Now we can put the two together::
 
   fn main() {
-      for int::range(1, 101) |num| {
+      for std::int::range(1, 101) |num| {
           let mut answer = "";
 
           if is_fifteen(num){
@@ -423,9 +420,11 @@ Now we can put the two together::
       }
   }
 
-Uhhhh ``let mut``? ``let`` is the way that we make a local variable. ``mut`` means
-we plan to mutate that variable: yes, variables are immutable by default.
-When I first wrote this, I wrote this::
+Uhhhh ``let mut``? ``let`` is the way that we make a local variable. ``mut``
+means we plan to mutate that variable: yes, variables are immutable by
+default. The ``std::int::range`` is the name of the ``int`` range function in
+the standard library. We need to fully qualify it, at least if we don't want
+to import it...  more on that later.  When I first wrote this, I wrote this::
 
   let mut answer = "";
 
@@ -479,7 +478,7 @@ Of course, this version gives us lots of empty lines, so what we actually want
 is::
 
   fn main() {
-      for int::range(1, 101) |num| {
+      for std::int::range(1, 101) |num| {
           let answer =
               if is_fifteen(num){
                   ~"FizzBuzz"
@@ -491,27 +490,27 @@ is::
                   ~"Buzz"
               }
               else {
-                  int::to_str(num)
+                  num.to_str()
               };
           println(answer)
       }
   }
 
-Remember that the tilde has an effect that we haven't talked about yet. I added
-it because running without it gives an error message that implies you need it:
-give it a shot. Because our variables are typed, we have to convert the number
-in the ``else`` case to a string. In Ruby we'd just let it be a ``Fixnum`` if
-it was a number. Oh well.
+What's up with the tildes? Like the ampersand, they modify the declaration
+somehow. I added it because running without it gives an error message that
+implies you need it: give it a shot. Because our variables are typed, we have
+to convert the number in the ``else`` case to a string. In Ruby we'd just let
+it be a ``Fixnum`` if it was a number. Oh well.
 
 Because the ``if`` returns a value, we could also do something like this::
 
   fn main() {
-      for int::range(1, 101) |num| {
+      for std::int::range(1, 101) |num| {
           println(
             if is_fifteen(num) { ~"FizzBuzz" }
             else if is_three(num) { ~"Fizz" }
             else if is_five(num) { ~"Buzz" }
-            else { int::to_str(num) }
+            else { num.to_str() }
           );
       }
   }
@@ -529,7 +528,7 @@ Meet ``assert!``::
 
 This will fail if it gets false, and pass if it gets true. Simple! You can also
 give it a message to be printed when the assertion fails, mostly useful when you
-are using ``assert!`` to for preconditions and such::
+are using ``assert!`` to test for preconditions and such::
 
   fn main() {
     assert!(1 == 0, "1 does not equal 0!");
@@ -583,12 +582,12 @@ method, but we're just learning. ;) Here's my full final code::
   }
 
   fn main() {
-      for int::range(1, 101) |num| {
+      for std::int::range(1, 101) |num| {
           println(
               if is_fifteen(num) { ~"FizzBuzz" }
               else if is_three(num) { ~"Fizz" }
               else if is_five(num) { ~"Buzz" }
-              else { int::to_str(num) }
+              else { num.to_str() }
           );
       }
   }

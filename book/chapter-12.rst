@@ -23,7 +23,8 @@ Using ``stdin()``
 
 Turns out getting text input is pretty simple. Just try this::
 
-  use core::io::{Reader, ReaderUtil};
+  use std::io::{Reader, ReaderUtil};
+  use std::io;
   fn main() {
       println("INPUT:");
       let in = io::stdin().read_line();
@@ -47,8 +48,7 @@ when you use methods. So this won't work::
 
   let in = io::stdin.read_line;
 
-  $ make          
-  rustc fizzbuzz.rs
+  $ rust run fizzbuzz.rs
   fizzbuzz.rs:123:11: 123:30 error: attempted to take value of method (try writing an anonymous function)
   fizzbuzz.rs:123   let in = io::stdin.read_line;
                              ^~~~~~~~~~~~~~~~~~~
@@ -68,8 +68,8 @@ code," you say "I want this file that happens to have this code in it."
 Rust basically pretends that it has these two lines at the beginning of every
 program::
 
-  extern mod core;
-  use core::*;
+  extern mod std;
+  use std::prelude::*;
 
 Two things here. The first line is this ``extern mod`` business. I wanted to
 clarify my understanding, so I jumped into the `ever helpful Rust IRC`_ and
@@ -81,13 +81,13 @@ Right. So we're saying 'please link against this library.' Rust uses a load
 path to find where those libraries are, which you can modify with the ``-L``
 command-line flag. For instance::
 
-   $ rustc foo.rs -o foo -L ./lib
+   $ rustc -L ./lib -o foo foo.rs
 
 Would compile ``foo.rs`` into ``foo`` while also looking for extra libraries
 in the ``lib`` directory. These libraries are called 'crates' in Rust, and you
 can make one of your own with the ``--lib`` flag to ``rustc``::
 
-  $ rustc bar.rs -o bar --lib
+  $ rustc --lib -o bar bar.rs
 
 This would make a shared library crate named ``bar``. Technically, any time
 you compile something, it makes a crate: the ``--lib`` flag just says that
@@ -105,9 +105,9 @@ Every Rust file can contain one top-level module, and modules can contain other
 modules. Modules look like this::
 
   mod foo {
-      pub fun bar() { "bar" }
-      pub fun baz() { "baz" }
-      pub fun qux() { "qux" }
+      pub fn bar() { "bar" }
+      pub fn baz() { "baz" }
+      pub fn qux() { "qux" }
   }
 
 You just shove a ``mod`` around everything that goes in the module. To bring
@@ -130,13 +130,13 @@ these::
 Pretty simple. So now we can see why the code acts like it has these two lines
 at the top::
 
-  extern mod core;
-  use core::*;
+  extern mod std;
+  use std::prelude::*;
 
 We want to link against the core library, and then import all the default stuff
-into scope. This is why we need::
+into scope (that's what the prelude is). This is why we need::
 
-  use io::{Reader, ReaderUtil};
+  use std::io::{Reader, ReaderUtil};
 
 We're bringing these two interfaces into scope. Not everything in ``io`` needs
 them, so they're not imported by default. And we use the ``{,}`` syntax in
@@ -148,7 +148,8 @@ Casting to integer
 So, I was trying to cast a string to an integer to get this program going. So
 I wrote this::
 
-  use core::io::{Reader, ReaderUtil};
+  use std::io::{Reader, ReaderUtil};
+  use std::io;
 
   fn main() {
       let in = io::stdin().read_line();

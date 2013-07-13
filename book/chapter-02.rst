@@ -17,6 +17,9 @@ Just do this::
 
 If you don't use Homebrew, install it. Seriously.
 
+(Note: Homebrew doesn't have 0.7 yet, you can use `brew install --HEAD rust`
+to get master, which is a close approximation of 0.7 right now)
+
 Linux
 -----
 
@@ -24,9 +27,9 @@ Rust does the Standard Unix Thing.
 
 ::
 
-  $ curl -O http://static.rust-lang.org/dist/rust-0.6.tar.gz
-  $ tar -xzf rust-0.6.tar.gz
-  $ cd rust-0.6
+  $ curl -O http://static.rust-lang.org/dist/rust-0.7.tar.gz
+  $ tar -xzf rust-0.7.tar.gz
+  $ cd rust-0.7
   $ ./configure
   $ make
   $ sudo make install
@@ -38,12 +41,13 @@ Windows
 -------
 
 I have not tried to install Rust on Windows, but I hear it works well. You can
-use the installer_.
+use the installer_. You will need a very specific mingw setup. It's easier to
+build rust, and there's instructions on the wiki_.
 
 Future Proofing
 ---------------
 
-The version this book is written for is 0.6. The language has largely calmed
+The version this book is written for is 0.7. The language has largely calmed
 down, so it should be pretty future-proof code. I'll be tweaking it with every
 new release.
 
@@ -55,4 +59,5 @@ If you run
 
 and it spits out a bunch of help information, you're good to go with Rust.
 
-.. _installer: http://static.rust-lang.org/dist/rust-0.6-install.exe
+.. _installer: http://static.rust-lang.org/dist/rust-0.7-install.exe
+.. _wiki: https://github.com/mozilla/rust/wiki/Note-getting-started-developing-Rust#windows

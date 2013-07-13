@@ -21,8 +21,8 @@ Structs are ways of packaging up multiple values into one::
   fn main() {
     let m = Monster { health: 10, attack: 20 };
 
-    println(int::to_str(m.health));
-    println(int::to_str(m.attack));
+    println(m.health.to_str());
+    println(m.attack.to_str());
   }
 
 This gives::
@@ -71,7 +71,8 @@ This gives::
 Methods will want to take a borrowed pointer, obviously. We don't care what
 the ownership semantics are. That's the ``&self``, if you forgot.
 
-You can define associated functions (class methods, in Ruby)  as well::
+You can define associated functions (class methods, in Ruby, static methods,
+in Java)  as well::
 
   struct Monster {
       health: int,
@@ -103,6 +104,10 @@ Constructors are a good reason to use associated functions::
   }
 
   impl Monster {
+      fn new(health: int, attack: int) -> Monster {
+          Monster { health:health, attack:attack }
+      }
+
       fn attack(&self) {
           println(fmt!("The monster attacks for %d damage.", self.attack));
       }
@@ -111,9 +116,6 @@ Constructors are a good reason to use associated functions::
           println("There are a bunch of monsters out tonight.");
       }
 
-      fn new(health: int, attack: int) -> Monster {
-          Monster { health:health, attack:attack }
-      }
   }
 
   fn main() {
@@ -142,7 +144,6 @@ an enum::
 
   impl Monster {
       fn attack(&self) {
-
         match *self {
             ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
             IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
@@ -159,8 +160,8 @@ an enum::
 Okay, few new things here: We can see that there's some duplication here.
 Obviously this isn't the best way to do it, but I wanted to try this out before
 we got to the better implementation. We make an ``Enum`` that defines two
-different things, and then we use this ``match`` expression to decompose
-things.
+different things, and then we use this ``match`` expression to "destructure"
+them and get at their... well, members, sorta.
 
 If you haven't used pattern matching in another language, you're missing out.
 It's awesome. Here's a simpler match expression::
@@ -193,14 +194,16 @@ powerful. If we leave off the ``_`` case, Rust will complain::
   error: aborting due to previous error
 
 Neat. The cool thing is that when pattern matching on a struct, the ``match``
-can deconstruct it::
+can destructure it::
 
   match p {
-      Point(x, y) => io::println(fmt!("X: %d, Y: %d", x, y))
+      Point(x, y) => println(fmt!("X: %d, Y: %d", x, y))
   }
 
 We name the two fields of a ``Point`` ``x`` and ``y``, and those names are
-valid within the match expression.
+valid within the match expression. Match is a lot more powerful (they can
+express ranges, options, and even variable binding), but this is its common
+use.
 
 Let's build monsters!
 ---------------------

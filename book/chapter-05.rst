@@ -11,8 +11,8 @@ things will want a one-step build process, anyway.
 ``rust run``
 ------------
 
-The simplest way to build and run a rust program, as of rust 0.6, is to use
-the ``rust`` wrapper program. It will do everything needed. For example::
+The simplest way to build and run a rust program is to use the ``rust``
+wrapper program. It will do everything needed. For example::
 
   $ rust run hello.rs
   $ rust test testing.rs
@@ -20,7 +20,8 @@ the ``rust`` wrapper program. It will do everything needed. For example::
 
 This can make running or testing simple rust programs easy. There's another
 option, though, that's more flexible, and provides many more options for
-customization down the road.
+customization down the road. I wouldn't recommend using it until you outgrow
+what `rust` provides.
 
 Make
 ----
@@ -29,6 +30,11 @@ Yeah, you already know how to use Rake, but we're going to work with its
 progenitor, ``make``. We don't want to assume that others have Ruby installed,
 and you'll end up reading ``Makefiles`` that others write anyway, so it's time
 to learn why Jim bothered with Rake in the first place.
+
+A warning before going any further: make is old, and make is crusty. You MUST
+use the TAB character (not just the tab key, the actualy character, ASCII 9)
+when indenting with make. It will complain very loudly and not work if you do
+not do this, and it might not be obvious why it is not working.
 
 Let's start off by running it::
 

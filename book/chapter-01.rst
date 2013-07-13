@@ -50,7 +50,7 @@ Here's "Hello World" in Rust:
 ::
 
   fn main() {
-      println(greeting_message);
+      println("Hello, world!");
   }
   
 

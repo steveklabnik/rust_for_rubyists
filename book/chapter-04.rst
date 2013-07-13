@@ -43,7 +43,7 @@ Bam! Now let's make it fail::
 
   #[test]
   fn this_tests_code() {
-      fail!(~"Fail!");
+      fail!("Fail!");
   }
 
 Recompile, and the output should be::
@@ -63,9 +63,8 @@ Recompile, and the output should be::
   rust: domain main @0x1ca49c0 root task failed
 
 
-Note the tilde before the string. We'll talk about that later. For now, let's
-just focus on the test.  You can see it gives us the message, the file name,
-and the line number. Great.
+You can see it gives us the message, the file name, and the line number.
+Great.
 
 Super simple. That's all you need to know to get started. But before we build
 our first 'real' Rust app with tests, we should deal with this whole
