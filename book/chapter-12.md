@@ -22,14 +22,13 @@ Using `stdin()`
 
 Turns out getting text input is pretty simple. Just try this:
 
-    use std::io::{Reader, ReaderUtil};
     use std::io;
     fn main() {
         println("INPUT:");
-        let in = io::stdin().read_line();
+        let input = io::stdin().read_line();
 
         println("YOU TYPED:");
-        println(in);
+        println(input);
     }
 
 Give that a run. It should prompt you to type something in, and then
@@ -45,12 +44,10 @@ variable, and then print it out again. Super simple.
 The only thing that's annoying from Ruby is that you must type the `()`
 s when you use methods. So this won't work:
 
-    let in = io::stdin.read_line;
+    let input = io::stdin().read_line;
 
     $ rust run fizzbuzz.rs
-    fizzbuzz.rs:123:11: 123:30 error: attempted to take value of method (try writing an anonymous function)
-    fizzbuzz.rs:123   let in = io::stdin.read_line;
-                               ^~~~~~~~~~~~~~~~~~~
+    /home/steveklabnik/tmp/foo.rs:4:16: 4:37 error: attempted to take value of method `read_line` on type `@std::io::Reader:'static` (try writing an anonymous function)
 
 Oh well. It's not the end of the world.
 
@@ -136,14 +133,10 @@ lines at the top:
     use std::prelude::*;
 
 We want to link against the core library, and then import all the
-default stuff into scope (that's what the prelude is). This is why we
+default io stuff into scope (that's what the prelude is). This is why we
 need:
 
-    use std::io::{Reader, ReaderUtil};
-
-We're bringing these two interfaces into scope. Not everything in `io`
-needs them, so they're not imported by default. And we use the `{,}`
-syntax in order to do it on one line.
+    use std::io;
 
 Casting to integer
 ------------------
@@ -151,40 +144,38 @@ Casting to integer
 So, I was trying to cast a string to an integer to get this program
 going. So I wrote this:
 
-    use std::io::{Reader, ReaderUtil};
     use std::io;
 
     fn main() {
-        let in = io::stdin().read_line();
+        let input = io::stdin().read_line();
         println("INPUT:");
-        println(int::str(int::from_str(in)));
+        println(from_str::<int>(input).to_str());
     }
 
 I was gonna convert the string to an int, then back to a string to print
 it out to the screen.
 
-This threw an error:
+This gave an odd result:
 
     $ make
     rustc fizzbuzz.rs
-    fizzbuzz.rs:125:23: 125:41 error: mismatched types: expected `int` but found `core::option::Option<int>` (expected int but found enum core::option::Option)
-    fizzbuzz.rs:125   println(int::str(int::from_str(in)));
-                                           ^~~~~~~~~~~~~~~~~~
-    error: aborting due to previous error
-    make: *** [build] Error 101
+    5
+    INPUT:
+    Some(5)
+
 
 Wait, huh? Here's the thing: Rust **knows** that we might have a string
 that doesn't make any sense as an integer. For example: `"foo"`. So it
 doesn't actually return a string, it returns an `Option`. We can then
 use pattern matching to handle both cases. Observe:
 
-    use core::io::{Reader, ReaderUtil};
+    use std::io;
 
     fn main() {
-        let in = io::stdin().read_line();
+        let input = io::stdin().read_line();
 
-        match int::from_str(in) {
-            Some(number_string) => println(int::to_str(number_string)),
+        match from_str::<int>(input) {
+            Some(number_string) => println(number_string.to_str()),
             None                => println("Hey, put in a number.")
         }
     }
@@ -236,8 +227,8 @@ Random number generation isn't too bad:
     use core::rand::RngUtil;
 
     fn main() {
-        let rng = rand::Rng();
-        println(int::to_str(rng.gen_int()));
+        let n = rand::random::<int>();
+        println(n.to_str());
     }
 
 This will print out a different number each time you run it. But you'll
@@ -246,9 +237,8 @@ get biiiiiiig numbers. If we want 1-100, of course we have to do this:
     use core::rand::RngUtil;
 
     fn main() {
-        let rng = rand::Rng();
-        let num = rng.gen_int() % 100 + 1;
-        println(int::to_str(num));
+        let r = rand::rng().gen_int_range(0, 100);
+        println(r.to_str());
     }
 
 One issue with this: We can get negatives too. `abs` to the rescue!!!:
@@ -257,9 +247,8 @@ One issue with this: We can get negatives too. `abs` to the rescue!!!:
     use core::int::abs;
 
     fn main() {
-        let rng = rand::Rng();
-        let num = abs(rng.gen_int() % 100) + 1;
-        println(int::to_str(num));
+        let r = abs(rand::rng().gen_int_range(0, 100));
+        println(r.to_str());
     }
 
 This will get us a random number between 1 and 100.
@@ -270,72 +259,15 @@ game. Have it it. I'm starting... now.
 My version
 ----------
 
-Okay! That took me... about half an hour. Maybe 45 minutes. I decided to
-use some pointer stuff... Check it out:
+Okay! That took me... about half an hour. Maybe 45 minutes. I decided to use
+some pointer stuff... I thought it was a little awkward, though.  After asking
+on IRC, 'strcat' gave me this version:
 
-    use core::io::{Reader, ReaderUtil};
-    use core::rand::RngUtil;
-    use core::int::abs;
+    extern mod std;
+    use std::rand;
+    use std::rand::RngUtil;
 
-    fn generate_secret_number() -> int {
-        abs(rand::Rng().gen_int() % 100) + 1
-    }
-
-    fn process_guess(secret:int, guess: int, guesses: &mut int) {
-        println(fmt!("You guessed: %d", guess));
-
-        if guess > secret {
-            println("Your guess was too high!");
-        }
-        else if guess < secret {
-            println("Your guess was too low!");
-        }
-        else if guess == secret {
-            println("You got it!");
-            *guesses = 4; // this will end up ending the game.
-        }
-
-        *guesses += 1;
-    }
-
-    fn main() {
-        let secret = generate_secret_number();
-
-        let guesses = @mut 1;
-
-        println("--- N U M B E R - G A M E ---");
-        println("");
-        println("Guess a number from 1-100 (you get five tries):");
-
-        loop {
-            println(fmt!("Guess #%d", *guesses));
-
-            let in = io::stdin().read_line();
-
-            match int::from_str(in) {
-                Some(number) => process_guess(secret, number, guesses),
-                None         => println("Hey, put in a number.")
-            }
-            if *guesses == 5 { break; }
-        }
-
-        println("Done!");
-    }
-
-That's it! I thought this was a little awkward, though: `process_guess`
-shouldn't really be worrying about mutating `guesses`, which leads to
-all kinds of awkward pointer stuff, as you can see. After asking on IRC,
-'strcat' gave me this version:
-
-    use core::io::{Reader, ReaderUtil};
-    use core::rand::RngUtil;
-    use core::int::abs;
-
-    fn generate_secret_number() -> int {
-        abs(rand::Rng().gen_int() % 100) + 1
-    }
-
-    fn process_guess(secret:int, guess: int) -> bool {
+    fn process_guess(secret: int, guess: int) -> bool {
         println(fmt!("You guessed: %d", guess));
 
         if guess > secret {
@@ -351,32 +283,73 @@ all kinds of awkward pointer stuff, as you can see. After asking on IRC,
     }
 
     fn main() {
-        let secret = generate_secret_number();
+        let secret = rand::rng().gen_int_range(0, 100);
 
         println("--- N U M B E R - G A M E ---");
         println("");
         println("Guess a number from 1-100 (you get five tries):");
 
-        for int::range(0, 5) |round| {
-            println(fmt!("Guess #%d", round));
+        for try in range(1, 6) {
+            println(fmt!("Guess #%d", try));
 
-            let in = io::stdin().read_line();
-
-            match int::from_str(in) {
+            let guess = std::io::stdin().read_line();
+            match from_str(guess) {
                 Some(number) => {
                     if process_guess(secret, number) { break; }
                 }
-                None         => println("Hey, put in a number.")
+                None => println("Hey, put in a number")
             }
         }
 
-        println("Done!");
+        println("Done");
+        println(fmt!("Secret number was %d.", secret));
     }
 
-I like this better. We loop over a `range` that really shows we get 5
-rounds, we don't need to pass around silly pointers, and our
-dubiously-named `process_guess` now tells us if we need to quit the
-game.
+        use core::io::{Reader, ReaderUtil};
+        use core::rand::RngUtil;
+        use core::int::abs;
+
+        fn generate_secret_number() -> int {
+            abs(rand::Rng().gen_int() % 100) + 1
+        }
+
+        fn process_guess(secret:int, guess: int) -> bool {
+            println(fmt!("You guessed: %d", guess));
+
+            if guess > secret {
+                println("Your guess was too high!");
+                false
+            } else if guess < secret {
+                println("Your guess was too low!");
+                false
+            } else {
+                println("You got it!");
+                true
+            }
+        }
+
+        fn main() {
+            let secret = generate_secret_number();
+
+            println("--- N U M B E R - G A M E ---");
+            println("");
+            println("Guess a number from 1-100 (you get five tries):");
+
+            for int::range(0, 5) |round| {
+                println(fmt!("Guess #%d", round));
+
+                let in = io::stdin().read_line();
+
+                match int::from_str(in) {
+                    Some(number) => {
+                        if process_guess(secret, number) { break; }
+                    }
+                    None         => println("Hey, put in a number.")
+                }
+            }
+
+            println("Done!");
+        }
 
 Conclusion
 ----------
