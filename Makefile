@@ -1,9 +1,9 @@
-all: book site
+all: rust-for-rubyists.epub site
 
-book: book/*.md book/metadata.xml book/title.txt
+rust-for-rubyists.epub:
 	pandoc --toc -S -s --epub-metadata=book/metadata.xml -o rust-for-rubyists.epub book/title.txt book/preamble.md book/chapter-*.md
 
-site: book/*
+site:
 	pandoc -S -s book/preamble.md book/chapter-*.md -o book/book.html --include-before-body=book/header.html --include-after-body=book/footer.html
 	pandoc -S -s book/chapter-01.md -o book/chapter-01.html --include-before-body=book/header.html --include-after-body=book/footer.html
 	pandoc -S -s book/chapter-02.md -o book/chapter-02.html --include-before-body=book/header.html --include-after-body=book/footer.html
