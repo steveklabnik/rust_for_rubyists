@@ -1,8 +1,4 @@
-.*.sw*
-output
-output-long
-artifacts
-logs
-*.pyc
-.DS_Store
-.cache
+*.epub
+book/chapter-*.html
+book/book.html
+book/index.html
