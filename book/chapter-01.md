@@ -46,23 +46,30 @@ yet very different, can teach us a lot.
 
 Here's "Hello World" in Rust:
 
-::
-
-fn main() { println("Hello, world!"); }
+    fn main() {
+        println("Hello, world!");
+    }
 
 Here's a parallel "Hello World" in Rust:
 
-::
-
-fn main() { for 10.times { do spawn { let greeting\_message = "Hello?";
-println(greeting\_message); } } }
+    fn main() {
+        for 10.times {
+            do spawn {
+                let greeting\_message = "Hello?";
+                println(greeting\_message);
+            }
+        }
+    }
 
 Here's a rough port to Ruby:
 
-::
 
-10.times do Thread.new do greeting\_message = "Hello?" puts
-greeting\_message end end
+    10.times do
+      Thread.new do
+        greeting_message = "Hello?"
+        puts greeting_message
+      end
+    end
 
 That's it. Note the stuff that's *similar* to Ruby:
 
@@ -81,12 +88,11 @@ Here's some stuff that's *different*:
 
 Oh, and:
 
-::
+    \$ time ./hello
+    ./hello 0.01s user 0.01s system 91% cpu 0.014 total
 
-\$ time ./hello ./hello 0.01s user 0.01s system 91% cpu 0.014 total
-
-\$ time ruby hello.rb ruby hello.rb 0.02s user 0.01s system 95% cpu
-0.026 total
+    \$ time ruby hello.rb
+    ruby hello.rb 0.02s user 0.01s system 95% cpu 0.026 total
 
 Twice as fast. Yay irrelevant microbenchmarks!
 
