@@ -4,10 +4,10 @@ Why care about Rust?
 You already write software in Ruby. It pays your bills. You enjoy it.
 Why should you care about Rust?
 
-Alan Perlis once said::
+Alan Perlis once said:
 
-A language that doesn't affect the way you think about programming is
-not worth knowing.
+> A language that doesn't affect the way you think about programming is
+> not worth knowing.
 
 Let's think about Ruby for a minute: what's its biggest weakness? For
 me, it's these things:
@@ -88,10 +88,10 @@ Here's some stuff that's *different*:
 
 Oh, and:
 
-    \$ time ./hello
+    $ time ./hello
     ./hello 0.01s user 0.01s system 91% cpu 0.014 total
 
-    \$ time ruby hello.rb
+    $ time ruby hello.rb
     ruby hello.rb 0.02s user 0.01s system 95% cpu 0.026 total
 
 Twice as fast. Yay irrelevant microbenchmarks!
