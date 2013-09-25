@@ -41,10 +41,7 @@ ship: all
 	git push origin
 	s3deploy
 
-.PHONY: clean test
+.PHONY: clean
 
 clean:
 	rm -f $(CLEAN_FILES)
-
-test:
-	echo $(patsubst %.md,%.html,$(wildcard book/chapter-*.md))
