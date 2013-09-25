@@ -1,4 +1,6 @@
 *.epub
+*.mobi
+*.pdf
 book/chapter-*.html
 book/book.html
 book/index.html
