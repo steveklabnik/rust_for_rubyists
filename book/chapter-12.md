@@ -210,7 +210,7 @@ That's it!
 # More resources
 
 There's a lot more going on with `rustpkg`, this is just to get you started.
-Check out [the rustpkg manual](rustpkg.html) for the full details on how to
+Check out [the rustpkg manual](http://static.rust-lang.org/doc/0.8/rustpkg.html) for the full details on how to
 customize `rustpkg`.
 
 A tag was created on GitHub specifically for `rustpkg`-related issues. You can

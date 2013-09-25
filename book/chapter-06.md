@@ -74,15 +74,15 @@ results. We can communicate between tasks with pipes. Pipes have two
 ends: a channel that sends info down the pipe, and a port that receives
 info. Here's an example of a task that sends us back a 10:
 
-  fn main() {
-      let (port, chan): (Port<int>, Chan<int>) = stream();
+    fn main() {
+        let (port, chan): (Port<int>, Chan<int>) = stream();
 
-      do spawn {
-          chan.send(10);
-      }
+        do spawn {
+            chan.send(10);
+        }
 
-      println(port.recv().to_str());
-  }
+        println(port.recv().to_str());
+    }
 
 You can imagine that instead of sending 10, we might be doing some sort
 of complex calculation. It could be doing that work in the background
