@@ -18,7 +18,7 @@ CLEAN_FILES=$(patsubst %.md,%.html,$(wildcard book/chapter-*.md)) \
 						rust-for-rubyists.pdf \
 						rust-for-rubyists.mobi \
 
-all: rust-for-rubyists.epub rust-for-rubyists.pdf rust-for-rubyists.mobi site
+all: rust-for-rubyists-epub.tgz rust-for-rubyists-pdf.tgz rust-for-rubyists-mobi.tgz site
 
 rust-for-rubyists.epub: $(ALL_FILES)
 	pandoc $(EPUB_OPTS) -o $@ $(CONTENTS)
@@ -36,6 +36,18 @@ book/%.html : book/%.md
 	pandoc -o $@ $(HTML_OPTS) $<
 
 site: $(CHAPTERS) book/book.html
+
+code.tgz: code
+	tar cf code.tgz code
+
+rust-for-rubyists-epub.tgz: rust-for-rubyists.epub code.tgz
+	tar cf $@ $< code.tgz
+
+rust-for-rubyists-pdf.tgz: rust-for-rubyists.pdf code.tgz
+	tar cf $@ $< code.tgz
+
+rust-for-rubyists-mobi.tgz: rust-for-rubyists.mobi code.tgz
+	tar cf $@ $< code.tgz
 
 ship: all
 	git push origin
