@@ -33,3 +33,15 @@ above. To run your program, do the Usual UNIX Thing:
     $ ./hello
 
 And you should see "Hello, world." print to the screen. Congrats!
+
+There's an easier way to do this, too. Rust provides another tool, `rust`,
+which wraps up a lot of functionality. We won't use `rustc` directly for the
+rest of this book, because you almost always want to be working with the
+higher-level tooling. Check it:
+
+    $ rust run hello.rs
+    Hello, world!
+
+Yup, `rust run` combines the compile and run step. This will probably feel more
+normal to you than keeping the two steps apart. It's only good for simple things,
+though: soon enough we'll be using `rustpkg` instead. But that's for later...

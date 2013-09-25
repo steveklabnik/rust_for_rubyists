@@ -53,10 +53,10 @@ Here's "Hello World" in Rust:
 Here's a parallel "Hello World" in Rust:
 
     fn main() {
-        for 10.times {
+        do 10.times {
             do spawn {
-                let greeting\_message = "Hello?";
-                println(greeting\_message);
+                let greeting_message = "Hello?";
+                println(greeting_message);
             }
         }
     }

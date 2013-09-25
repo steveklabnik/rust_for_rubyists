@@ -1,216 +1,525 @@
-Build toolchain
-===============
+FizzBuzz
+========
 
-Let's get a one-step build process going. We aren't used to the
-two-steps of building and then running with Ruby, and while it's not a
-big deal to type two things, we probably want to make it one step.
-Eventually, CI servers and things will want a one-step build process,
-anyway.
+Of course, the first thing that your job interview for that cushy new
+Rust job will task you with is building FizzBuzz. Let's do it!
 
-`rust run`
-----------
+If you're not familiar, FizzBuzz is a simple programming problem:
 
-The simplest way to build and run a rust program is to use the `rust`
-wrapper program. It will do everything needed. For example:
+> "Write a program that prints the numbers from 1 to 100. But for multiples of
+> three print “Fizz” instead of the number and for the multiples of five print
+> “Buzz”. For numbers which are multiples of both three and five print
+> “FizzBuzz”."
 
-    $ rust run hello.rs
-    $ rust test testing.rs
-    $ rust help # see all the things it can do for you!
+This will give us a good excuse to go over some basics of Rust: Looping,
+tests, printing to standard output, and a host of other simple things.
 
-This can make running or testing simple rust programs easy. There's
-another option, though, that's more flexible, and provides many more
-options for customization down the road. I wouldn't recommend using it
-until you outgrow what rust provides.
+First, a test. This will go in fizzbuzz.rs:
 
-Make
-----
-
-Yeah, you already know how to use Rake, but we're going to work with its
-progenitor, `make`. We don't want to assume that others have Ruby
-installed, and you'll end up reading `Makefiles` that others write
-anyway, so it's time to learn why Jim bothered with Rake in the first
-place.
-
-A warning before going any further: make is old, and make is crusty. You
-MUST use the TAB character (not just the tab key, the actualy character,
-ASCII 9) when indenting with make. It will complain very loudly and not
-work if you do not do this, and it might not be obvious why it is not
-working.
-
-Let's start off by running it:
-
-    $ make
-    make: *** No targets specified and no makefile found.  Stop.
-
-Yep. Great error. We didn't tell `make` what we wanted ("No targets")
-and there's no Makefile to provide a default target. We want `fizzbuzz`.
-Let's ask make for `fizzbuzz`. Does make know what to do?:
-
-    $ make fizzbuzz
-    make: *** No rule to make target `fizzbuzz'.  Stop.
-
-We've been mean to make. We haven't even given it a source file to work
-with. Let's play nice for just a moment and give it something old and
-familiar, a C program.:
-
-    $ echo 'main() {}' > fizzbuzz.c
-    $ make fizzbuzz
-    cc     fizzbuzz.c   -o fizzbuzz
-
-There we go! Make knows how to compile C programs. Notice that make
-printed out the compile command that it ran. Is make going to know about
-Rust? (Doesn't seem likely, does it?)
-
-Let's make `fizzbuzz.rs` with the following contents:
-
-    fn main() {
+    #[test]
+    fn test_is_three() {
+        if is_three(1) {
+            fail!("One is not three");
+        }
     }
 
-And, don't forget to get the C program out of the way, both the source
-and the compiled program:
+And run it:
 
-    $ rm fizzbuzz.c fizzbuzz
-    $ make
-    make: *** No rule to make target `fizzbuzz'.  Stop.
+    $ rust test fizzbuzz.rs
+    fizzbuzz.rs:3:7: 3:15 error: unresolved name `is_three`.
+    fizzbuzz.rs:3     if is_three(1) {
+                         ^~~~~~~~
+    error: aborting due to previous error
 
-Hmm, we've been here before. Make does not know about Rust programs. We
-need to give it a rule. Create `Makefile` with two lines in it:
+This makes sense: We haven't defined any functions yet. Let's define
+one:
 
-    fizzbuzz: fizzbuzz.rs
-    rustc fizzbuzz.rs
-
-Does it work?:
-
-    $ make fizzbuzz
-    rustc fizzbuzz.rs
-
-Cool! We're, um, back where we started. We can compile a Rust program.
-Boring. Let's run it, too. Add two more lines at the top of `Makefile`
-like this:
-
-    run: fizzbuzz
-    ./fizzbuzz
-
-    fizzbuzz: fizzbuzz.rs
-    rustc fizzbuzz.rs
-
-We've added a rule `run` that depends on `fizzbuzz`. Also, the first
-rule in `Makefile` is the default.:
-
-    $ make
-    ./fizzbuzz
-
-Just typing `make` ran our program. What happened to the compile step?
-We told make that `run` depends on `fizzbuzz`. Make noticed that the
-compiled `fizzbuzz` is newer than the source file `fizzbuzz.rs`. No new
-compilation needed! Let's check that make gets this right. Edit
-fizzbuzz.rs to add a println statement:
-
-    fn main() {
-        println("Hello from Rust!");
+    fn is_three(num: int) -> bool {
+        return true;
     }
 
-What does make do now?:
+    #[test]
+    fn test_is_three() {
+        if is_three(1) {
+            fail!("One is not three");
+        }
+    }
 
-    $ make
-    rustc fizzbuzz.rs
-    ./fizzbuzz
-    Hello from Rust!
+Okay. Here's some new syntax. The `num: int` says that we take one
+argument, `num`, and that it's of an integer type. The `-> bool` says
+that we return a boolean, and the `return true;`, well, returns true.
 
-Compile and run! Try it again?:
+You'll also note we have an `if` statement. It's pretty close to what
+you'd expect, but we have curly braces rather than our friends `do/end`.
 
-    $ make
-    ./fizzbuzz
-    Hello from Rust!
+Now that we've got that cleared up, let's run our tests:
 
-Ran it! And no recompile needed.
-
-Now, we want to setup for running tests as well. To keep things simple,
-we'll just have a single source file `fizzbuzz.rs` for both the program
-and the tests. We just want to compile it two different ways. Add a
-compile rule at the end of `Makefile` for the testing build, like this:
-
-    test-fizzbuzz: fizzbuzz.rs
-      rustc --test fizzbuzz.rs -o test-fizzbuzz
-
-Does this work?:
-
-    $ make test-fizzbuzz
-    rustc --test fizzbuzz.rs -o test-fizzbuzz
-
-Nice! Now add a "test" rule to run the tests:
-
-    test: test-fizzbuzz
-      ./test-fizzbuzz
-
-And give it a go:
-
-    $ make test
-    ./test-fizzbuzz
-
-    running 0 tests
-
-    result: ok. 0 passed; 0 failed; 0 ignored
-
-For icing on the cake, define a default rule to "do it all". Here is the
-whole `Makefile`:
-
-    all: test run
-
-    run: fizzbuzz
-      ./fizzbuzz
-
-    test: test-fizzbuzz
-      ./test-fizzbuzz
-
-    fizzbuzz: fizzbuzz.rs
-      rustc fizzbuzz.rs
-
-    test-fizzbuzz: fizzbuzz.rs
-      rustc --test fizzbuzz.rs -o test-fizzbuzz
-
-The default is to run the tests. If the tests pass, run the program:
-
-    $ make
-    ./test-fizzbuzz
-
-    running 0 tests
-
-    result: ok. 0 passed; 0 failed; 0 ignored
-
-    ./fizzbuzz
-    Hello from Rust!
-
-Let's add a failing test to prove we've got it all:
-
-    $ make
-    rustc --test fizzbuzz.rs -o test-fizzbuzz
-    ./test-fizzbuzz
+    $ rust test fizzbuzz.rs
+    fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
+    fizzbuzz.rs:1 fn is_three(num: int) -> bool {
+                              ^~~~
 
     running 1 test
-    rust: task failed at 'We just fail every time :-(', fizzbuzz.rs:3
-    test this_tests_code ... FAILED
+    rust: task failed at 'One is not three', fizzbuzz.rs:8
+    test test_is_three ... FAILED
 
     failures:
-        this_tests_code
+        test_is_three
 
     result: FAILED. 0 passed; 1 failed; 0 ignored
 
     rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
-    rust: domain main @0xa529c0 root task failed
+    rust: domain main @0x85d9c0 root task failed
 
-Yup. The failing test failed. And, make did not continue on to compile
-and run the program. We still can ask make to run the program without
-the tests:
+Rust is kind enough to give us a warning: we never used the `num`
+argument. We then get our failure, "One is not three", because we
+returned true. Now that we have a failing test, let's make it pass:
 
-    $ make run
-    rustc fizzbuzz.rs
-    ./fizzbuzz
-    Hello from Rust!
+    fn is_three(num: int) -> bool {
+      return false;
+    }
 
-You can do a lot more complex stuff with Make, such as pattern rules. I
-don't want to teach you everything about Make, this is a book about
-Rust. So we'll just leave it like this for now. This recipe will serve
-you well until you get to much more complex projects.
+    #[test]
+    fn test_is_three() {
+        if is_three(1) {
+            fail!("One is not three");
+        }
+    }
 
-Next up: TDD-ing Fizzbuzz.
+TDD means do the simplest thing! And run it:
+
+    $ rust test fizzbuzz.rs
+    fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
+    fizzbuzz.rs:1 fn is_three(num: int) -> bool {
+                              ^~~~
+
+    running 1 test
+    test test_is_three ... ok
+
+    result: ok. 1 passed; 0 failed; 0 ignored
+
+Awesome! We pass! We still have that warning, though... let's write
+another test, and see what happens:
+
+    fn is_three(num: int) -> bool {
+        return false;
+    }
+
+    #[test]
+    fn test_is_three_with_not_three() {
+        if is_three(1) {
+          fail!("One is not three");
+        }
+    }
+
+    #[test]
+    fn test_is_three_with_three() {
+      if !is_three(3) {
+        fail!(~"Three should be three");
+      }
+    }
+
+    $ rust test fizzbuzz.rs
+    fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
+    fizzbuzz.rs:1 fn is_three(num: int) -> bool {
+                              ^~~~
+
+    running 2 tests
+    test test_is_three_with_not_three ... ok
+    rust: task failed at 'Three should be three', fizzbuzz.rs:15
+    test test_is_three_with_three ... FAILED
+
+    failures:
+        test_is_three_with_three
+
+    result: FAILED. 1 passed; 1 failed; 0 ignored
+
+    rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
+    rust: domain main @0x15109c0 root task failed
+
+Great! It showed that our first test passed, and that our second one
+failed. Let's make both tests pass:
+
+    fn is_three(num: int) -> bool {
+        if num % 3 == 0 {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    #[test]
+    fn test_is_three_with_not_three() {
+        if is_three(1) {
+            fail!("One is not three");
+        }
+    }
+
+    #[test]
+    fn test_is_three_with_three() {
+        if !is_three(3) {
+            fail!("Three should be three");
+        }
+    }
+
+    $ rustc test fizzbuzz.rs
+
+    running 2 tests
+    test test_is_three_with_not_three ... ok
+    test test_is_three_with_three ... ok
+
+    result: ok. 2 passed; 0 failed; 0 ignored
+
+Awesome! This shows off how elses work, as well. It's probably what you
+expected. Go ahead and try to refactor this into a one-liner.
+
+Done? How'd you do? Here's mine:
+
+    fn is_three(num: int) -> bool {
+        num % 3 == 0
+    }
+
+Wait, whaaaat? Yep, the last thing in a function is a return in Rust,
+but there's one wrinkle: note there's no semicolon here. If you had one,
+you'd get:
+
+    $ rust test fizzbuzz.rs
+    fizzbuzz.rs:1:0: 3:1 error: not all control paths return a value
+    fizzbuzz.rs:1 fn is_three(num: int) -> bool {
+    fizzbuzz.rs:2     num % 3 == 0;
+    fizzbuzz.rs:3 }
+    error: aborting due to previous error
+
+Basically, ending an expression in Rust with a semicolon ignores the
+value of that expression. Another way to think about it is that the
+semicolon turns the expression into a statement, and statements don't
+have values. This is kinda weird. I don't know how I feel about it. But
+it is something you should know about.
+
+Okay, now try to TDD out an `is_five` and `is_fifteen` methods. They
+should work the same way, but this will let you get practice actually
+writing it out. Once you see this, you're ready to advance:
+
+    $ rust test fizzbuzz.rs
+
+    running 6 tests
+    test test_is_five_with_not_five ... ok
+    test test_is_fifteen_with_fifteen ... ok
+    test test_is_three_with_not_three ... ok
+    test test_is_five_with_five ... ok
+    test test_is_three_with_three ... ok
+    test test_is_fifteen_with_not_fifteen ... ok
+
+    result: ok. 6 passed; 0 failed; 0 ignored
+
+Okay! Let's talk about the main program now. We've got the tools to
+build FizzBuzz, let's make it work. First thing we need to do is print
+out all the numbers from one to 100. It's easy!
+
+    fn main() {
+        do 100.times {
+            println("num");
+        }
+    }
+
+Step one: print **something** 100 times. If you run this with `rust run`
+or `make` (not `make test`!) you should see `num` printed 100 times.
+Note that our tests didn't actually run. Not only are they not run,
+they're actually not even in the executable:
+
+    $ rust test fizzbuzz.rs
+    $ nm -C fizzbuzz~ | grep test
+    0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
+    0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
+    0000000000403c10 t test_is_five_with_not_five::_79fbef3fc431adf6::_00
+    0000000000403ee0 t test_is_fifteen_with_fifteen::_79fbef3fc431adf6::_00
+    0000000000403a00 t test_is_three_with_not_three::_79fbef3fc431adf6::_00
+    0000000000403e20 t test_is_fifteen_with_not_fifteen::_79fbef3fc431adf6::_00
+                     U test::test_main_static::_e5d562a4bc8c4dd6::_06
+    000000000040fea0 T __test::main::_79fbef3fc431adf6::_00
+    0000000000614890 D __test::tests::_7c31a8a9617a6a::_00
+
+
+    $ rust run fizzbuzz.rs
+    $ nm -C fizzbuzz~ | grep test
+
+    $
+
+Neat, huh? Rust is smart. By the way, you can see how `rust run` and `rust
+test` work here: They compile and run a version of your file with a `~` at
+the end.
+
+Anyway, `nm`: The `nm` program lists all the symbols in a binary executable or
+library. The `-C` option is important, it "de-mangles" the symbol names. Rust
+uses the same mangling scheme as C++, so it's compatible with all the existing
+tools. How it works isn't that important, though.  It's cool low-level stuff if
+you're into that sort of thing.
+
+Anywho, where were we? Oh, iteration:
+
+    fn main() {
+        do 100.times {
+            println("num");
+        }
+    }
+
+Let's talk about `do`. `do` is actually syntax sugar. Here's the
+equivalent without `do`:
+
+    fn main() {
+        100.times(|| {
+            println("num");
+        });
+    }
+
+Note the extra parens and `||`. Typing out `});` really sucks, and having the
+`({` is also awkward. Just like Ruby, Rust has special syntax when you're
+passing a single closure to a method. Awesome. And it shouldn't surprise
+Rubyists that you can pass a closure (read: block) to a method, and have it
+loop. Let's print out the numbers now. First step: we need to get the number of
+the current iteration. Rubyists will do a double take:
+
+    fn main() {
+        do 100.times |num| {
+            println("num");
+        };
+    }
+
+Almost the same syntax, but with the pipes *outside* of the curlies.
+But, if you try to run this, you'll get an error:
+
+    $ rust build fizzbuzz.rs
+    fizzbuzz.rs:45:12: 47:5 error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
+    fizzbuzz.rs:45     do 100.times |num| {
+    fizzbuzz.rs:46         println("num");
+    fizzbuzz.rs:47     }
+    fizzbuzz.rs:45:12: 47:5 error: mismatched types: expected `&fn() -> bool` but found `&fn(<V0>) -> bool` (incorrect number of function parameters)
+    fizzbuzz.rs:45     do 100.times |num| {
+    fizzbuzz.rs:46         println("num");
+    fizzbuzz.rs:47     }
+    fizzbuzz.rs:45:12: 47:5 error: Unconstrained region variable #3
+    fizzbuzz.rs:45     do 100.times |num| {
+    fizzbuzz.rs:46         println("num");
+    fizzbuzz.rs:47     }
+    error: aborting due to 3 previous errors
+
+The big one is this:
+
+    error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
+
+Expected `fn()` but got `fn(<V0>)`. It wants no parameters, but we gave
+it one. Whoops! These kind of crazy compiler errors are a little hard to
+read, especially since we don't get them at all in Ruby. The `<V0>` is
+just rust trying to tell us that it doesn't quite know what type we
+want: it's the first (index 0) inferred type it encountered in the
+program. There is also `<VIx>`, for any `x`, which meants it thought the
+inferred type was an integer, and `<VFx>` for floats.
+
+Anyway, we need a different function:
+
+    fn main() {
+        for num in range(1, 3) {
+            println(num)
+        }
+    }
+
+
+Neat! If we run this, we get
+another error message:
+
+    $ rust run fizzbuzz.rs
+    fizzbuzz.rs:46:16: 46:19 error: mismatched types: expected `&str` but found `<VI2>` (expected &str but found integral variable)
+    fizzbuzz.rs:46         println(num);
+                                   ^~~
+    error: aborting due to previous error
+
+Mismatched types: expected &str but found integral value. It wants a
+string, but we gave it a number. Whoops! Now, there's two ways to fix
+this. The first is to use the `to_str` function:
+
+    fn main() {
+        for num in range(1, 3) {
+            println(num.to_str())
+        }
+    }
+
+Awesome. The `i` suffix tells Rust that we want the vector to contains
+`int`. Otherwise, it wouldn't know which of the various numeric types
+(`uint`, `float`, `u32`, etc) to use for the `to_str` method. The cool
+thing about rust's type system is that you only need to provide the
+"type hint" once, rather than on every value. Let's run it:
+
+    $ rust run fizzbuzz.rs
+    1
+    2
+    3
+
+Bam! Whew. We had to fight with the compiler a bit, and the errors
+weren't great, but that wasn't too bad. The other way to do it is to use
+the `fmt!` function. At least, it looks like a function to me. Here it
+is:
+
+    fn main() {
+      for num in range(1, 3) {
+        println(fmt!("%d", num));
+      }
+    }
+
+`fmt!` is similar to `str % arg`, or the `format` and `sprintf`
+functions in `Kernel`: it takes a format string, some arguments, and
+makes a string out of them. A cool feature of rust that sets it apart
+from C or C++, which also have this, is that the format strings are
+type-checked at compile time. No more broken format strings!
+
+Anyway, now we have 1 to 3. We need 1 to 100.
+
+    fn main() {
+        for num in range(1, 101) {
+            println(num.to_str());
+        }
+    }
+
+Now we can put the two together:
+
+    fn main() {
+        for num in range(1, 101) {
+            let mut answer = "";
+
+            if is_fifteen(num){
+                answer = "FizzBuzz";
+            }
+            else if is_three(num) {
+                answer = "Fizz";
+            }
+            else if is_five(num) {
+                answer = "Buzz";
+            }
+            else {
+                answer = "";
+            };
+            println(answer)
+        }
+    }
+
+Uhhhh `let mut`? `let` is the way that we make a local variable. `mut`
+means we plan to mutate that variable: yes, variables are immutable by
+default. The `std::int::range` is the name of the `int` range function
+in the standard library. We need to fully qualify it, at least if we
+don't want to import it... more on that later. When I first wrote this,
+I wrote this:
+
+    let mut answer = "";
+
+We can shorten this up a bit with this syntax:
+
+    fn main() {
+        for num in range(1, 101) {
+            let mut answer =
+                if is_fifteen(num){
+                    "FizzBuzz"
+                }
+                else if is_three(num) {
+                    "Fizz"
+                }
+                else if is_five(num) {
+                    "Buzz"
+                }
+                else {
+                    ""
+                };
+            println(answer)
+        }
+    }
+
+We've made the `if` assign the value to answer. Note that we had to
+remove the semicolons again; that lets the expression give its value to
+`answer.` Note that this \_also\_ makes answer immutable, so we can
+remove the `mut`:
+
+    fn main() {
+        for num in range(1, 101) {
+            let answer =
+                if is_fifteen(num){
+                    "FizzBuzz"
+                }
+                else if is_three(num) {
+                    "Fizz"
+                }
+                else if is_five(num) {
+                    "Buzz"
+                }
+                else {
+                    ""
+                };
+            println(answer)
+        }
+    }
+
+Not too shabby! I love eliminating mutable state.
+
+Of course, this version gives us lots of empty lines, so what we
+actually want is:
+
+    fn main() {
+        for num in range(1, 101) {
+            let answer =
+                if is_fifteen(num){
+                    ~"FizzBuzz"
+                }
+                else if is_three(num) {
+                    ~"Fizz"
+                }
+                else if is_five(num) {
+                    ~"Buzz"
+                }
+                else {
+                    num.to_str()
+                };
+            println(answer)
+        }
+    }
+
+What's up with the tildes? They modify the declaration somehow. I added it
+because running without it gives an error message that implies you need it:
+give it a shot. Because our variables are typed, we have to convert the number
+in the `else` case to a string. In Ruby we'd just let it be a `Fixnum` if it
+was a number. Oh well.
+
+Because the `if` returns a value, we could also do something like this:
+
+    fn main() {
+        for num in range(1, 101) {
+            println(
+              if is_fifteen(num) { ~"FizzBuzz" }
+              else if is_three(num) { ~"Fizz" }
+              else if is_five(num) { ~"Buzz" }
+              else { num.to_str() }
+            );
+        }
+    }
+
+It's more compact, and removes the intermediate variable all together.
+
+We can do one other thing too: this whole `if/fail!` thing so common in
+tests seems too complex. Why do we have to write if over and over and
+over again? Meet `assert!`:
+
+    #[test]
+    fn test_is_fifteen_with_fifteen() {
+      assert!(is_fifteen(15))
+    }
+
+This will fail if it gets false, and pass if it gets true. Simple! You
+can also give it a message to be printed when the assertion fails,
+mostly useful when you are using `assert!` to test for preconditions and
+such:
+
+    fn main() {
+      assert!(1 == 0, "1 does not equal 0!");
+    }
+
+Try running it.
+
+Anyway, awesome! We've conquered FizzBuzz. `is_fifteen` isn't the best
+named method, but we're just learning. ;) You can check the code samples
+for the full, final code.

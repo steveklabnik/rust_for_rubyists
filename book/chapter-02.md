@@ -1,9 +1,7 @@
 Installing Rust
 ===============
 
-Most Rubyists use OS X, and I haven't personally installed Rust on other
-platforms yet, so I'm just covering OS X for now. I'll add Windows and
-Linux instructions once I've tried them out myself.
+Most Rubyists use OS X, and Rust is pretty easy to get going on it:
 
 Mac OS X
 --------
@@ -15,41 +13,42 @@ already use. Just do this:
 
 If you don't use Homebrew, install it. Seriously.
 
-(Note: Homebrew doesn't have 0.7 yet, you can use
-brew install --HEAD rust to get master, which is a close approximation
-of 0.7 right now)
+(Note: If you're reading this close to release, Homebrew may not have 0.8 yet,
+you can use brew install --HEAD rust to get master, which will be close.)
 
 Linux
 -----
 
-Rust does the Standard Unix Thing.
+I personally use Linux, and Rust works quite well on it. Rust does the Standard
+Unix Thing.
 
-    $ curl -O http://static.rust-lang.org/dist/rust-0.7.tar.gz
-    $ tar -xzf rust-0.7.tar.gz
-    $ cd rust-0.7
+    $ curl -O http://static.rust-lang.org/dist/rust-0.8.tar.gz
+    $ tar -xzf rust-0.8.tar.gz
+    $ cd rust-0.8
     $ ./configure
     $ make
     $ sudo make install
 
-Most package managers I've checked out either have no package or a
-really old package, so you'll probably want to just install from source.
+Most package managers I've checked out either have no package or a really old
+package, so you'll probably want to just install from source.
 
 Windows
 -------
 
-I have not tried to install Rust on Windows, but I hear it works well.
-You can use the
-[installer](http://static.rust-lang.org/dist/rust-0.7-install.exe). You
-will need a very specific mingw setup. It's easier to build rust, and
-there's instructions on the
+See instructions on the
 [wiki](https://github.com/mozilla/rust/wiki/Note-getting-started-developing-Rust#windows).
+Overall, Rust wants to have strong Windows support, but some of it is in flux,
+and it was decided that the 0.8 release would be a bit wonky. Don't be afraid to 
+hop into [the Rust
+IRC](http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust) and
+ask for help.
 
 Future Proofing
 ---------------
 
-The version this book is written for is 0.7. The language has largely
-calmed down, so it should be pretty future-proof code. I'll be tweaking
-it with every new release.
+The version this book is written for is 0.8.While the language itself is pretty
+stable, things like the standard library and some major subsystems are being
+revised. I'll be tweaking it with every new release.
 
 If you run
 

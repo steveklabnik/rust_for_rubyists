@@ -1,212 +1,73 @@
-Structs and Methods
-===================
+Vectors
+=======
 
-I'd like to talk about structs and methods, so let's build a fun little
-project:
-[DwemthysArray](http://mislav.uniqpath.com/poignant-guide/dwemthy/). One
-of \_why's sillier examples, we make an array of monsters, and then
-fight them. We won't be building the Array \_exactly\_, but something
-like it.
+Before getting into generic functions that could handle multiple kinds
+of Monster, let's first talk about a format that you end up using them
+with often: Vectors. Vectors are the 'array' in Dwemthy's Array: they're
+lists of things, but unlike in Ruby, the elements must all be of the
+same type. You can have any of the three kinds of pointers to vectors,
+and you'll sometimes hear a borrowed pointer to a vector called a
+'slice.'
 
-Structs
--------
+Examples
+--------
 
-Structs are ways of packaging up multiple values into one:
-
-    struct Monster {
-        health: int,
-        attack: int
-    }
+See if this looks familliar:
 
     fn main() {
-      let m = Monster { health: 10, attack: 20 };
+        let your_favorite_numbers = ~[1,2,3];
+        let my_favorite_numbers = ~[4,5,6];
 
-      println(m.health.to_str());
-      println(m.attack.to_str());
+        let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
+
+        println(fmt!("The third favorite number is %d.", our_favorite_numbers[2]))
     }
 
-This gives:
+Seems like business as usual: `+` adds two vectors, `[]` does an
+indexing operation. What happens if you leave off the `~` s?:
 
-    $ rust run dwemthysarray.rs
-    10
-    20
+    $ rust run vectors.rs
+    vectors.rs:5:31: 5:74 error: failed to find an implementation of trait std::vec::Vector<<VI2>> for [int, .. 3]
+    vectors.rs:5     let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
+                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Seems simple enough! Note that you can give a struct to `fmt!`, using
-the `%?` format specifier. Example:
+Type `Vector<<VI2>>`? Basically, if you don't make your variable a pointer to a
+vector, it's stored on the stack with a fixed size. So concatenating them
+together doesn't make sense.
 
-    $ rust run dwemthysarray.rs
-    {health: 10, attack: 20}
+Mutability inheritance
+----------------------
 
-Fancy!
-
-Methods
--------
-
-Methods are basically functions that take a first argument named `self`.
-Python people who are reading will be high fiving each other in droves.
-Let's add a method for our `Monster` s:
-
-    struct Monster {
-        health: int,
-        attack: int
-    }
-
-    impl Monster {
-        fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
-        }
-    }
+You can mutate vectors if you make them so:
 
     fn main() {
-        let m = Monster { health: 10, attack: 20 };
+        let a_vector = ~[1,2,3];
+        let mut another_vector = ~[];
+        another_vector.push_all(a_vector);
 
-        m.attack();
+        println(fmt!("The first number is %d.", another_vector[0]))
     }
 
-This gives:
-
-    $ rust run dwemthysarray.rs
-    The monster attacks for 20 damage.
-
-Methods will want to take a borrowed pointer, obviously. We don't care
-what the ownership semantics are. That's the `&self`, if you forgot.
-
-You can define associated functions (class methods, in Ruby, static
-methods, in Java) as well:
-
-    struct Monster {
-        health: int,
-        attack: int
-    }
-
-    impl Monster {
-        fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
-        }
-
-        fn count() {
-            println("There are a bunch of monsters out tonight.");
-        }
-    }
+Of course, changing an element of a vector doesn't make sense:
 
     fn main() {
-        let m = Monster { health: 10, attack: 20 };
+        let a_vector = ~[1,2,3];
+        a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: cannot assign to immutable vec content
 
-        m.attack();
-        Monster::count();
+        println(fmt!("The first number is %d.", a_vector[0]))
     }
 
-Constructors are a good reason to use associated functions:
-
-    struct Monster {
-        health: int,
-        attack: int
-    }
-
-    impl Monster {
-        fn new(health: int, attack: int) -> Monster {
-            Monster { health:health, attack:attack }
-        }
-
-        fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
-        }
-
-        fn count() {
-            println("There are a bunch of monsters out tonight.");
-        }
-
-    }
+But you can move it to a mutable one and then change it:
 
     fn main() {
-        Monster::new(20, 40).attack();
+        let a_vector = ~[1,2,3];
+        let mut mut_vector = a_vector;
+        mut_vector[0] = 5;
+
+        println(fmt!("The first number is %d.", mut_vector[0]))
     }
 
-This gives:
+When you make an immutable vector mutable, it's called 'thawing' the
+vector, and the opposite is 'freezing' a vector.
 
-    $ rust run dwemthysarray.rs
-    The monster attacks for 40 damage.
-
-as you'd expect.
-
-Enums
------
-
-What if we want to define a few different types of things? In other
-languages, we'd use inheritance. In Rust, it seems like Enums are a
-better idea. Here's an enum:
-
-    enum Monster {
-        ScubaArgentine(int, int, int, int),
-        IndustrialRaverMonkey(int, int, int, int)
-    }
-
-
-    impl Monster {
-        fn attack(&self) {
-          match *self {
-              ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
-              IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
-          }
-        }
-    }
-
-    fn main() {
-        let irm = IndustrialRaverMonkey(46, 35, 91, 2);
-        irm.attack();
-    }
-
-Okay, few new things here: We can see that there's some duplication
-here. Obviously this isn't the best way to do it, but I wanted to try
-this out before we got to the better implementation. We make an `Enum`
-that defines two different things, and then we use this `match`
-expression to "destructure" them and get at their... well, members,
-sorta.
-
-If you haven't used pattern matching in another language, you're missing
-out. It's awesome. Here's a simpler match expression:
-
-    fn message(i: int) {
-      match i {
-          1 => println("ONE!"),
-          2 => println("Two is a prime."),
-          3 => println("THREE!"),
-          _ => println("no idea what that is, boss")
-        }
-    }
-
-    fn main() {
-        message(1);
-        message(2);
-        message(3);
-    }
-
-Does that make sense? It's sorta like a `case` statement, but it's more
-powerful. If we leave off the `_` case, Rust will complain:
-
-    $ rust run match.rs
-    match.rs:2:4: 6:5 error: non-exhaustive patterns
-    match.rs:2     match i {
-    match.rs:3         1 => println("ONE!"),
-    match.rs:4         2 => println("Two is a prime."),
-    match.rs:5         3 => println("THREE!"),
-    match.rs:6     }
-    error: aborting due to previous error
-
-Neat. The cool thing is that when pattern matching on a struct, the
-`match` can destructure it:
-
-    match p {
-        Point(x, y) => println(fmt!("X: %d, Y: %d", x, y))
-    }
-
-We name the two fields of a `Point` `x` and `y`, and those names are
-valid within the match expression. Match is a lot more powerful (they
-can express ranges, options, and even variable binding), but this is its
-common use.
-
-Let's build monsters!
----------------------
-
-Before we build some monsters, let's look at the Right Way to implement
-them. We can do this with Traits, but that's the next chapter.
+That's it! Vectors are pretty simple.

@@ -14,7 +14,7 @@ In Rust, you annotate test methods like such:
     }
 
 You'll note that tests take no arguments and return nothing. If the
-method runs, the test passes, and if it errors in some way, the test
+function runs, the test passes, and if it errors in some way, the test
 fails. Let's give it a shot: Open up `testing.rs` and put this in it:
 
     #[test]
@@ -22,14 +22,11 @@ fails. Let's give it a shot: Open up `testing.rs` and put this in it:
         println("")
     }
 
-Then, compile it with the `--test` flag, and run it:
+Then, use `rust run`'s buddy, `rust test`:
 
-    $ rustc --test testing.rs --test
-    $ ./testing
+    $ rust test testing.rs
 
 You should get some output that looks like this:
-
-    $ ./testing
 
     running 1 test
 
@@ -63,7 +60,4 @@ Recompile, and the output should be:
 You can see it gives us the message, the file name, and the line number.
 Great.
 
-Super simple. That's all you need to know to get started. But before we
-build our first 'real' Rust app with tests, we should deal with this
-whole compilation bit. It's really annoying to keep typing two commands
-just to run things. Let's build a bit of infrastructure first.
+Super simple. That's all you need to know to get started. Next up: FizzBuzz.
