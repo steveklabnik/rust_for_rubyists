@@ -17,6 +17,7 @@ CLEAN_FILES=$(patsubst %.md,%.html,$(wildcard book/chapter-*.md)) \
 						rust-for-rubyists.epub \
 						rust-for-rubyists.pdf \
 						rust-for-rubyists.mobi \
+						*.tgz
 
 all: rust-for-rubyists-epub.tgz rust-for-rubyists-pdf.tgz rust-for-rubyists-mobi.tgz site
 
