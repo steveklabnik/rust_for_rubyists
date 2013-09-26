@@ -8,19 +8,23 @@ it.
 
 In Rust, you annotate test methods like such:
 
+~~~ {.rust}
     #[test]
     fn this_tests_code() {
         // SOMETHING HERE
     }
+~~~
 
 You'll note that tests take no arguments and return nothing. If the
 function runs, the test passes, and if it errors in some way, the test
 fails. Let's give it a shot: Open up `testing.rs` and put this in it:
 
+~~~ {.rust}
     #[test]
     fn this_tests_code() {
         println("")
     }
+~~~
 
 Then, use `rust run`'s buddy, `rust test`:
 
@@ -36,10 +40,12 @@ You should get some output that looks like this:
 
 Bam! Now let's make it fail:
 
+~~~ {.rust}
     #[test]
     fn this_tests_code() {
         fail!("Fail!");
     }
+~~~
 
 Recompile, and the output should be:
 

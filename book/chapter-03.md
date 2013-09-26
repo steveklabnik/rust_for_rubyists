@@ -10,9 +10,11 @@ Rust programs end in `.rs`:
 
 Put this in it:
 
+~~~ {.rust}
     fn main() {
         println("Hello, world.");
     }
+~~~
 
 And compile it with `rustc`:
 

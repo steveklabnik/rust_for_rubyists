@@ -13,7 +13,7 @@ of Rust code to someone else.
 First, let's try to use an external package somehow. I've made a sample package
 called `hello` to demonstrate how to do so.  Here's how `hello` is used:
 
-~~~~
+~~~ {.rust}
 extern mod hello;
 
 fn main() {
@@ -24,7 +24,7 @@ fn main() {
 Easy! But if you try to compile this, you'll get an error:
 
 ~~~~ {.notrust}
-$ rustc main.rs 
+$ rustc main.rs
 main.rs:1:0: 1:17 error: can't find crate for `hello`
 main.rs:1 extern mod hello;
           ^~~~~~~~~~~~~~~~~
@@ -63,7 +63,7 @@ Now, compiling our example should work:
 
 ~~~ {.notrust}
 $ rustc main.rs
-$ ./main 
+$ ./main
 Hello, world.
 ~~~
 

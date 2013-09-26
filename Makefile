@@ -7,7 +7,7 @@ CONTENTS=book/title.txt \
 ALL_FILES=$(CHAPTERS) \
 					book/metadata.xml \
 					book/title.txt \
-					cover.png				
+					cover.png
 
 EPUB_OPTS=--toc -S -s --epub-cover-image=cover.png --epub-metadata=book/metadata.xml
 
@@ -27,7 +27,7 @@ rust-for-rubyists.pdf: $(ALL_FILES)
 	pandoc $(EPUB_OPTS) -o $@ $(CONTENTS)
 
 rust-for-rubyists.mobi: rust-for-rubyists.epub
-	kindlegen rust-for-rubyists.epub 
+	kindlegen rust-for-rubyists.epub
 
 book/book.html: $(CHAPTERS)
 	pandoc -o $@ $(HTML_OPTS) $(CHAPTERS)

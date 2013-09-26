@@ -14,11 +14,13 @@ refactor that into the generic form.
 
 Let's do an exercise. You have this code:
 
+~~~ {.rust}
     fn main() {
         let vec = [1,2,3];
 
         print_vec(vec);
     }
+~~~
 
 Implement `print_vec` so that it puts out `1 2 3` with newlines between
 them. Hint: You can write 'I want an array of ints' with `&[int]`.
@@ -28,6 +30,7 @@ I'll wait.
 
 Done? I got this:
 
+~~~ {.rust}
     fn print_vec(v: &[int]) {
       for i in v.iter() {
         println(i.to_str())
@@ -39,6 +42,7 @@ Done? I got this:
 
       print_vec(vec);
     }
+~~~
 
 Pretty straightforward. We take a slice (remember, 'borrowed vector' ==
 'slice') of ints, get a borrowed pointer to each of them, and print them
@@ -46,6 +50,7 @@ out.
 
 Round two: Implement this:
 
+~~~ {.rust}
     fn main() {
         let vec = [1,2,3];
 
@@ -55,11 +60,13 @@ Round two: Implement this:
 
         print_vec_str(str_vec);
     }
+~~~
 
 You'll often be seeing owned pointers with strings. Go ahead. You can do it!
 
 I got this:
 
+~~~ {.rust}
     fn print_vec(v: &[int]) {
         for i in v.iter() {
             println(i.to_str())
@@ -81,6 +88,7 @@ I got this:
 
         print_vec_str(str_vec);
     }
+~~~
 
 You'll notice we had to declare what type of `str` we had. See, strings
 are actually implemented as vectors of characters (encoded in UTF-8), so
@@ -91,6 +99,7 @@ Okay, obviously, this situation sucks! What can we do? Well, the first
 thing is that we don't have the same method body. We're doing different
 things to convert our arguments to a string. Here's the answer:
 
+~~~ {.rust}
     fn print_vec(v: &[int]) {
       for i in v.iter() {
           println(i.to_str())
@@ -112,10 +121,12 @@ things to convert our arguments to a string. Here's the answer:
 
         print_vec_str(str_vec);
     }
+~~~
 
 And now that we have the same method body, our types are almost the
 same... Let's fix that:
 
+~~~ {.rust}
     fn print_vec<T>(v: &[T]) {
         for v.iter().advance |&i| {
             println(i.to_str())
@@ -131,6 +142,7 @@ same... Let's fix that:
 
         print_vec(str_vec);
     }
+~~~
 
 This won't compile, but it is closer. Let's examine that signature more
 closely.
@@ -158,6 +170,7 @@ Traits
 
 This **will** work:
 
+~~~ {.rust}
     fn print_vec<T: ToStr>(v: &[T]) {
         for i in v.iter() {
             println((*i).to_str())
@@ -173,6 +186,7 @@ This **will** work:
 
         print_vec(str_vec);
     }
+~~~
 
 The `<T: ToStr>` says: "We take any type `T` that implements the `ToStr`
 trait.
@@ -181,24 +195,29 @@ Traits are sort of like 'static duck typing' or 'structural typing.' We
 get away with this in Ruby by just trusting the code we write, and for
 most of it, it just works out. Think about this:
 
+~~~ {.ruby}
     def print_each(arr)
       arr.each do |i|
         puts i
       end
     end
+~~~
 
 We trust that this will always work, because `Object` implements
 `#to_str`. But if we had this:
 
+~~~ {.ruby}
     def print_each(arr)
       arr.each do |i|
         puts i + 1
       end
     end
+~~~
 
 We have an implicit type here: `arr` must contain things that
 `respond_to?(:+)`. In many ways, Rust is sorta like:
 
+~~~ {.ruby}
     def print_each(arr)
       assert arr.respond_to?(:+)
 
@@ -206,6 +225,7 @@ We have an implicit type here: `arr` must contain things that
         puts i + 1
       end
     end
+~~~
 
 But it happens at compile time, not run time.
 
@@ -227,6 +247,7 @@ information about our code, it can make certain optimizations. Check
 this out:
 
     $ cat fizzbuzz.rs
+~~~ {.rust}
     fn print_vec<T: ToStr>(v: &[T]) {
         for i in v.iter() {
             println((*i).to_str())
@@ -242,6 +263,7 @@ this out:
 
       print_vec(str_vec);
     }
+~~~
 
     $ rust run traits.rs
     1
@@ -287,6 +309,7 @@ this out:
     $ mvim traits.rs
     ....editing...
     $ cat traits.rs
+~~~ {.rust}
     fn print_vec<T: ToStr>(v: &[T]) {
         for i in v.iter() {
             println((*i).to_str())
@@ -298,6 +321,7 @@ this out:
 
         print_vec(vec);
     }
+~~~
 
     $ rust run traits.rs
 
@@ -347,7 +371,7 @@ Here's what my manpage says:
 
     DESCRIPTION
            Nm displays the name list (symbol table) of each  object  file  in  the
-           argument list. 
+           argument list.
 
 Cool! You've never had to think about symbol tables before, so let's
 talk about them.
@@ -404,6 +428,7 @@ actually use. No generating code that's useless. This process is called
 change it (morph) into other things. To simplify, the compiler takes
 this code:
 
+~~~ {.rust}
     fn print_vec<T: ToStr>(v: &[T]) {
         for i in v.iter() {
             println((*i).to_str())
@@ -419,9 +444,11 @@ this code:
 
         print_vec(str_vec);
     }
+~~~
 
 And turns it into:
 
+~~~ {.rust}
     fn print_vec_str(v: &[~str]) {
         for i in v.iter() {
             println((*i).to_str())
@@ -443,6 +470,7 @@ And turns it into:
 
         print_vec_str(str_vec);
     }
+~~~
 
 Complete with changing the calls at each call site to call the special
 version of the function. We call this 'static dispatch,' as opposed to
@@ -453,19 +481,23 @@ Neat! I will say that there are efforts to bring this kind of
 optimization into dynamically typed languages as well, through analyzing
 the call site. So, for example:
 
+~~~ {.ruby}
     def foo(arg)
       puts arg
     end
+~~~
 
 If we call `foo` with a `String` `arg` a bunch of times in a row, the
 interpreter will JIT compile a version of `foo` specialized for
 `Strings`, and then replace the call site with something like:
 
+~~~ {.ruby}
     if arg.kind_of? String
       __super_optimized_foo_string(arg)
     else
       foo(arg)
     end
+~~~
 
 This would give you the same benefit, without the human typing. Not just
 that, but a sufficiently smart runtime would be able to actually
@@ -480,14 +512,17 @@ Making our own Traits
 We want all of our monsters to implement `attack`. So let's make
 `Monster` a Trait. The syntax looks like this:
 
+~~~ {.rust}
     trait Monster {
         fn attack(&self);
     }
+~~~
 
 This says that the `Monster` trait guarantees we have one method
 available on any type that implements the trait, `attack`. Here's how we
 make one:
 
+~~~ {.rust}
     trait Monster {
         fn attack(&self);
     }
@@ -507,9 +542,11 @@ make one:
 
         monkey.attack();
     }
+~~~
 
 Now we're cooking with gas! Remember our old implementation?:
 
+~~~ {.rust}
     impl Monster {
         fn attack(&self) {
             match *self {
@@ -518,10 +555,12 @@ Now we're cooking with gas! Remember our old implementation?:
             }
         }
     }
+~~~
 
 Ugh. This is way better. No destructuring on types. We can write an
 implementation for absolutely anything:
 
+~~~ {.rust}
     trait Monster {
         fn attack(&self);
     }
@@ -549,6 +588,7 @@ implementation for absolutely anything:
         let i = 10;
         i.attack();
     }
+~~~
 
 Heh. Check it:
 
@@ -570,6 +610,7 @@ help once while doing it. They're friendly, don't worry.
 
 Done? Here's mine:
 
+~~~ {.rust}
     trait Monster {
         fn attack(&self);
         fn new() -> Self;
@@ -585,14 +626,14 @@ Done? Here's mine:
     struct DwarvenAngel {
         life: int,
         strength: int,
-        charisma: int, 
+        charisma: int,
         weapon: int,
     }
 
     struct AssistantViceTentacleAndOmbudsman {
         life: int,
         strength: int,
-        charisma: int, 
+        charisma: int,
         weapon: int,
     }
 
@@ -606,14 +647,14 @@ Done? Here's mine:
     struct IntrepidDecomposedCyclist {
         life: int,
         strength: int,
-        charisma: int, 
+        charisma: int,
         weapon: int,
     }
 
     struct Dragon {
         life: int,
         strength: int,
-        charisma: int, 
+        charisma: int,
         weapon: int,
     }
 
@@ -690,5 +731,6 @@ Done? Here's mine:
 
         monsters_attack(dwemthys_vector);
     }
+~~~
 
 Congrats! You've mastered Traits. They're pretty awesome, right?

@@ -12,7 +12,9 @@ Pointer recap
 When you create a variable, you're really giving a name to a chunk of
 memory somewhere. We'll use C syntax for these examples:
 
+~~~ {.c}
     int i = 5; int j = 6;
+~~~
 
       location   value
       ---------- -------
@@ -22,7 +24,9 @@ memory somewhere. We'll use C syntax for these examples:
 This is of course slightly simplified. Anyway, we can introduce
 indirection by making a pointer:
 
+~~~ {.c}
     int i = 5; int j = 6; int *pi = &i;
+~~~
 
       location   value
       ---------- ----------
@@ -33,15 +37,19 @@ indirection by making a pointer:
 `pi` has a pointer to another memory location. We can access the value
 of the thing that `pi` points at by using the `*`:
 
+~~~ {.c}
     printf("The value of the thing pi points to is: %d\n", *pi);
+~~~
 
 The `*` dereferences the pointer, and gives us the value. Simple!
 
 Here's the issue: you have no idea if the data that is being pointed to
 is good. What do you think this code does?:
 
+~~~ {.c}
     int *pi;
     printf("The value of the thing pi points to is: %d\n", *pi);
+~~~
 
 Who knows!?!? Probably something bad, but **certainly** not something expected.
 Rust introduces three different kinds of pointers, 'managed,' 'owned,' and
@@ -57,13 +65,15 @@ Managed pointers are heap allocated and garbage collected. They are the
 most similar to Ruby object references. They have a `@` prefix. Check it
 out:
 
+~~~ {.rust}
     fn main() {
         let x: @int = @10;
         println((*x).to_str());
     }
+~~~
 
-This prints 10. The `*` dereferences, just like in C. The
-["@10](mailto:"@10)" makes a managed pointer pointing at 10.
+This prints 10. The `*` dereferences, just like in C. The `@` makes a managed
+pointer pointing at 10.
 
 The big deal is this: managed pointer never leave the task they're made
 in. So you can't share them across tasks. This is a nice feature,
@@ -84,18 +94,22 @@ If you don't want your values to get GC'd, you can use an owned pointer.
 This tells Rust that you own a reference to something, and you'll take
 care of it yourself. This is indicated with a `~`:
 
+~~~ {.rust}
     fn main() {
         let x: ~int = ~10;
         println((*x).to_str());
     }
+~~~
 
 You can't make another owned pointer to this value:
 
+~~~ {.rust}
     fn main() {
         let x: ~int = ~10;
         let y = x;
         println((*x).to_str());
     }
+~~~
 
 This yields:
 
@@ -111,11 +125,13 @@ This yields:
 It tells us that we moved the value of `x` to `y` and points out where
 the move happens. Neat. We can make a copy:
 
+~~~ {.rust}
     fn main() {
         let x: ~int = ~10;
         let y = x.clone();
         println((*x).to_str());
     }
+~~~
 
 This will work, though it will tell us that `y` was never used. And they
 point at two different copies of 10, not the same one.
@@ -131,6 +147,7 @@ Borrowed Pointers
 
 Imagine we had this:
 
+~~~ {.rust}
     fn plus_one(x: int) -> int {
         x + 1
     }
@@ -140,10 +157,12 @@ Imagine we had this:
 
         println(plus_one(*x).to_str());
     }
+~~~
 
 Now, this works just fine. But what if we don't want to copy the value
 of x when we call `plus_one`? We'd want to pass a pointer. Easy enough:
 
+~~~ {.rust}
     fn plus_one(x: ~int) -> int {
         *x + 1
     }
@@ -153,9 +172,11 @@ of x when we call `plus_one`? We'd want to pass a pointer. Easy enough:
 
       println(plus_one(x).to_str());
     }
+~~~
 
 Seems fine. But what about this?:
 
+~~~ {.rust}
     fn plus_one(x: ~int) -> int {
         *x + 1
     }
@@ -167,6 +188,7 @@ Seems fine. But what about this?:
         println(plus_one(x).to_str());
         println(plus_one(y).to_str()); // uhhhhhhh
     }
+~~~
 
 `plus_one` takes an owned pointer, but we're giving it a managed pointer. If we
 try to compile this, we get this:
@@ -178,6 +200,7 @@ try to compile this, we get this:
 
 Makes sense. Expected `~int` but found `@int`. We could do this:
 
+~~~ {.rust}
     fn plus_one_managed(x: @int) -> int {
         *x + 1
     }
@@ -193,6 +216,7 @@ Makes sense. Expected `~int` but found `@int`. We could do this:
         println(plus_one_managed(x).to_str());
         println(plus_one_owned(y).to_str());
     }
+~~~
 
 This is pretty obviously a terrible idea. What we want is to take either
 kind of pointer: we don't care about changing ownership. We just want to
@@ -200,6 +224,7 @@ use the value for a while.
 
 Enter borrowed pointers:
 
+~~~ {.rust}
     fn plus_one(x: &int) -> int {
         *x + 1
     }
@@ -211,6 +236,7 @@ Enter borrowed pointers:
         println(plus_one(x).to_str());
         println(plus_one(y).to_str());
     }
+~~~
 
 Borrowed pointers use an `&`, as you can see. They don't change any
 ownership semantics. They do let you write functions that take either

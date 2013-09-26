@@ -16,12 +16,14 @@ tests, printing to standard output, and a host of other simple things.
 
 First, a test. This will go in fizzbuzz.rs:
 
+~~~ {.rust}
     #[test]
     fn test_is_three() {
         if is_three(1) {
             fail!("One is not three");
         }
     }
+~~~
 
 And run it:
 
@@ -34,6 +36,7 @@ And run it:
 This makes sense: We haven't defined any functions yet. Let's define
 one:
 
+~~~ {.rust}
     fn is_three(num: int) -> bool {
         return true;
     }
@@ -44,6 +47,7 @@ one:
             fail!("One is not three");
         }
     }
+~~~
 
 Okay. Here's some new syntax. The `num: int` says that we take one
 argument, `num`, and that it's of an integer type. The `-> bool` says
@@ -75,6 +79,7 @@ Rust is kind enough to give us a warning: we never used the `num`
 argument. We then get our failure, "One is not three", because we
 returned true. Now that we have a failing test, let's make it pass:
 
+~~~ {.rust}
     fn is_three(num: int) -> bool {
       return false;
     }
@@ -85,6 +90,7 @@ returned true. Now that we have a failing test, let's make it pass:
             fail!("One is not three");
         }
     }
+~~~
 
 TDD means do the simplest thing! And run it:
 
@@ -101,6 +107,7 @@ TDD means do the simplest thing! And run it:
 Awesome! We pass! We still have that warning, though... let's write
 another test, and see what happens:
 
+~~~ {.rust}
     fn is_three(num: int) -> bool {
         return false;
     }
@@ -118,6 +125,7 @@ another test, and see what happens:
         fail!(~"Three should be three");
       }
     }
+~~~
 
     $ rust test fizzbuzz.rs
     fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
@@ -140,6 +148,7 @@ another test, and see what happens:
 Great! It showed that our first test passed, and that our second one
 failed. Let's make both tests pass:
 
+~~~ {.rust}
     fn is_three(num: int) -> bool {
         if num % 3 == 0 {
             return true;
@@ -161,6 +170,7 @@ failed. Let's make both tests pass:
             fail!("Three should be three");
         }
     }
+~~~
 
     $ rustc test fizzbuzz.rs
 
@@ -175,9 +185,11 @@ expected. Go ahead and try to refactor this into a one-liner.
 
 Done? How'd you do? Here's mine:
 
+~~~ {.rust}
     fn is_three(num: int) -> bool {
         num % 3 == 0
     }
+~~~
 
 Wait, whaaaat? Yep, the last thing in a function is a return in Rust,
 but there's one wrinkle: note there's no semicolon here. If you had one,
@@ -216,11 +228,13 @@ Okay! Let's talk about the main program now. We've got the tools to
 build FizzBuzz, let's make it work. First thing we need to do is print
 out all the numbers from one to 100. It's easy!
 
+~~~ {.rust}
     fn main() {
         do 100.times {
             println("num");
         }
     }
+~~~
 
 Step one: print **something** 100 times. If you run this with `rust run`
 or `make` (not `make test`!) you should see `num` printed 100 times.
@@ -257,20 +271,24 @@ you're into that sort of thing.
 
 Anywho, where were we? Oh, iteration:
 
+~~~ {.rust}
     fn main() {
         do 100.times {
             println("num");
         }
     }
+~~~
 
 Let's talk about `do`. `do` is actually syntax sugar. Here's the
 equivalent without `do`:
 
+~~~ {.rust}
     fn main() {
         100.times(|| {
             println("num");
         });
     }
+~~~
 
 Note the extra parens and `||`. Typing out `});` really sucks, and having the
 `({` is also awkward. Just like Ruby, Rust has special syntax when you're
@@ -279,11 +297,13 @@ Rubyists that you can pass a closure (read: block) to a method, and have it
 loop. Let's print out the numbers now. First step: we need to get the number of
 the current iteration. Rubyists will do a double take:
 
+~~~ {.rust}
     fn main() {
         do 100.times |num| {
             println("num");
         };
     }
+~~~
 
 Almost the same syntax, but with the pipes *outside* of the curlies.
 But, if you try to run this, you'll get an error:
@@ -317,11 +337,13 @@ inferred type was an integer, and `<VFx>` for floats.
 
 Anyway, we need a different function:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 3) {
             println(num)
         }
     }
+~~~
 
 
 Neat! If we run this, we get
@@ -337,11 +359,13 @@ Mismatched types: expected &str but found integral value. It wants a
 string, but we gave it a number. Whoops! Now, there's two ways to fix
 this. The first is to use the `to_str` function:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 3) {
             println(num.to_str())
         }
     }
+~~~
 
 Awesome. The `i` suffix tells Rust that we want the vector to contains
 `int`. Otherwise, it wouldn't know which of the various numeric types
@@ -359,11 +383,13 @@ weren't great, but that wasn't too bad. The other way to do it is to use
 the `fmt!` function. At least, it looks like a function to me. Here it
 is:
 
+~~~ {.rust}
     fn main() {
       for num in range(1, 3) {
         println(fmt!("%d", num));
       }
     }
+~~~
 
 `fmt!` is similar to `str % arg`, or the `format` and `sprintf`
 functions in `Kernel`: it takes a format string, some arguments, and
@@ -373,14 +399,17 @@ type-checked at compile time. No more broken format strings!
 
 Anyway, now we have 1 to 3. We need 1 to 100.
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
             println(num.to_str());
         }
     }
+~~~
 
 Now we can put the two together:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
             let mut answer = "";
@@ -400,6 +429,7 @@ Now we can put the two together:
             println(answer)
         }
     }
+~~~
 
 Uhhhh `let mut`? `let` is the way that we make a local variable. `mut`
 means we plan to mutate that variable: yes, variables are immutable by
@@ -408,10 +438,13 @@ in the standard library. We need to fully qualify it, at least if we
 don't want to import it... more on that later. When I first wrote this,
 I wrote this:
 
+~~~ {.rust}
     let mut answer = "";
+~~~
 
 We can shorten this up a bit with this syntax:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
             let mut answer =
@@ -430,12 +463,14 @@ We can shorten this up a bit with this syntax:
             println(answer)
         }
     }
+~~~
 
 We've made the `if` assign the value to answer. Note that we had to
 remove the semicolons again; that lets the expression give its value to
 `answer.` Note that this \_also\_ makes answer immutable, so we can
 remove the `mut`:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
             let answer =
@@ -454,12 +489,14 @@ remove the `mut`:
             println(answer)
         }
     }
+~~~
 
 Not too shabby! I love eliminating mutable state.
 
 Of course, this version gives us lots of empty lines, so what we
 actually want is:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
             let answer =
@@ -478,6 +515,7 @@ actually want is:
             println(answer)
         }
     }
+~~~
 
 What's up with the tildes? They modify the declaration somehow. I added it
 because running without it gives an error message that implies you need it:
@@ -487,6 +525,7 @@ was a number. Oh well.
 
 Because the `if` returns a value, we could also do something like this:
 
+~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
             println(
@@ -497,6 +536,7 @@ Because the `if` returns a value, we could also do something like this:
             );
         }
     }
+~~~
 
 It's more compact, and removes the intermediate variable all together.
 
@@ -504,19 +544,23 @@ We can do one other thing too: this whole `if/fail!` thing so common in
 tests seems too complex. Why do we have to write if over and over and
 over again? Meet `assert!`:
 
+~~~ {.rust}
     #[test]
     fn test_is_fifteen_with_fifteen() {
       assert!(is_fifteen(15))
     }
+~~~
 
 This will fail if it gets false, and pass if it gets true. Simple! You
 can also give it a message to be printed when the assertion fails,
 mostly useful when you are using `assert!` to test for preconditions and
 such:
 
+~~~ {.rust}
     fn main() {
       assert!(1 == 0, "1 does not equal 0!");
     }
+~~~
 
 Try running it.
 

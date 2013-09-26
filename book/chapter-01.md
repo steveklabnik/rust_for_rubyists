@@ -46,12 +46,15 @@ yet very different, can teach us a lot.
 
 Here's "Hello World" in Rust:
 
+~~~ {.rust}
     fn main() {
         println("Hello, world!");
     }
+~~~
 
 Here's a parallel "Hello World" in Rust:
 
+~~~ {.rust}
     fn main() {
         do 10.times {
             do spawn {
@@ -60,16 +63,19 @@ Here's a parallel "Hello World" in Rust:
             }
         }
     }
+~~~
 
 Here's a rough port to Ruby:
 
 
+~~~ {.rust}
     10.times do
       Thread.new do
         greeting_message = "Hello?"
         puts greeting_message
       end
     end
+~~~
 
 That's it. Note the stuff that's *similar* to Ruby:
 

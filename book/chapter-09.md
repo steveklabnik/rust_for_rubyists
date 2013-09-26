@@ -14,6 +14,7 @@ Examples
 
 See if this looks familliar:
 
+~~~ {.rust}
     fn main() {
         let your_favorite_numbers = ~[1,2,3];
         let my_favorite_numbers = ~[4,5,6];
@@ -22,6 +23,7 @@ See if this looks familliar:
 
         println(fmt!("The third favorite number is %d.", our_favorite_numbers[2]))
     }
+~~~
 
 Seems like business as usual: `+` adds two vectors, `[]` does an
 indexing operation. What happens if you leave off the `~` s?:
@@ -40,6 +42,7 @@ Mutability inheritance
 
 You can mutate vectors if you make them so:
 
+~~~ {.rust}
     fn main() {
         let a_vector = ~[1,2,3];
         let mut another_vector = ~[];
@@ -47,18 +50,22 @@ You can mutate vectors if you make them so:
 
         println(fmt!("The first number is %d.", another_vector[0]))
     }
+~~~
 
 Of course, changing an element of a vector doesn't make sense:
 
+~~~ {.rust}
     fn main() {
         let a_vector = ~[1,2,3];
         a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: cannot assign to immutable vec content
 
         println(fmt!("The first number is %d.", a_vector[0]))
     }
+~~~
 
 But you can move it to a mutable one and then change it:
 
+~~~ {.rust}
     fn main() {
         let a_vector = ~[1,2,3];
         let mut mut_vector = a_vector;
@@ -66,6 +73,7 @@ But you can move it to a mutable one and then change it:
 
         println(fmt!("The first number is %d.", mut_vector[0]))
     }
+~~~
 
 When you make an immutable vector mutable, it's called 'thawing' the
 vector, and the opposite is 'freezing' a vector.

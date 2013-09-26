@@ -22,6 +22,7 @@ Using `stdin()`
 
 Turns out getting text input is pretty simple. Just try this:
 
+~~~ {.rust}
     use std::io;
     fn main() {
         println("INPUT:");
@@ -30,6 +31,7 @@ Turns out getting text input is pretty simple. Just try this:
         println("YOU TYPED:");
         println(input);
     }
+~~~
 
 Give that a run. It should prompt you to type something in, and then
 echo out what you typed. Simple enough!
@@ -65,8 +67,10 @@ code in it."
 Rust basically pretends that it has these two lines at the beginning of
 every program:
 
+~~~ {.rust}
     extern mod std;
     use std::prelude::*;
+~~~
 
 Two things here. The first line is this `extern mod` business. I wanted
 to clarify my understanding, so I jumped into the [ever helpful Rust
@@ -103,40 +107,52 @@ Modules?
 Every Rust file can contain one top-level module, and modules can
 contain other modules. Modules look like this:
 
+~~~ {.rust}
     mod foo {
         pub fn bar() { "bar" }
         pub fn baz() { "baz" }
         pub fn qux() { "qux" }
     }
+~~~
 
 You just shove a `mod` around everything that goes in the module. To
 bring `bar` into scope, you:
 
+~~~ {.rust}
     use foo::bar;
+~~~
 
 To bring them all into scope, you:
 
+~~~ {.rust}
     use foo::*;
+~~~
 
 To bring `bar` and `baz` into scope, but not `qux` you do either one of
 these:
 
+~~~ {.rust}
     use foo::bar;
     use foo::baz;
 
     use foo::{bar,baz};
+~~~
 
 Pretty simple. So now we can see why the code acts like it has these two
 lines at the top:
 
+~~~ {.rust}
     extern mod std;
     use std::prelude::*;
+~~~
 
 We want to link against the core library, and then import all the
 default io stuff into scope (that's what the prelude is). This is why we
 need:
 
+~~~ {.rust}
     use std::io;
+~~~
 
 Casting to integer
 ------------------
@@ -144,6 +160,7 @@ Casting to integer
 So, I was trying to cast a string to an integer to get this program
 going. So I wrote this:
 
+~~~ {.rust}
     use std::io;
 
     fn main() {
@@ -151,6 +168,7 @@ going. So I wrote this:
         println("INPUT:");
         println(from_str::<int>(input).to_str());
     }
+~~~
 
 I was gonna convert the string to an int, then back to a string to print
 it out to the screen.
@@ -169,6 +187,7 @@ that doesn't make any sense as an integer. For example: `"foo"`. So it
 doesn't actually return a string, it returns an `Option`. We can then
 use pattern matching to handle both cases. Observe:
 
+~~~ {.rust}
     use std::io;
 
     fn main() {
@@ -179,15 +198,18 @@ use pattern matching to handle both cases. Observe:
             None                => println("Hey, put in a number.")
         }
     }
+~~~
 
 Remember `match`? It's really good for matching against some kind of
 type and breaking it up. Here we match against our `Option` type.
 `Option` looks like this:
 
+~~~ {.rust}
     enum Option<T> {
         Some(T),
         None
     }
+~~~
 
 `Option` is called `Maybe` in some other languages, but basically, you
 can think of it as a type that handles what we'd use `nil` for in Ruby.
@@ -201,19 +223,23 @@ Looping forever
 Looping forever is possible with `while true`, but like in Ruby, that's
 kinda silly. Rust gives us `loop` to loop forever:
 
+~~~ {.rust}
     loop {
         println("HELLO")
     }
+~~~
 
 Obviously you don't want to actually run that. You can use `break` to
 break out of the loop:
 
+~~~ {.rust}
     let mut i = 0;
     loop {
         i += 1;
         if i == 5 { break; }
         println("hi");
     }
+~~~
 
 This will print `"hi"` five times. You're going to want to do this,
 because if someone mis-types a number, we don't want to count it against
@@ -224,32 +250,38 @@ Random Number Generation
 
 Random number generation isn't too bad:
 
-    use core::rand::RngUtil;
+~~~ {.rust}
+    use std::rand;
 
     fn main() {
         let n = rand::random::<int>();
         println(n.to_str());
     }
+~~~
 
 This will print out a different number each time you run it. But you'll
 get biiiiiiig numbers. If we want 1-100, of course we have to do this:
 
-    use core::rand::RngUtil;
+~~~ {.rust}
+	use std::rand;
 
     fn main() {
         let r = rand::rng().gen_int_range(0, 100);
         println(r.to_str());
     }
+~~~
 
 One issue with this: We can get negatives too. `abs` to the rescue!!!:
 
-    use core::rand::RngUtil;
-    use core::int::abs;
+~~~ {.rust}
+	use std::rand;
+    use std::num::abs;
 
     fn main() {
-        let r = abs(rand::rng().gen_int_range(0, 100));
+        let r: int = abs(rand::rng().gen_int_range(0, 100));
         println(r.to_str());
     }
+~~~
 
 This will get us a random number between 1 and 100.
 
@@ -263,6 +295,7 @@ Okay! That took me... about half an hour. Maybe 45 minutes. I decided to use
 some pointer stuff... I thought it was a little awkward, though.  After asking
 on IRC, 'strcat' gave me this version:
 
+~~~ {.rust}
     use std::io;
     use std::rand;
 
@@ -307,6 +340,7 @@ on IRC, 'strcat' gave me this version:
 
         println("Done!");
     }
+~~~
 
 Conclusion
 ----------

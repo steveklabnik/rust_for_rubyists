@@ -22,15 +22,18 @@ As a Rubyist, you probably don't know anything about that, so let's talk
 code first, and get into what exactly all that means later. Here's some
 code that prints "Hello" 100 times:
 
+~~~ {.rust}
     fn main() {
         do 100.times {
             println("Hello");
         }
     }
+~~~
 
 You may remember this from earlier. This loops 100 times, printing
 "Hello." Now let's make it roflscale with tasks:
 
+~~~ {.rust}
     fn main() {
         do 100.times {
             do spawn {
@@ -38,6 +41,7 @@ You may remember this from earlier. This loops 100 times, printing
             }
         }
     }
+~~~
 
 That's it! We spin up 100 tasks that print stuff. If you inspect your
 output, you can tell it's working:
@@ -54,7 +58,9 @@ its string before this task prints its newline). But the vast majority
 of things aren't like that. Let's take a look at the type signature of
 `spawn`:
 
+~~~ {.rust}
     fn spawn(f: ~fn())
+~~~
 
 Spawn is a function that takes a pointer to another function (it's a
 higher order function). But there's that `~` again. This means that the
@@ -74,6 +80,7 @@ results. We can communicate between tasks with pipes. Pipes have two
 ends: a channel that sends info down the pipe, and a port that receives
 info. Here's an example of a task that sends us back a 10:
 
+~~~ {.rust}
     fn main() {
         let (port, chan): (Port<int>, Chan<int>) = stream();
 
@@ -83,6 +90,7 @@ info. Here's an example of a task that sends us back a 10:
 
         println(port.recv().to_str());
     }
+~~~
 
 You can imagine that instead of sending 10, we might be doing some sort
 of complex calculation. It could be doing that work in the background
@@ -92,16 +100,19 @@ What about that `chan.send` bit? Well, the task captures the `chan`
 variable we set up before, so it's just matter of using it. This is
 similar to Ruby's blocks:
 
+~~~ {.ruby}
     foo = 10
     2.times do
       puts foo
     end
+~~~
 
 This is really only one-way transit, though: what if we want to
 communicate back and forth? Setting up two ports and channels each time
 would be pretty annoying, so we have some standard library code for
 this: `DuplexStream`:
 
+~~~ {.rust}
     extern mod extra;
     use extra::comm::DuplexStream;
 
@@ -131,6 +142,7 @@ this: `DuplexStream`:
             println(answer.to_str());
         }
     }
+~~~
 
 
 What's this `extern mod extra` madness? Well, that's how we `link` to
@@ -149,6 +161,7 @@ function, we make a `DuplexStream`, send one end to a new task, and then
 send it a `22`, and print out the result. Because this task is running
 in the background, we can send it bunches of values:
 
+~~~ {.rust}
     fn main() {
         let (from_child, to_child) = DuplexStream();
 
@@ -166,6 +179,7 @@ in the background, we can send it bunches of values:
             println(answer.to_str());
         }
     }
+~~~
 
 Pretty simple. Our task is always waiting for work. If you run this,
 you'll get some weird output at the end:
@@ -184,6 +198,7 @@ running `main`) died. By default, Rust tasks are bidirectionally linked, which
 means if one task fails, all of its children and parents fail too. We can fix
 this for now by telling our child to die:
 
+~~~ {.rust}
     extern mod extra;
     use extra::comm::DuplexStream;
 
@@ -214,6 +229,7 @@ this for now by telling our child to die:
           println(answer.to_str());
       }
     }
+~~~
 
 Now when we send a zero, our child task terminates. If you run this,
 you'll get no errors at the end. We can also change our failure mode.
@@ -233,6 +249,7 @@ main that spins up some sort of global task setup, and all the work gets
 done inside these tasks that communicate with each other. Like, for a
 video game:
 
+~~~ {.rust}
     fn main() {
 
       do spawn {
@@ -251,6 +268,7 @@ video game:
         io_handler();
       }
     }
+~~~
 
 ... with the associated channels, of course. This feels very Actor-y to
 me. I like it. In fact, someone *is* working on an Actor

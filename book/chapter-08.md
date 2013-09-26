@@ -13,6 +13,7 @@ Structs
 
 Structs are ways of packaging up multiple values into one:
 
+~~~ {.rust}
     struct Monster {
         health: int,
         attack: int
@@ -24,6 +25,7 @@ Structs are ways of packaging up multiple values into one:
       println(m.health.to_str());
       println(m.attack.to_str());
     }
+~~~
 
 This gives:
 
@@ -47,6 +49,7 @@ Methods are basically functions that take a first argument named `self`.
 Python people who are reading will be high fiving each other in droves.
 Let's add a method for our `Monster` s:
 
+~~~ {.rust}
     struct Monster {
         health: int,
         attack: int
@@ -63,6 +66,7 @@ Let's add a method for our `Monster` s:
 
         m.attack();
     }
+~~~
 
 This gives:
 
@@ -75,6 +79,7 @@ what the ownership semantics are. That's the `&self`, if you forgot.
 You can define associated functions (class methods, in Ruby, static
 methods, in Java) as well:
 
+~~~ {.rust}
     struct Monster {
         health: int,
         attack: int
@@ -96,9 +101,11 @@ methods, in Java) as well:
         m.attack();
         Monster::count();
     }
+~~~
 
 Constructors are a good reason to use associated functions:
 
+~~~ {.rust}
     struct Monster {
         health: int,
         attack: int
@@ -122,6 +129,7 @@ Constructors are a good reason to use associated functions:
     fn main() {
         Monster::new(20, 40).attack();
     }
+~~~
 
 This gives:
 
@@ -137,6 +145,7 @@ What if we want to define a few different types of things? In other
 languages, we'd use inheritance. In Rust, it seems like Enums are a
 better idea. Here's an enum:
 
+~~~ {.rust}
     enum Monster {
         ScubaArgentine(int, int, int, int),
         IndustrialRaverMonkey(int, int, int, int)
@@ -156,6 +165,7 @@ better idea. Here's an enum:
         let irm = IndustrialRaverMonkey(46, 35, 91, 2);
         irm.attack();
     }
+~~~
 
 Okay, few new things here: We can see that there's some duplication
 here. Obviously this isn't the best way to do it, but I wanted to try
@@ -167,6 +177,7 @@ sorta.
 If you haven't used pattern matching in another language, you're missing
 out. It's awesome. Here's a simpler match expression:
 
+~~~ {.rust}
     fn message(i: int) {
       match i {
           1 => println("ONE!"),
@@ -181,6 +192,7 @@ out. It's awesome. Here's a simpler match expression:
         message(2);
         message(3);
     }
+~~~
 
 Does that make sense? It's sorta like a `case` statement, but it's more
 powerful. If we leave off the `_` case, Rust will complain:
@@ -197,9 +209,11 @@ powerful. If we leave off the `_` case, Rust will complain:
 Neat. The cool thing is that when pattern matching on a struct, the
 `match` can destructure it:
 
+~~~ {.rust}
     match p {
         Point(x, y) => println(fmt!("X: %d, Y: %d", x, y))
     }
+~~~
 
 We name the two fields of a `Point` `x` and `y`, and those names are
 valid within the match expression. Match is a lot more powerful (they
