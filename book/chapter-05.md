@@ -237,12 +237,12 @@ out all the numbers from one to 100. It's easy!
 ~~~
 
 Step one: print **something** 100 times. If you run this with `rust run`
-or `make` (not `make test`!) you should see `num` printed 100 times.
-Note that our tests didn't actually run. Not only are they not run,
-they're actually not even in the executable:
+(not `rust test`!) you should see `num` printed 100 times.  Note that
+our tests didn't actually run. Not only are they not run, they're
+actually not even in the executable:
 
     $ rust test fizzbuzz.rs
-    $ nm -C fizzbuzz~ | grep test
+    $ nm -C fizzbuzztest~ | grep test
     0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
     0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
     0000000000403c10 t test_is_five_with_not_five::_79fbef3fc431adf6::_00
