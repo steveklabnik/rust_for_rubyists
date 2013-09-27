@@ -36,7 +36,7 @@ book/book.html: $(CHAPTERS)
 book/%.html : book/%.md
 	pandoc -o $@ $(HTML_OPTS) $<
 
-site: $(CHAPTERS) book/book.html
+site: $(patsubst %.md,%.html,$(wildcard book/chapter-*.md)) book/book.html
 
 code.tgz: code
 	tar cf code.tgz code
