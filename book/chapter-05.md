@@ -339,7 +339,7 @@ Anyway, we need a different function:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 3) {
+        for num in range(1, 4) {
             println(num)
         }
     }
@@ -361,7 +361,7 @@ this. The first is to use the `to_str` function:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 3) {
+        for num in range(1, 4) {
             println(num.to_str())
         }
     }
@@ -385,7 +385,7 @@ is:
 
 ~~~ {.rust}
     fn main() {
-      for num in range(1, 3) {
+      for num in range(1, 4) {
         println(fmt!("%d", num));
       }
     }
