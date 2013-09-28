@@ -367,11 +367,7 @@ this. The first is to use the `to_str` function:
     }
 ~~~
 
-Awesome. The `i` suffix tells Rust that we want the vector to contains
-`int`. Otherwise, it wouldn't know which of the various numeric types
-(`uint`, `float`, `u32`, etc) to use for the `to_str` method. The cool
-thing about rust's type system is that you only need to provide the
-"type hint" once, rather than on every value. Let's run it:
+Awesome. Let's run it:
 
     $ rust run fizzbuzz.rs
     1
