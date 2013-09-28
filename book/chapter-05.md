@@ -208,7 +208,7 @@ semicolon turns the expression into a statement, and statements don't
 have values. This is kinda weird. I don't know how I feel about it. But
 it is something you should know about.
 
-Okay, now try to TDD out an `is_five` and `is_fifteen` methods. They
+Okay, now try to TDD out the `is_five` and `is_fifteen` methods. They
 should work the same way, but this will let you get practice actually
 writing it out. Once you see this, you're ready to advance:
 
@@ -332,7 +332,7 @@ it one. Whoops! These kind of crazy compiler errors are a little hard to
 read, especially since we don't get them at all in Ruby. The `<V0>` is
 just rust trying to tell us that it doesn't quite know what type we
 want: it's the first (index 0) inferred type it encountered in the
-program. There is also `<VIx>`, for any `x`, which meants it thought the
+program. There is also `<VIx>`, for any `x`, which means it thought the
 inferred type was an integer, and `<VFx>` for floats.
 
 Anyway, we need a different function:
