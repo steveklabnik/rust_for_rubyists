@@ -135,7 +135,6 @@ this: `DuplexStream`:
         from_child.try_send(23);
         from_child.send(24);
         from_child.send(25);
-        from_child.send(0);
 
         do 4.times {
             let answer = from_child.recv();
