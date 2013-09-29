@@ -429,10 +429,7 @@ Now we can put the two together:
 
 Uhhhh `let mut`? `let` is the way that we make a local variable. `mut`
 means we plan to mutate that variable: yes, variables are immutable by
-default. The `std::int::range` is the name of the `int` range function
-in the standard library. We need to fully qualify it, at least if we
-don't want to import it... more on that later. When I first wrote this,
-I wrote this:
+default. When I first wrote this, I wrote this:
 
 ~~~ {.rust}
     let mut answer = "";
