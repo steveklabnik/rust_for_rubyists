@@ -32,7 +32,7 @@ fn test_is_three() {
 #[test]
 fn test_is_three_with_three() {
     if !is_three(3) {
-        fail!(~"Three should be three");
+        fail!("Three should be three");
     }
 }
 
@@ -46,7 +46,7 @@ fn test_is_five() {
 #[test]
 fn test_is_five_with_five() {
     if !is_five(5) {
-        fail!(~"Five should be five");
+        fail!("Five should be five");
     }
 }
 
@@ -60,7 +60,7 @@ fn test_is_fifteen() {
 #[test]
 fn test_is_fifteen_with_fifteen() {
     if !is_fifteen(15) {
-        fail!(~"Fifteen should be fifteen");
+        fail!("Fifteen should be fifteen");
     }
 }
 
