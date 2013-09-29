@@ -13,7 +13,6 @@ Let's think about Ruby for a minute: what's its biggest weakness? For
 me, it's these things:
 
 -   Concurrency
--   Concurrency
 -   Safety guarantees
 -   Lots of mutable state
 -   Only vaguely functional
@@ -24,7 +23,6 @@ me, it's these things:
 
 What's awesome about Ruby?
 
--   Blocks
 -   Blocks
 -   Vaguely functional
 -   Syntax is pretty easy
