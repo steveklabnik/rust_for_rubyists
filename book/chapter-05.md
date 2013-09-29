@@ -122,7 +122,7 @@ another test, and see what happens:
     #[test]
     fn test_is_three_with_three() {
       if !is_three(3) {
-        fail!(~"Three should be three");
+        fail!("Three should be three");
       }
     }
 ~~~
