@@ -30,7 +30,16 @@ this:
                    ^~~~~~~
 
 This happened when I left off the curly brace after the `main` function
-above. To run your program, do the Usual UNIX Thing:
+above. 
+
+This isn't an error:
+
+    $ rustc hello.rs
+    warning: no debug symbols in executable (-arch x86_64)
+    
+It happens on OSX for some versions of Rust. You can safely ignore it.
+
+To run your program, do the Usual UNIX Thing:
 
     $ ./hello
 
