@@ -1,4 +1,4 @@
 ---
 aws_bucket: www.rustforrubyists.com
-skip_regex:    (pdf)|(mobi)|(epub)|(md)|(book/header.html)|(book/footer.html)|(txt)|(yml)|(Makefile)|(gitignore)|(xml)$
+skip_regex:    (pdf)|(mobi)|(epub)|(md)|(book/header.html)|(book/footer.html)|(txt)|(yml)|(Makefile)|(gitignore)|(xml)|(.tgz)|(LICENSE)$
 
