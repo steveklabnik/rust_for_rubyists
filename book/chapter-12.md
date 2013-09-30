@@ -182,6 +182,14 @@ You'll also notice that `src/hello/lib.rs` turned into
 `libhello-ed8619dad9ce7d58-0.1.0.so`. This is a simple combination of the
 library name, a hash of its content, and the version.
 
+Now you can compile and run any program that uses `extern mod hello` like this:
+
+~~~ {.notrust}
+$ cd ~/src/foo
+$ rustc -L ~/src/hello/build/x86_64-unknown-linux-gnu/hello/ foo.rs
+$ ./foo
+~~~
+
 Now that your library builds, you'll want to commit:
 
 ~~~ {.notrust}
