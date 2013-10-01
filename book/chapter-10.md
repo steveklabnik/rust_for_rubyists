@@ -128,7 +128,7 @@ same... Let's fix that:
 
 ~~~ {.rust}
     fn print_vec<T>(v: &[T]) {
-        for v.iter().advance |&i| {
+        for i in v.iter() {
             println(i.to_str())
         }
     }
