@@ -196,6 +196,7 @@ but there's one wrinkle: note there's no semicolon here. If you had one,
 you'd get:
 
     $ rust test fizzbuzz.rs
+
     fizzbuzz.rs:1:0: 3:1 error: not all control paths return a value
     fizzbuzz.rs:1 fn is_three(num: int) -> bool {
     fizzbuzz.rs:2     num % 3 == 0;
@@ -242,21 +243,46 @@ our tests didn't actually run. Not only are they not run, they're
 actually not even in the executable:
 
     $ rust test fizzbuzz.rs
-    $ nm -C fizzbuzztest~ | grep test
-    0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
-    0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
-    0000000000403c10 t test_is_five_with_not_five::_79fbef3fc431adf6::_00
-    0000000000403ee0 t test_is_fifteen_with_fifteen::_79fbef3fc431adf6::_00
-    0000000000403a00 t test_is_three_with_not_three::_79fbef3fc431adf6::_00
-    0000000000403e20 t test_is_fifteen_with_not_fifteen::_79fbef3fc431adf6::_00
-                     U test::test_main_static::_e5d562a4bc8c4dd6::_06
-    000000000040fea0 T __test::main::_79fbef3fc431adf6::_00
-    0000000000614890 D __test::tests::_7c31a8a9617a6a::_00
 
+On Linux:
 
-    $ rust run fizzbuzz.rs
-    $ nm -C fizzbuzz~ | grep test
+~~~
+$ nm -C fizzbuzztest~ | grep test
+~~~
 
+On OS X:
+
+~~~
+$ nm fizzbuzztest~ | c++filt -p -i | grep test
+~~~
+   
+~~~
+0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
+0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
+0000000000403c10 t test_is_five_with_not_five::_79fbef3fc431adf6::_00
+0000000000403ee0 t test_is_fifteen_with_fifteen::_79fbef3fc431adf6::_00
+0000000000403a00 t test_is_three_with_not_three::_79fbef3fc431adf6::_00
+0000000000403e20 t test_is_fifteen_with_not_fifteen::_79fbef3fc431adf6::_00
+                 U test::test_main_static::_e5d562a4bc8c4dd6::_06
+000000000040fea0 T __test::main::_79fbef3fc431adf6::_00
+0000000000614890 D __test::tests::_7c31a8a9617a6a::_00
+~~~
+
+~~~
+$ rust run fizzbuzz.rs
+~~~
+
+On Linux:
+
+~~~
+$ nm -C fizzbuzz~ | grep test
+~~~
+
+On OS X:
+
+~~~
+$ nm fizzbuzz~ | c++filt -p -i | grep test
+~~~
     $
 
 Neat, huh? Rust is smart. By the way, you can see how `rust run` and `rust
@@ -264,7 +290,8 @@ test` work here: They compile and run a version of your file with a `~` at
 the end.
 
 Anyway, `nm`: The `nm` program lists all the symbols in a binary executable or
-library. The `-C` option is important, it "de-mangles" the symbol names. Rust
+library. The `-C` option is important on linux, it "de-mangles" the symbol names.
+On OS X, `nm` provides no symbol de-mangling option, so the output must be piped to `c++filt`. Rust
 uses the same mangling scheme as C++, so it's compatible with all the existing
 tools. How it works isn't that important, though.  It's cool low-level stuff if
 you're into that sort of thing.
