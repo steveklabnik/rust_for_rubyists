@@ -34,7 +34,13 @@ This gives:
     20
 
 Seems simple enough! Note that you can give a struct to `fmt!`, using
-the `%?` format specifier. Example:
+the `%?` format specifier, such as:
+
+~~~ {.rust}
+    println(fmt!("%?", m));
+~~~
+
+Which produces:
 
     $ rust run dwemthysarray.rs
     Monster{health: 10, attack: 20}
