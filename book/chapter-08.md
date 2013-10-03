@@ -131,7 +131,9 @@ Constructors are a good reason to use associated functions:
     }
 ~~~
 
-This gives:
+Note the lack of a semicolon inside `new`, so it's acting as an
+expression. `new` is just a function that creates a new `Monster`
+struct and returns it. This gives:
 
     $ rust run dwemthysarray.rs
     The monster attacks for 40 damage.
