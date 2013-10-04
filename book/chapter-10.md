@@ -246,7 +246,7 @@ typing. The right way to look at it is that by giving the compiler more
 information about our code, it can make certain optimizations. Check
 this out:
 
-    $ cat fizzbuzz.rs
+    $ cat traits.rs
 ~~~ {.rust}
     fn print_vec<T: ToStr>(v: &[T]) {
         for i in v.iter() {
