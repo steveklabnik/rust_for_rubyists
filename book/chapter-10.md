@@ -533,7 +533,7 @@ make one:
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println(fmt!("The monkey attacks for %d.", self.strength))
+            println(format!("The monkey attacks for {:d}.", self.strength))
         }
     }
 
@@ -550,8 +550,8 @@ Now we're cooking with gas! Remember our old implementation?:
     impl Monster {
         fn attack(&self) {
             match *self {
-                ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
-                IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
+                ScubaArgentine(l, s, c, w) => println(format!("The monster attacks for {:d} damage.", w)),
+                IndustrialRaverMonkey(l, s, c, w) => println(format!("The monster attacks for {:d} damage.", w))
             }
         }
     }
@@ -571,13 +571,13 @@ implementation for absolutely anything:
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println(fmt!("The monkey attacks for %d.", self.strength))
+            println(format!("The monkey attacks for {:d}.", self.strength))
         }
     }
 
     impl Monster for int {
         fn attack(&self) {
-            println(fmt!("The int attacks for %d.", *self))
+            println(format!("The int attacks for {:d}.", *self))
         }
     }
 
@@ -660,7 +660,7 @@ Done? Here's mine:
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println(fmt!("The monkey attacks for %d.", self.strength))
+            println(format!("The monkey attacks for {:d}.", self.strength))
         }
 
         fn new() -> IndustrialRaverMonkey {
@@ -670,7 +670,7 @@ Done? Here's mine:
 
     impl Monster for DwarvenAngel {
         fn attack(&self) {
-            println(fmt!("The angel attacks for %d.", self.strength))
+            println(format!("The angel attacks for {:d}.", self.strength))
         }
         fn new() -> DwarvenAngel {
             DwarvenAngel {life: 540, strength: 6, charisma: 144, weapon: 50}
@@ -679,7 +679,7 @@ Done? Here's mine:
 
     impl Monster for AssistantViceTentacleAndOmbudsman {
         fn attack(&self) {
-            println(fmt!("The tentacle attacks for %d.", self.strength))
+            println(format!("The tentacle attacks for {:d}.", self.strength))
         }
         fn new() -> AssistantViceTentacleAndOmbudsman {
             AssistantViceTentacleAndOmbudsman {life: 320, strength: 6, charisma: 144, weapon: 50}
@@ -688,7 +688,7 @@ Done? Here's mine:
 
     impl Monster for TeethDeer {
         fn attack(&self) {
-            println(fmt!("The deer attacks for %d.", self.strength))
+            println(format!("The deer attacks for {:d}.", self.strength))
         }
         fn new() -> TeethDeer {
             TeethDeer {life: 655, strength: 192, charisma: 19, weapon: 109}
@@ -697,7 +697,7 @@ Done? Here's mine:
 
     impl Monster for IntrepidDecomposedCyclist {
         fn attack(&self) {
-            println(fmt!("The cyclist attacks for %d.", self.strength))
+            println(format!("The cyclist attacks for {:d}.", self.strength))
         }
         fn new() -> IntrepidDecomposedCyclist {
             IntrepidDecomposedCyclist {life: 901, strength: 560, charisma: 422, weapon: 105}
@@ -706,7 +706,7 @@ Done? Here's mine:
 
     impl Monster for Dragon {
         fn attack(&self) {
-            println(fmt!("The dragon attacks for %d.", self.strength))
+            println(format!("The dragon attacks for {:d}.", self.strength))
         }
         fn new() -> Dragon {
             Dragon {life: 1340, strength: 451, charisma: 1020, weapon: 939}

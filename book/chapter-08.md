@@ -33,11 +33,11 @@ This gives:
     10
     20
 
-Seems simple enough! Note that you can give a struct to `fmt!`, using
-the `%?` format specifier, such as:
+Seems simple enough! Note that you can give a struct to `format!`, using
+the `:?` format specifier, such as:
 
 ~~~ {.rust}
-    println(fmt!("%?", m));
+    println(format!("{:?}", m));
 ~~~
 
 Which produces:
@@ -63,7 +63,7 @@ Let's add a method for our `Monster` s:
 
     impl Monster {
         fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
+            println(format!("The monster attacks for {:d} damage.", self.attack));
         }
     }
 
@@ -93,7 +93,7 @@ methods, in Java) as well:
 
     impl Monster {
         fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
+            println(format!("The monster attacks for {:d} damage.", self.attack));
         }
 
         fn count() {
@@ -123,7 +123,7 @@ Constructors are a good reason to use associated functions:
         }
 
         fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
+            println(format!("The monster attacks for {:d} damage.", self.attack));
         }
 
         fn count() {
@@ -161,8 +161,8 @@ better idea. Here's an enum:
     impl Monster {
         fn attack(&self) {
           match *self {
-              ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
-              IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
+              ScubaArgentine(l, s, c, w) => println(format!("The monster attacks for {:d} damage.", w)),
+              IndustrialRaverMonkey(l, s, c, w) => println(format!("The monster attacks for {:d} damage.", w))
           }
         }
     }
@@ -217,7 +217,7 @@ Neat. The cool thing is that when pattern matching on a struct, the
 
 ~~~ {.rust}
     match p {
-        Point(x, y) => println(fmt!("X: %d, Y: %d", x, y))
+        Point(x, y) => println(format!("X: {:d}, Y: {:d}", x, y))
     }
 ~~~
 
