@@ -304,7 +304,7 @@ on IRC, 'strcat' gave me this version:
     }
 
     fn process_guess(secret:int, guess: int) -> bool {
-        println(fmt!("You guessed: %d", guess));
+        println(format!("You guessed: {:d}", guess));
 
         if guess > secret {
             println("Your guess was too high!");
@@ -326,7 +326,7 @@ on IRC, 'strcat' gave me this version:
         println("Guess a number from 1-100 (you get five tries):");
 
         for round in range(0, 5) {
-            println(fmt!("Guess #%d", round));
+            println(format!("Guess \\#{:d}", round));
 
             let input = io::stdin().read_line();
 

@@ -21,7 +21,7 @@ See if this looks familliar:
 
         let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
 
-        println(fmt!("The third favorite number is %d.", our_favorite_numbers[2]))
+        println(format!("The third favorite number is {:d}.", our_favorite_numbers[2]))
     }
 ~~~
 
@@ -48,7 +48,7 @@ You can mutate vectors if you make them so:
         let mut another_vector = ~[];
         another_vector.push_all(a_vector);
 
-        println(fmt!("The first number is %d.", another_vector[0]))
+        println(format!("The first number is {:d}.", another_vector[0]))
     }
 ~~~
 
@@ -59,7 +59,7 @@ Of course, changing an element of a vector doesn't make sense:
         let a_vector = ~[1,2,3];
         a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: cannot assign to immutable vec content
 
-        println(fmt!("The first number is %d.", a_vector[0]))
+        println(format!("The first number is {:d}.", a_vector[0]))
     }
 ~~~
 
@@ -71,7 +71,7 @@ But you can move it to a mutable one and then change it:
         let mut mut_vector = a_vector;
         mut_vector[0] = 5;
 
-        println(fmt!("The first number is %d.", mut_vector[0]))
+        println(format!("The first number is {:d}.", mut_vector[0]))
     }
 ~~~
 
