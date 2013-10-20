@@ -263,22 +263,10 @@ This will print out a different number each time you run it. But you'll
 get biiiiiiig numbers. If we want 1-100, of course we have to do this:
 
 ~~~ {.rust}
-	use std::rand;
+	use std::rand::Rng;
 
     fn main() {
-        let r = rand::rng().gen_int_range(0, 100);
-        println(r.to_str());
-    }
-~~~
-
-One issue with this: We can get negatives too. `abs` to the rescue!!!:
-
-~~~ {.rust}
-	use std::rand;
-    use std::num::abs;
-
-    fn main() {
-        let r: int = abs(rand::rng().gen_int_range(0, 100));
+        let r = std::rand::rng().gen_integer_range(1, 101);
         println(r.to_str());
     }
 ~~~
