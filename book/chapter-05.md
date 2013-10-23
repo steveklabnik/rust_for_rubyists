@@ -172,7 +172,7 @@ failed. Let's make both tests pass:
     }
 ~~~
 
-    $ rustc test fizzbuzz.rs
+    $ rust test fizzbuzz.rs
 
     running 2 tests
     test test_is_three_with_not_three ... ok
