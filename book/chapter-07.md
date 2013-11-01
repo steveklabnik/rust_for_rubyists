@@ -136,7 +136,7 @@ the move happens. Neat. We can make a copy:
 This will work, though it will tell us that `y` was never used. And they
 point at two different copies of 10, not the same one.
 
-Genearly, you should use owned pointers where possible, rather than managed
+Generally, you should use owned pointers where possible, rather than managed
 pointers. They are much more efficient (no GC!), because they are analyzed
 at compile-time to make sure they are used correctly. Some things just
 aren't possible without managed pointers, though. Frequently, though, you
