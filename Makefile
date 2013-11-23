@@ -9,9 +9,9 @@ ALL_FILES=$(CHAPTERS) \
 					book/title.txt \
 					cover.png
 
-EPUB_OPTS=--toc -S -s --epub-cover-image=cover.png --epub-metadata=book/metadata.xml
+EPUB_OPTS=--toc --smart --epub-cover-image=cover.png --epub-metadata=book/metadata.xml
 
-HTML_OPTS=-S -s --include-before-body=book/header.html --include-after-body=book/footer.html
+HTML_OPTS=--smart --to-html5 --template=book/template.html
 
 CLEAN_FILES=$(patsubst %.md,%.html,$(wildcard book/chapter-*.md)) \
 						rust-for-rubyists.epub \
