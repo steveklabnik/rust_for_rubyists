@@ -367,7 +367,7 @@ Anyway, we need a different function:
 ~~~ {.rust}
     fn main() {
         for num in range(1, 4) {
-            println(num)
+            println(num);
         }
     }
 ~~~
@@ -403,22 +403,24 @@ Awesome. Let's run it:
 
 Bam! Whew. We had to fight with the compiler a bit, and the errors
 weren't great, but that wasn't too bad. The other way to do it is to use
-the `fmt!` function. At least, it looks like a function to me. Here it
-is:
+the `format!` macro, which will format-print our variables at 
+compile-time. Here it is:
 
 ~~~ {.rust}
     fn main() {
       for num in range(1, 4) {
-        println(fmt!("%d", num));
+        println!("{:d}", num);
       }
     }
 ~~~
 
-`fmt!` is similar to `str % arg`, or the `format` and `sprintf`
-functions in `Kernel`: it takes a format string, some arguments, and
-makes a string out of them. A cool feature of rust that sets it apart
-from C or C++, which also have this, is that the format strings are
-type-checked at compile time. No more broken format strings!
+`println!`, ie. `println(format!())` is similar to `str % arg`, or the
+`format` and `sprintf` functions in `Kernel`: it takes a format string,
+some arguments, and makes a string out of them.
+A cool feature of Rust that sets it apart from C or C++, is that the
+format strings are type-checked at compile time (the type annotation like
+`:d` is otherwise optional).
+No more broken format strings!
 
 Anyway, now we have 1 to 3. We need 1 to 100.
 

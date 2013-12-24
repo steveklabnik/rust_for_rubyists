@@ -6,7 +6,7 @@ fn generate_secret_number() -> int {
 } 
 
 fn process_guess(secret:int, guess: int) -> bool { 
-    println(fmt!("You guessed: %d", guess)); 
+    println!("You guessed: {:d}", guess); 
 
     if guess > secret { 
         println("Your guess was too high!"); 
@@ -29,7 +29,7 @@ fn main() {
     println("Guess a number from 1-100 (you get five tries):"); 
 
     for round in range(0, 5) { 
-        println(fmt!("Guess #%d", round)); 
+        println!("Guess #{:d}", round)); 
 
         let input = io::stdin().read_line(); 
 
