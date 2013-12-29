@@ -33,8 +33,8 @@ This gives:
     10
     20
 
-Seems simple enough! Note that you can give a struct to `fmt!`, using
-the `%?` format specifier. Example:
+Seems simple enough! Note that you can give a struct to `format!`, using
+the `:?` format specifier. Example:
 
     $ rust run dwemthysarray.rs
     Monster{health: 10, attack: 20}
@@ -57,7 +57,7 @@ Let's add a method for our `Monster` s:
 
     impl Monster {
         fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
+            println!("The monster attacks for {:d} damage.", self.attack);
         }
     }
 
@@ -87,7 +87,7 @@ methods, in Java) as well:
 
     impl Monster {
         fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
+            println!("The monster attacks for {:d} damage.", self.attack);
         }
 
         fn count() {
@@ -117,7 +117,7 @@ Constructors are a good reason to use associated functions:
         }
 
         fn attack(&self) {
-            println(fmt!("The monster attacks for %d damage.", self.attack));
+            println!("The monster attacks for {:d} damage.", self.attack);
         }
 
         fn count() {
@@ -157,8 +157,8 @@ better idea. Here's an enum:
     impl Monster {
         fn attack(&self) {
           match *self {
-              ScubaArgentine(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w)),
-              IndustrialRaverMonkey(l, s, c, w) => println(fmt!("The monster attacks for %d damage.", w))
+              ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
+              IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
           }
         }
     }
@@ -221,7 +221,7 @@ can destructure it:
 
 ~~~ {.rust}
     match p {
-        Point(x, y) => println(fmt!("X: %d, Y: %d", x, y))
+        Point(x, y) => println!("X: {:d}, Y: {:d}", x, y)
     }
 ~~~
 

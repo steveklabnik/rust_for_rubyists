@@ -45,7 +45,7 @@
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println(fmt!("The monkey attacks for %d.", self.strength))
+            println!("The monkey attacks for {:d}.", self.strength)
         }
 
       fn new() -> IndustrialRaverMonkey {
@@ -55,7 +55,7 @@
 
     impl Monster for DwarvenAngel {
         fn attack(&self) {
-            println(fmt!("The angel attacks for %d.", self.strength))
+            println!("The angel attacks for {:d}.", self.strength)
         }
         fn new() -> DwarvenAngel {
             DwarvenAngel {life: 540, strength: 6, charisma: 144, weapon: 50}
@@ -64,7 +64,7 @@
 
     impl Monster for AssistantViceTentacleAndOmbudsman {
         fn attack(&self) {
-            println(fmt!("The tentacle attacks for %d.", self.strength))
+            println!("The tentacle attacks for {:d}.", self.strength)
         }
         fn new() -> AssistantViceTentacleAndOmbudsman {
             AssistantViceTentacleAndOmbudsman {life: 320, strength: 6, charisma: 144, weapon: 50}
@@ -72,7 +72,7 @@
     }
    impl Monster for TeethDeer {
         fn attack(&self) {
-            println(fmt!("The deer attacks for %d.", self.strength))
+            println!("The deer attacks for {:d}.", self.strength)
         }
         fn new() -> TeethDeer {
             TeethDeer {life: 655, strength: 192, charisma: 19, weapon: 109}
@@ -81,7 +81,7 @@
 
     impl Monster for IntrepidDecomposedCyclist {
         fn attack(&self) {
-            println(fmt!("The cyclist attacks for %d.", self.strength))
+            println!("The cyclist attacks for {:d}.", self.strength)
         }
         fn new() -> IntrepidDecomposedCyclist {
             IntrepidDecomposedCyclist {life: 901, strength: 560, charisma: 422, weapon: 105}
@@ -90,7 +90,7 @@
 
     impl Monster for Dragon {
         fn attack(&self) {
-            println(fmt!("The dragon attacks for %d.", self.strength))
+            println!("The dragon attacks for {:d}.", self.strength)
         }
        fn new() -> Dragon {
             Dragon {life: 1340, strength: 451, charisma: 1020, weapon: 939}

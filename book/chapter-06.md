@@ -151,7 +151,7 @@ program uses a certain dynamic library (`.dll` on Windows, `.dylib` on
 OS X, and `.so` on other Unix systems). `extra` is part of Rust itself,
 it includes extras as compared to `std` (which is automatically included
 in every program), such as JSON parsing, networking, and data
-structures. See <http://static.rust-lang.org/doc/0.8/extra/index.html>
+structures. See [libextra docs](http://static.rust-lang.org/doc/0.8/extra/index.html)
 for more.
 
 We make a function that just loops forever, gets an `int` off of the

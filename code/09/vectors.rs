@@ -3,6 +3,6 @@ fn main() {
     let mut mut_vector = a_vector;
     mut_vector[0] = 5;
 
-    println(fmt!("The first number is %d.", mut_vector[0]))
+    println!("The first number is {:d}.", mut_vector[0])
 }
 
