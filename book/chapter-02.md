@@ -46,7 +46,7 @@ ask for help.
 Future Proofing
 ---------------
 
-The version this book is written for is 0.8.While the language itself is pretty
+The version this book is written for is 0.8. While the language itself is pretty
 stable, things like the standard library and some major subsystems are being
 revised. I'll be tweaking it with every new release.
 
