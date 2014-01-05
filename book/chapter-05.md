@@ -298,7 +298,7 @@ Anywho, where were we? Oh, iteration:
 ~~~ {.rust}
     fn main() {
         for num in range(0, 100) {
-            println(num)
+            println(num);
         }
     }
 ~~~
