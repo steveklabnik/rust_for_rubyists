@@ -13,7 +13,7 @@ already use. Just do this:
 
 If you don't use Homebrew, install it. Seriously.
 
-(Note: If you're reading this close to release, Homebrew may not have 0.8 yet,
+(Note: If you're reading this close to release, Homebrew may not have 0.9 yet,
 you can use brew install --HEAD rust to get master, which will be close.)
 
 Linux
@@ -22,9 +22,9 @@ Linux
 I personally use Linux, and Rust works quite well on it. Rust does the Standard
 Unix Thing.
 
-    $ curl -O http://static.rust-lang.org/dist/rust-0.8.tar.gz
-    $ tar -xzf rust-0.8.tar.gz
-    $ cd rust-0.8
+    $ curl -O http://static.rust-lang.org/dist/rust-0.9.tar.gz
+    $ tar -xzf rust-0.9.tar.gz
+    $ cd rust-0.9
     $ ./configure
     $ make
     $ sudo make install
@@ -46,7 +46,7 @@ ask for help.
 Future Proofing
 ---------------
 
-The version this book is written for is 0.8.While the language itself is pretty
+The version this book is written for is 0.9. While the language itself is pretty
 stable, things like the standard library and some major subsystems are being
 revised. I'll be tweaking it with every new release.
 

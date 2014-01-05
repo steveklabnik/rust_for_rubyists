@@ -29,14 +29,14 @@ Structs are ways of packaging up multiple values into one:
 
 This gives:
 
-    $ rust run dwemthysarray.rs
+    $ rustc dwemthysarray.rs && ./dwemthysarray
     10
     20
 
 Seems simple enough! Note that you can give a struct to `format!`, using
 the `:?` format specifier. Example:
 
-    $ rust run dwemthysarray.rs
+    $ rustc dwemthysarray.rs && ./dwemthysarray
     Monster{health: 10, attack: 20}
 
 
@@ -70,7 +70,6 @@ Let's add a method for our `Monster` s:
 
 This gives:
 
-    $ rust run dwemthysarray.rs
     The monster attacks for 20 damage.
 
 Methods will want to take a borrowed pointer, obviously. We don't care
@@ -135,7 +134,6 @@ Note the lack of a semicolon inside `new`, so it's acting as an
 expression. `new` is just a function that creates a new `Monster`
 struct and returns it. This gives:
 
-    $ rust run dwemthysarray.rs
     The monster attacks for 40 damage.
 
 as you'd expect.
@@ -199,7 +197,7 @@ out. It's awesome. Here's a simpler match expression:
 Does that make sense? It's sorta like a `case` statement, but it's more
 powerful. If we leave off the `_` case, Rust will complain:
 
-    $ rust run match.rs
+    $ rustc match.rs && ./match
     match.rs:2:4: 6:5 error: non-exhaustive patterns
     match.rs:2     match i {
     match.rs:3         1 => println("ONE!"),

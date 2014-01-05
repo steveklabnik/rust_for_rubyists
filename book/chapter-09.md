@@ -28,7 +28,7 @@ See if this looks familliar:
 Seems like business as usual: `+` adds two vectors, `[]` does an
 indexing operation. What happens if you leave off the `~` s?:
 
-    $ rust run vectors.rs
+    $ rustc vectors.rs && ./vectors
     vectors.rs:5:31: 5:74 error: failed to find an implementation of trait std::vec::Vector<<VI2>> for [int, .. 3]
     vectors.rs:5     let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

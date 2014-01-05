@@ -10,21 +10,18 @@ things" anymore.
 Tasks
 -----
 
-The fundamental unit of computation in Rust is called a 'task.' Tasks
-are similar to 'lightweight' threads in Erlang or Go. Rust tasks are
-entirely isolated from one another, though. They're scheduled on an M:N
-basis to OS threads, so they're not quite green threads exactly, either:
-they'll be parallel as well as concurrent. There can be 200k Rust tasks
-running on 4 OS threads (the rust scheduler by default uses one thread
-per core on your computer).
+The fundamental unit of computation in Rust is called a 'task.' Tasks are like
+threads, but you can choose the low-level details of how they operate.  Rust
+now supports both 1:1 scheduled and N:M scheduled threads as well, though the
+work for 1:1 is still ongoing, so N:M is the default.  The details of what
+_exactly_ that means are out of the scope of this tutorial, but the [Wikipedia
+page](http://en.wikipedia.org/wiki/Thread_%28computing%29) has a good overview.
 
-As a Rubyist, you probably don't know anything about that, so let's talk
-code first, and get into what exactly all that means later. Here's some
-code that prints "Hello" 100 times:
+Here's some code that prints "Hello" 100 times:
 
 ~~~ {.rust}
     fn main() {
-        do 100.times {
+        for num in range(0, 100) {
             println("Hello");
         }
     }
@@ -35,7 +32,7 @@ You may remember this from earlier. This loops 100 times, printing
 
 ~~~ {.rust}
     fn main() {
-        do 100.times {
+        for num in range(0, 100) {
             do spawn {
                 println("Hello");
             }
@@ -82,7 +79,7 @@ info. Here's an example of a task that sends us back a 10:
 
 ~~~ {.rust}
     fn main() {
-        let (port, chan): (Port<int>, Chan<int>) = stream();
+        let (port, chan): (Port<int>, Chan<int>) = Chan::new();
 
         do spawn {
             chan.send(10);
@@ -125,7 +122,7 @@ this: `DuplexStream`:
     }
 
     fn main() {
-        let (from_child, to_child) = DuplexStream();
+        let (from_child, to_child) = DuplexStream::new();
 
         do spawn {
             plus_one(&to_child);
@@ -136,7 +133,7 @@ this: `DuplexStream`:
         from_child.send(24);
         from_child.send(25);
 
-        do 4.times {
+        for num in range(0, 4) {
             let answer = from_child.recv();
             println(answer.to_str());
         }
@@ -151,7 +148,7 @@ program uses a certain dynamic library (`.dll` on Windows, `.dylib` on
 OS X, and `.so` on other Unix systems). `extra` is part of Rust itself,
 it includes extras as compared to `std` (which is automatically included
 in every program), such as JSON parsing, networking, and data
-structures. See [libextra docs](http://static.rust-lang.org/doc/0.8/extra/index.html)
+structures. See <http://static.rust-lang.org/doc/0.9/extra/index.html>
 for more.
 
 We make a function that just loops forever, gets an `int` off of the
@@ -162,7 +159,7 @@ in the background, we can send it bunches of values:
 
 ~~~ {.rust}
     fn main() {
-        let (from_child, to_child) = DuplexStream();
+        let (from_child, to_child) = DuplexStream::new();
 
         do spawn {
             plus_one(&to_child);
@@ -173,7 +170,7 @@ in the background, we can send it bunches of values:
         from_child.send(24);
         from_child.send(25);
 
-        do 4.times {
+        for num in range(0, 4) {
             let answer = from_child.recv();
             println(answer.to_str());
         }
@@ -211,7 +208,7 @@ this for now by telling our child to die:
     }
 
     fn main() {
-      let (from_child, to_child) = DuplexStream();
+      let (from_child, to_child) = DuplexStream::new();
 
       do spawn {
           plus_one(&to_child);
@@ -223,7 +220,7 @@ this for now by telling our child to die:
       from_child.send(25);
       from_child.send(0);
 
-      do 4.times {
+      for num in range(0, 4) {
           let answer = from_child.recv();
           println(answer.to_str());
       }
@@ -274,4 +271,4 @@ me. I like it. In fact, someone *is* working on an Actor
 [library](http://www.reddit.com/r/rust/comments/1i3c15/experimental_actor_library_in_rust/)!
 We'll see how these kinds of things develop as Rust moves forward. For more,
 the [tasks and communication
-tutorial](http://static.rust-lang.org/doc/0.8/tutorial-tasks.html) is helpful.
+tutorial](http://static.rust-lang.org/doc/0.9/tutorial-tasks.html) is helpful.

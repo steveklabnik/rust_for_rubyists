@@ -52,47 +52,17 @@ is good. What do you think this code does?:
 ~~~
 
 Who knows!?!? Probably something bad, but **certainly** not something expected.
-Rust introduces three different kinds of pointers, 'managed,' 'owned,' and
-'borrowed.' They indicate different levels of access, so that you know that
-different people aren't messing with the things that are being pointed to.
-Imagine we spun up ten tasks, passed the same pointer to all of them, and let
-them go wild. We'd have no idea what was going on.
-
-Managed Pointers
-----------------
-
-Managed pointers are heap allocated and garbage collected. They are the
-most similar to Ruby object references. They have a `@` prefix. Check it
-out:
-
-~~~ {.rust}
-    fn main() {
-        let x: @int = @10;
-        println((*x).to_str());
-    }
-~~~
-
-This prints 10. The `*` dereferences, just like in C. The `@` makes a managed
-pointer pointing at 10.
-
-The big deal is this: managed pointer never leave the task they're made
-in. So you can't share them across tasks. This is a nice feature,
-because the GC does not need to look at all tasks to determine if `x`
-needs to be collected or not. So the GC can do fun things like only run
-when that task is paused for other reasons, so it's not really 'stopping
-the world' exactly. You also know that other people aren't messing with
-your data, because it **can't** leak across boundaries.
-
-You should almost never used managed pointer. Only resort to them when you
-cannot use another type of pointer. They are (relatively) inefficient
-and, when using `@mut`, can cause dynamic, runtime failure!
+Rust introduces two different kinds of pointers: 'owned' and 'borrowed.' They
+indicate different levels of access, so that you know that different people
+aren't messing with the things that are being pointed to.  Imagine we spun up
+ten tasks, passed the same pointer to all of them, and let them go wild. We'd
+have no idea what was going on.
 
 Owned Pointer
 -------------
 
-If you don't want your values to get GC'd, you can use an owned pointer.
-This tells Rust that you own a reference to something, and you'll take
-care of it yourself. This is indicated with a `~`:
+An owned pointer tells Rust that you own a reference to something. This is
+indicated with a `~`:
 
 ~~~ {.rust}
     fn main() {
@@ -136,91 +106,14 @@ the move happens. Neat. We can make a copy:
 This will work, though it will tell us that `y` was never used. And they
 point at two different copies of 10, not the same one.
 
-Genearly, you should use owned pointers where possible, rather than managed
-pointers. They are much more efficient (no GC!), because they are analyzed
-at compile-time to make sure they are used correctly. Some things just
-aren't possible without managed pointers, though. Frequently, though, you
-don't even need to use owned pointers, because Rust has...
+That said, you generally don't need to use an owned pointer. You generally need
+them for recursive data structures, or when you have a _huge_ chunk of data
+that you're passing around between many functions.
+
+Instead, use a borrowed pointer.
 
 Borrowed Pointers
 -----------------
-
-Imagine we had this:
-
-~~~ {.rust}
-    fn plus_one(x: int) -> int {
-        x + 1
-    }
-
-    fn main() {
-        let x: ~int = ~10;
-
-        println(plus_one(*x).to_str());
-    }
-~~~
-
-Now, this works just fine. But what if we don't want to copy the value
-of x when we call `plus_one`? We'd want to pass a pointer. Easy enough:
-
-~~~ {.rust}
-    fn plus_one(x: ~int) -> int {
-        *x + 1
-    }
-
-    fn main() {
-      let x = ~10;
-
-      println(plus_one(x).to_str());
-    }
-~~~
-
-Seems fine. But what about this?:
-
-~~~ {.rust}
-    fn plus_one(x: ~int) -> int {
-        *x + 1
-    }
-
-    fn main() {
-        let x = ~10;
-        let y = @10;
-
-        println(plus_one(x).to_str());
-        println(plus_one(y).to_str()); // uhhhhhhh
-    }
-~~~
-
-`plus_one` takes an owned pointer, but we're giving it a managed pointer. If we
-try to compile this, we get this:
-
-    $ rust run owned.rs
-    owned.rs:10:21: 10:22 error: mismatched types: expected `~int` but found `@int` (expected ~-ptr but found @-ptr)
-    owned.rs:10     println(plus_one(y).to_str());
-
-
-Makes sense. Expected `~int` but found `@int`. We could do this:
-
-~~~ {.rust}
-    fn plus_one_managed(x: @int) -> int {
-        *x + 1
-    }
-
-    fn plus_one_owned(x: ~int) -> int {
-        *x + 1
-    }
-
-    fn main() {
-        let x = @10;
-        let y = ~10;
-
-        println(plus_one_managed(x).to_str());
-        println(plus_one_owned(y).to_str());
-    }
-~~~
-
-This is pretty obviously a terrible idea. What we want is to take either
-kind of pointer: we don't care about changing ownership. We just want to
-use the value for a while.
 
 Enter borrowed pointers:
 
@@ -230,16 +123,14 @@ Enter borrowed pointers:
     }
 
     fn main() {
-        let x = @10;
         let y = ~10;
 
-        println(plus_one(x).to_str());
         println(plus_one(y).to_str());
     }
 ~~~
 
 Borrowed pointers use an `&`, as you can see. They don't change any
-ownership semantics. They do let you write functions that take either
+ownership semantics. They do let you write functions that take any other
 kind of pointer, without caring about those details. The compiler makes
 sure that all borrowed pointers do not outlive the thing they point to,
 which means you don't have to worry about use-after-free or any of the

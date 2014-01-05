@@ -23,11 +23,14 @@ Using `stdin()`
 Turns out getting text input is pretty simple. Just try this:
 
 ~~~ {.rust}
+    use std::io::buffered::BufferedReader;
     use std::io;
+    
     fn main() {
         println("INPUT:");
-        let input = io::stdin().read_line();
-
+        let mut reader = BufferedReader::new(io::stdin());
+    
+        let input = reader.read_line().unwrap_or(~"nothing");
         println("YOU TYPED:");
         println(input);
     }
@@ -38,22 +41,13 @@ echo out what you typed. Simple enough!
 
 I want to talk about that import, but first, let's go over this
 `stdin()` business. Basically. `io::stdin()` will give you a reference
-to standard in. It implements an interface called `Reader`, which gives
-you access to the `read_line()` method. This reads stuff up to a `\n`
-from whatever it's implemented on. So we grab that line, save it in a
-variable, and then print it out again. Super simple.
+to standard in. It only has the lowest-level of reading capabilities, so we
+wrap it in a `BufferedReader`, which gives us the `read_line()` method. This
+reads stuff up to a `\n` from whatever it's implemented on. So we grab that
+line, save it in a variable, and then print it out again. Super simple.
 
-The only thing that's annoying from Ruby is that you must type the `()`
-s when you use methods. So this won't work:
-
-    let input = io::stdin().read_line;
-
-    $ rust run fizzbuzz.rs
-    /home/steveklabnik/tmp/foo.rs:4:16: 4:37 error: attempted to take value of method `read_line` on type `@std::io::Reader:'static` (try writing an anonymous function)
-
-Oh well. It's not the end of the world.
-
-Anyway, what's up with this `use` shenanigans?
+This `unwrap_or` business we'll talk about in a minute. First, what's up with
+this `use` shenanigans?
 
 How to use `use`
 ----------------
@@ -161,12 +155,17 @@ So, I was trying to cast a string to an integer to get this program
 going. So I wrote this:
 
 ~~~ {.rust}
+    use std::io::buffered::BufferedReader;
     use std::io;
 
     fn main() {
-        let input = io::stdin().read_line();
         println("INPUT:");
-        println(from_str::<int>(input).to_str());
+        let mut reader = BufferedReader::new(io::stdin());
+
+        let input = reader.read_line().unwrap_or(~"nothing");
+        let num = from_str::<int>(input.slice_to(input.len() - 1));
+        println("YOU TYPED:");
+        println(num.to_str());
     }
 ~~~
 
@@ -188,12 +187,15 @@ doesn't actually return a string, it returns an `Option`. We can then
 use pattern matching to handle both cases. Observe:
 
 ~~~ {.rust}
+    use std::io::buffered::BufferedReader;
     use std::io;
 
     fn main() {
-        let input = io::stdin().read_line();
+        let mut reader = BufferedReader::new(io::stdin());
+        let input = reader.read_line().unwrap_or(~"nothing");
+        let num = from_str::<int>(input.slice_to(input.len() - 1));
 
-        match from_str::<int>(input) {
+        match num {
             Some(number_string) => println(number_string.to_str()),
             None                => println("Hey, put in a number.")
         }
@@ -263,10 +265,10 @@ This will print out a different number each time you run it. But you'll
 get biiiiiiig numbers. If we want 1-100, of course we have to do this:
 
 ~~~ {.rust}
-	use std::rand::Rng;
+    use std::rand::Rng;
 
     fn main() {
-        let r = std::rand::rng().gen_integer_range(1, 101);
+        let r = std::rand::rng().gen_range(1, 101);
         println(r.to_str());
     }
 ~~~
@@ -284,6 +286,7 @@ some pointer stuff... I thought it was a little awkward, though.  After asking
 on IRC, 'strcat' gave me this version:
 
 ~~~ {.rust}
+    use std::io::buffered::BufferedReader;
     use std::io;
     use std::rand;
 
@@ -314,11 +317,13 @@ on IRC, 'strcat' gave me this version:
         println("Guess a number from 1-100 (you get five tries):");
 
         for round in range(0, 5) {
-            println!("Guess #{:d}", round);
+            println!("Guess {:d}", round);
 
-            let input = io::stdin().read_line();
+            let mut reader = BufferedReader::new(io::stdin());
+            let input = reader.read_line().unwrap_or(~"nothing");
+            let num = from_str::<int>(input.slice_to(input.len() - 1));
 
-            match from_str::<int>(input) {
+            match num {
                 Some(number) => {
                     if process_guess(secret, number) { break; }
                 }
@@ -341,5 +346,3 @@ in an idiomatic way than it is learning syntax. Of course, this was not
 a complete introduction to the language, but this is the end of the
 'beginner level' stuff. You should have a basic idea of how to write
 many programs by this point. Pick a few projects, try them out.
-
-We've got one more bit to go: Making your own packages.

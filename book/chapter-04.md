@@ -26,9 +26,14 @@ fails. Let's give it a shot: Open up `testing.rs` and put this in it:
     }
 ~~~
 
-Then, use `rust run`'s buddy, `rust test`:
+Then, use `rustc` with a special flag:
 
-    $ rust test testing.rs
+    $ rust --test testing.rs
+
+This tells `rust` to compile your tests, and replaces the `main` function
+with a test runner. Try it out:
+
+    $ ./testing
 
 You should get some output that looks like this:
 

@@ -154,7 +154,7 @@ closely.
 
 If you try to compile this, you'll get an error:
 
-    $ rust run traits.rs
+    $ rustc traits.rs && ./traits
     traits.rs:3:16: 3:30 error: type `T` does not implement any method in scope named `to_str`
     traits.rs:3         println((*i).to_str())
                                    ^~~~~~~~~~~~~~
@@ -265,7 +265,7 @@ this out:
     }
 ~~~
 
-    $ rust run traits.rs
+    $ rustc traits.rs && ./traits
     1
     2
     3
@@ -323,7 +323,7 @@ this out:
     }
 ~~~
 
-    $ rust run traits.rs
+    $ rustc traits.rs && ./traits
 
     $ nm -C traits~ | grep vec
     00000000004012d0 t print_vec_2908::_85e5a3bc2d3e1a83::_00
@@ -592,7 +592,7 @@ implementation for absolutely anything:
 
 Heh. Check it:
 
-    $ rust run dwemthy.rs
+    $ rustc dwemthy.rs && ./dwemthy
     The monkey attacks for 35.
     The int attacks for 10.
 

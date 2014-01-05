@@ -231,29 +231,27 @@ out all the numbers from one to 100. It's easy!
 
 ~~~ {.rust}
     fn main() {
-        do 100.times {
+        for num in range(0,100) {
             println("num");
         }
     }
 ~~~
 
-Step one: print **something** 100 times. If you run this with `rust run`
-(not `rust test`!) you should see `num` printed 100 times.  Note that
-our tests didn't actually run. Not only are they not run, they're
-actually not even in the executable:
-
-    $ rust test fizzbuzz.rs
+Step one: print **something** 100 times. If you run this via
+`rustc fizzbuzz.rs && ./fizzbuzz` you should see `num` printed
+100 times. Note that our tests didn't actually run. Not only are they not run,
+they're actually not even in the executable:
 
 On Linux:
 
 ~~~
-$ nm -C fizzbuzztest~ | grep test
+$ nm -C fizzbuzz | grep test
 ~~~
 
 On OS X:
 
 ~~~
-$ nm fizzbuzztest~ | c++filt -p -i | grep test
+$ nm fizzbuzz | c++filt -p -i | grep test
 ~~~
    
 ~~~
@@ -269,7 +267,7 @@ $ nm fizzbuzztest~ | c++filt -p -i | grep test
 ~~~
 
 ~~~
-$ rust run fizzbuzz.rs
+$ rustc fizzbuzz.rs
 ~~~
 
 On Linux:
@@ -283,11 +281,10 @@ On OS X:
 ~~~
 $ nm fizzbuzz~ | c++filt -p -i | grep test
 ~~~
+
     $
 
-Neat, huh? Rust is smart. By the way, you can see how `rust run` and `rust
-test` work here: They compile and run a version of your file with a `~` at
-the end.
+Neat, huh? Rust is smart.
 
 Anyway, `nm`: The `nm` program lists all the symbols in a binary executable or
 library. The `-C` option is important on linux, it "de-mangles" the symbol names.
@@ -300,95 +297,31 @@ Anywho, where were we? Oh, iteration:
 
 ~~~ {.rust}
     fn main() {
-        do 100.times {
-            println("num");
-        }
-    }
-~~~
-
-Let's talk about `do`. `do` is actually syntax sugar. Here's the
-equivalent without `do`:
-
-~~~ {.rust}
-    fn main() {
-        100.times(|| {
-            println("num");
-        });
-    }
-~~~
-
-Note the extra parens and `||`. Typing out `});` really sucks, and having the
-`({` is also awkward. Just like Ruby, Rust has special syntax when you're
-passing a single closure to a method. Awesome. And it shouldn't surprise
-Rubyists that you can pass a closure (read: block) to a method, and have it
-loop. Let's print out the numbers now. First step: we need to get the number of
-the current iteration. Rubyists will do a double take:
-
-~~~ {.rust}
-    fn main() {
-        do 100.times |num| {
-            println("num");
-        };
-    }
-~~~
-
-Almost the same syntax, but with the pipes *outside* of the curlies.
-But, if you try to run this, you'll get an error:
-
-    $ rust build fizzbuzz.rs
-    fizzbuzz.rs:45:12: 47:5 error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
-    fizzbuzz.rs:45     do 100.times |num| {
-    fizzbuzz.rs:46         println("num");
-    fizzbuzz.rs:47     }
-    fizzbuzz.rs:45:12: 47:5 error: mismatched types: expected `&fn() -> bool` but found `&fn(<V0>) -> bool` (incorrect number of function parameters)
-    fizzbuzz.rs:45     do 100.times |num| {
-    fizzbuzz.rs:46         println("num");
-    fizzbuzz.rs:47     }
-    fizzbuzz.rs:45:12: 47:5 error: Unconstrained region variable #3
-    fizzbuzz.rs:45     do 100.times |num| {
-    fizzbuzz.rs:46         println("num");
-    fizzbuzz.rs:47     }
-    error: aborting due to 3 previous errors
-
-The big one is this:
-
-    error: mismatched types: expected `&fn()` but found `&fn(<V0>)` (incorrect number of function parameters)
-
-Expected `fn()` but got `fn(<V0>)`. It wants no parameters, but we gave
-it one. Whoops! These kind of crazy compiler errors are a little hard to
-read, especially since we don't get them at all in Ruby. The `<V0>` is
-just rust trying to tell us that it doesn't quite know what type we
-want: it's the first (index 0) inferred type it encountered in the
-program. There is also `<VIx>`, for any `x`, which means it thought the
-inferred type was an integer, and `<VFx>` for floats.
-
-Anyway, we need a different function:
-
-~~~ {.rust}
-    fn main() {
-        for num in range(1, 4) {
-            println(num);
+        for num in range(0, 100) {
+            println(num)
         }
     }
 ~~~
 
 
-Neat! If we run this, we get
-another error message:
+Note we've removed the quotes to print the number itself rather than the string
+'num'.  If we run this, we get another error message:
 
-    $ rust run fizzbuzz.rs
-    fizzbuzz.rs:46:16: 46:19 error: mismatched types: expected `&str` but found `<VI2>` (expected &str but found integral variable)
+    $ rustc fizzbuzz.rs && ./fizzbuzz
+    fizzbuzz.rs:46:16: 46:19 error: error: mismatched types: expected `&str`
+       but found `int` (expected &str but found int)
+
     fizzbuzz.rs:46         println(num);
                                    ^~~
     error: aborting due to previous error
 
-Mismatched types: expected &str but found integral value. It wants a
-string, but we gave it a number. Whoops! Now, there's two ways to fix
-this. The first is to use the `to_str` function:
+Mismatched types: expected &str but found int. It wants a string, but we gave
+it a number. Whoops! Now, there's two ways to fix this. The first is to use the
+`to_str` function:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 4) {
+        for num in range(1, 100) {
             println(num.to_str())
         }
     }
@@ -400,34 +333,45 @@ Awesome. Let's run it:
     1
     2
     3
+    ...
+    99
 
 Bam! Whew. We had to fight with the compiler a bit, and the errors
 weren't great, but that wasn't too bad. The other way to do it is to use
-the `format!` macro, which will format-print our variables at 
-compile-time. Here it is:
+the `format!` function. At least, it looks like a function to me. Here it
+is:
 
 ~~~ {.rust}
     fn main() {
       for num in range(1, 4) {
+        println(format!("{:d}", num));
+      }
+    }
+~~~
+
+`format!` is similar to `str % arg`, or the `format` and `sprintf`
+functions in `Kernel`: it takes a format string, some arguments, and
+makes a string out of them. A cool feature of rust that sets it apart
+from C or C++, which also have this, is that the format strings are
+type-checked at compile time. No more broken format strings!
+
+Because this combination is common, you can use `println!` as a combination of
+`println` and `format!`:
+
+~~~ {.rust}
+    fn main() {
+      for num in range(1, 100) {
         println!("{:d}", num);
       }
     }
 ~~~
 
-`println!`, ie. `println(format!())` is similar to `str % arg`, or the
-`format` and `sprintf` functions in `Kernel`: it takes a format string,
-some arguments, and makes a string out of them.
-A cool feature of Rust that sets it apart from C or C++, is that the
-format strings are type-checked at compile time (the type annotation like
-`:d` is otherwise optional).
-No more broken format strings!
-
-Anyway, now we have 1 to 3. We need 1 to 100.
+Anyway, now we have 1 to 99. We need 1 to 100.
 
 ~~~ {.rust}
     fn main() {
         for num in range(1, 101) {
-            println(num.to_str());
+            println!("{:d}", num);
         }
     }
 ~~~
@@ -543,7 +487,7 @@ What's up with the tildes? They modify the declaration somehow. I added it
 because running without it gives an error message that implies you need it:
 give it a shot. Because our variables are typed, we have to convert the number
 in the `else` case to a string. In Ruby we'd just let it be a `Fixnum` if it
-was a number. Oh well.
+was a number. Oh well. We'll talk more about them later.
 
 Because the `if` returns a value, we could also do something like this:
 
