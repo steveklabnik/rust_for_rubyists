@@ -66,7 +66,7 @@ Here's a parallel "Hello World" in Rust:
 Here's a rough port to Ruby:
 
 
-~~~ {.rust}
+~~~ {.ruby}
     10.times do
       Thread.new do
         greeting_message = "Hello?"
