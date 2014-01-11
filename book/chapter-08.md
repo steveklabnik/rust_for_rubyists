@@ -219,7 +219,7 @@ can destructure it:
 
 ~~~ {.rust}
     match p {
-        Point(x, y) => println!("X: {:d}, Y: {:d}", x, y)
+        Point{x:x, y:y} => println!("X: {:d}, Y: {:d}", x, y)
     }
 ~~~
 
