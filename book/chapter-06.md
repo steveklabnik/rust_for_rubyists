@@ -17,22 +17,22 @@ work for 1:1 is still ongoing, so N:M is the default.  The details of what
 _exactly_ that means are out of the scope of this tutorial, but the [Wikipedia
 page](http://en.wikipedia.org/wiki/Thread_%28computing%29) has a good overview.
 
-Here's some code that prints "Hello" 100 times:
+Here's some code that prints "Hello" 500 times:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(0, 100) {
+        for num in range(0, 500) {
             println("Hello");
         }
     }
 ~~~
 
-You may remember this from earlier. This loops 100 times, printing
+You may remember this from earlier. This loops 500 times, printing
 "Hello." Now let's make it roflscale with tasks:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(0, 100) {
+        for num in range(0, 500) {
             do spawn {
                 println("Hello");
             }
@@ -40,7 +40,7 @@ You may remember this from earlier. This loops 100 times, printing
     }
 ~~~
 
-That's it! We spin up 100 tasks that print stuff. If you inspect your
+That's it! We spin up 500 tasks that print stuff. If you inspect your
 output, you can tell it's working:
 
     Hello
