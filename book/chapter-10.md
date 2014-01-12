@@ -424,9 +424,9 @@ call it on ints, we have one version.
 
 Neat! We get specialized versions, but only specialized for the types we
 actually use. No generating code that's useless. This process is called
-'monomorphization,' which basically means we take one thing (mono) and
-change it (morph) into other things. To simplify, the compiler takes
-this code:
+'monomorphization,' which basically means we take something that can work
+with things of different types and change it (morph) into specialized
+(mono) versions. To simplify, the compiler takes this code:
 
 ~~~ {.rust}
     fn print_vec<T: ToStr>(v: &[T]) {
