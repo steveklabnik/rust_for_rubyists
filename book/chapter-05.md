@@ -25,9 +25,9 @@ First, a test. This will go in fizzbuzz.rs:
     }
 ~~~
 
-And run it:
+And compile it:
 
-    $ rust test fizzbuzz.rs
+    $ rustc --test fizzbuzz.rs
     fizzbuzz.rs:3:7: 3:15 error: unresolved name `is_three`.
     fizzbuzz.rs:3     if is_three(1) {
                          ^~~~~~~~
@@ -56,13 +56,14 @@ that we return a boolean, and the `return true;`, well, returns true.
 You'll also note we have an `if` statement. It's pretty close to what
 you'd expect, but we have curly braces rather than our friends `do/end`.
 
-Now that we've got that cleared up, let's run our tests:
+Now that we've got that cleared up, let's compile and run our tests:
 
-    $ rust test fizzbuzz.rs
+    $ rustc --test fizzbuzz.rs
     fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
     fizzbuzz.rs:1 fn is_three(num: int) -> bool {
                               ^~~~
 
+    $ ./fizzbuzz
     running 1 test
     rust: task failed at 'One is not three', fizzbuzz.rs:8
     test test_is_three ... FAILED
@@ -92,13 +93,14 @@ returned true. Now that we have a failing test, let's make it pass:
     }
 ~~~
 
-TDD means do the simplest thing! And run it:
+TDD means do the simplest thing! Compile and run it:
 
-    $ rust test fizzbuzz.rs
+    $ rustc --test fizzbuzz.rs
     fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
     fizzbuzz.rs:1 fn is_three(num: int) -> bool {
                               ^~~~
 
+    $ ./fizzbuzz
     running 1 test
     test test_is_three ... ok
 
@@ -127,11 +129,12 @@ another test, and see what happens:
     }
 ~~~
 
-    $ rust test fizzbuzz.rs
+    $ rustc --test fizzbuzz.rs
     fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
     fizzbuzz.rs:1 fn is_three(num: int) -> bool {
                               ^~~~
 
+    $ ./fizzbuzz
     running 2 tests
     test test_is_three_with_not_three ... ok
     rust: task failed at 'Three should be three', fizzbuzz.rs:15
@@ -172,7 +175,7 @@ failed. Let's make both tests pass:
     }
 ~~~
 
-    $ rust test fizzbuzz.rs
+    $ rustc --test fizzbuzz.rs && ./fizzbuzz
 
     running 2 tests
     test test_is_three_with_not_three ... ok
@@ -195,8 +198,7 @@ Wait, whaaaat? Yep, the last thing in a function is a return in Rust,
 but there's one wrinkle: note there's no semicolon here. If you had one,
 you'd get:
 
-    $ rust test fizzbuzz.rs
-
+    $ rustc --test fizzbuzz.rs
     fizzbuzz.rs:1:0: 3:1 error: not all control paths return a value
     fizzbuzz.rs:1 fn is_three(num: int) -> bool {
     fizzbuzz.rs:2     num % 3 == 0;
@@ -213,7 +215,7 @@ Okay, now try to TDD out the `is_five` and `is_fifteen` methods. They
 should work the same way, but this will let you get practice actually
 writing it out. Once you see this, you're ready to advance:
 
-    $ rust test fizzbuzz.rs
+    $ rustc --test fizzbuzz.rs && ./fizzbuzz
 
     running 6 tests
     test test_is_five_with_not_five ... ok
@@ -329,7 +331,7 @@ it a number. Whoops! Now, there's two ways to fix this. The first is to use the
 
 Awesome. Let's run it:
 
-    $ rust run fizzbuzz.rs
+    $ rustc fizzbuzz.rs && ./fizzbuzz
     1
     2
     3
