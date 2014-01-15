@@ -180,12 +180,12 @@ in the background, we can send it bunches of values:
 Pretty simple. Our task is always waiting for work. If you run this,
 you'll get some weird output at the end:
 
-    $ rust run tasks.rs
+    $ rustc tasks.rs && ./tasks
     23
     24
     25
     26
-    task <unnamed> failed at 'receiving on closed channel', /home/steveklabnik/src/rust/src/libstd/rt/comm.rs:487
+    task '<unnamed>' failed at 'receiving on a closed channel', /home/steveklabnik/src/rust/src/libstd/comm/mod.rs:728
 
 
 `task failed at 'receiving on closed channel'`. Basically, we quit the program
