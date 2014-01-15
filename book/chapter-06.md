@@ -271,4 +271,4 @@ me. I like it. In fact, someone *is* working on an Actor
 [library](http://www.reddit.com/r/rust/comments/1i3c15/experimental_actor_library_in_rust/)!
 We'll see how these kinds of things develop as Rust moves forward. For more,
 the [tasks and communication
-tutorial](http://static.rust-lang.org/doc/0.9/tutorial-tasks.html) is helpful.
+tutorial](http://static.rust-lang.org/doc/0.9/guide-tasks.html) is helpful.
