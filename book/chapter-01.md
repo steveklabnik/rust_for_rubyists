@@ -54,12 +54,12 @@ Here's a parallel "Hello World" in Rust:
 
 ~~~ {.rust}
     fn main() {
-        do 10.times {
+        10.times ( ||
             do spawn {
                 let greeting_message = "Hello?";
                 println(greeting_message);
             }
-        }
+        )
     }
 ~~~
 
