@@ -54,7 +54,7 @@ Here's a parallel "Hello World" in Rust:
 
 ~~~ {.rust}
     fn main() {
-        do 10.times {
+        for num in range(0, 10) {
             do spawn {
                 let greeting_message = "Hello?";
                 println(greeting_message);
