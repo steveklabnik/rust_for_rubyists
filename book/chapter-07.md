@@ -83,13 +83,13 @@ You can't make another owned pointer to this value:
 
 This yields:
 
-    $ rust run owned.rs
+    $ rustc owned.rs && ./owned
     owned.rs:4:18: 4:19 error: use of moved value: `x`
     owned.rs:4         println((*x).to_str());
-                                       ^
+                                 ^
     owned.rs:3:12: 3:13 note: `x` moved here because it has type `~int`, which is moved by default (use `ref` to override)
     owned.rs:3         let y = x;
-                             ^
+                           ^
 
 
 It tells us that we moved the value of `x` to `y` and points out where
