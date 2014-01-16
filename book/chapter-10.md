@@ -204,7 +204,7 @@ most of it, it just works out. Think about this:
 ~~~
 
 We trust that this will always work, because `Object` implements
-`#to_str`. But if we had this:
+`#to_s`. But if we had this:
 
 ~~~ {.ruby}
     def print_each(arr)
