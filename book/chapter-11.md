@@ -243,7 +243,7 @@ break out of the loop:
     }
 ~~~
 
-This will print `"hi"` five times. You're going to want to do this,
+This will print `"hi"` four times. You're going to want to do this,
 because if someone mis-types a number, we don't want to count it against
 them: we should just ask them to put in another number.
 
