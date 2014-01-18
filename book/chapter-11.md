@@ -174,10 +174,10 @@ it out to the screen.
 
 This gave an odd result:
 
-    $ make
-    rustc fizzbuzz.rs
-    5
+    $ rustc casting.rs && ./casting
     INPUT:
+    5
+    YOU TYPED:
     Some(5)
 
 
