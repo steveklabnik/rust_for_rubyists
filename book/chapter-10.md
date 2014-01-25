@@ -32,15 +32,15 @@ Done? I got this:
 
 ~~~ {.rust}
     fn print_vec(v: &[int]) {
-      for i in v.iter() {
-        println(i.to_str())
-      }
+        for i in v.iter() {
+            println(i.to_str())
+        }
     }
 
     fn main() {
-      let vec = [1,2,3];
+        let vec = [1,2,3];
 
-      print_vec(vec);
+        print_vec(vec);
     }
 ~~~
 
@@ -101,15 +101,15 @@ things to convert our arguments to a string. Here's the answer:
 
 ~~~ {.rust}
     fn print_vec(v: &[int]) {
-      for i in v.iter() {
-          println(i.to_str())
-      }
+        for i in v.iter() {
+            println(i.to_str())
+        }
     }
 
     fn print_vec_str(v: &[~str]) {
-      for i in v.iter() {
-          println((*i).to_str())
-      }
+        for i in v.iter() {
+            println((*i).to_str())
+        }
     }
 
     fn main() {
@@ -255,13 +255,13 @@ this out:
     }
 
     fn main() {
-      let vec = [1,2,3];
+        let vec = [1,2,3];
 
-      print_vec(vec);
+        print_vec(vec);
 
-      let str_vec = [~"hey", ~"there", ~"yo"];
+        let str_vec = [~"hey", ~"there", ~"yo"];
 
-      print_vec(str_vec);
+        print_vec(str_vec);
     }
 ~~~
 
