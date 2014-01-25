@@ -155,9 +155,9 @@ closely.
 If you try to compile this, you'll get an error:
 
     $ rustc traits.rs && ./traits
-    traits.rs:3:16: 3:30 error: type `T` does not implement any method in scope named `to_str`
-    traits.rs:3         println((*i).to_str())
-                                   ^~~~~~~~~~~~~~
+    traits.rs:3:17: 3:28 error: type `&T` does not implement any method in scope named `to_str`
+    traits.rs:3         println(i).to_str())
+                                ^~~~~~~~~~~~~~
 
 This is a problem. Our generic type T does not have any restrictions on
 what kind of thing it is, which means we can't guarantee that we'll get
