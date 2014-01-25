@@ -82,7 +82,7 @@ returned true. Now that we have a failing test, let's make it pass:
 
 ~~~ {.rust}
     fn is_three(num: int) -> bool {
-      return false;
+        return false;
     }
 
     #[test]
@@ -117,15 +117,15 @@ another test, and see what happens:
     #[test]
     fn test_is_three_with_not_three() {
         if is_three(1) {
-          fail!("One is not three");
+            fail!("One is not three");
         }
     }
 
     #[test]
     fn test_is_three_with_three() {
-      if !is_three(3) {
-        fail!("Three should be three");
-      }
+        if !is_three(3) {
+            fail!("Three should be three");
+        }
     }
 ~~~
 
@@ -345,9 +345,9 @@ is:
 
 ~~~ {.rust}
     fn main() {
-      for num in range(1, 4) {
-        println(format!("{:d}", num));
-      }
+        for num in range(1, 4) {
+            println(format!("{:d}", num));
+        }
     }
 ~~~
 
@@ -362,9 +362,9 @@ Because this combination is common, you can use `println!` as a combination of
 
 ~~~ {.rust}
     fn main() {
-      for num in range(1, 100) {
-        println!("{:d}", num);
-      }
+        for num in range(1, 100) {
+            println!("{:d}", num);
+        }
     }
 ~~~
 
@@ -497,10 +497,10 @@ Because the `if` returns a value, we could also do something like this:
     fn main() {
         for num in range(1, 101) {
             println(
-              if is_fifteen(num) { ~"FizzBuzz" }
-              else if is_three(num) { ~"Fizz" }
-              else if is_five(num) { ~"Buzz" }
-              else { num.to_str() }
+                if is_fifteen(num) { ~"FizzBuzz" }
+                else if is_three(num) { ~"Fizz" }
+                else if is_five(num) { ~"Buzz" }
+                else { num.to_str() }
             );
         }
     }
@@ -515,7 +515,7 @@ over again? Meet `assert!`:
 ~~~ {.rust}
     #[test]
     fn test_is_fifteen_with_fifteen() {
-      assert!(is_fifteen(15))
+        assert!(is_fifteen(15))
     }
 ~~~
 
@@ -526,7 +526,7 @@ such:
 
 ~~~ {.rust}
     fn main() {
-      assert!(1 == 0, "1 does not equal 0!");
+        assert!(1 == 0, "1 does not equal 0!");
     }
 ~~~
 

@@ -20,10 +20,10 @@ Structs are ways of packaging up multiple values into one:
     }
 
     fn main() {
-      let m = Monster { health: 10, attack: 20 };
+        let m = Monster { health: 10, attack: 20 };
 
-      println(m.health.to_str());
-      println(m.attack.to_str());
+        println(m.health.to_str());
+        println(m.attack.to_str());
     }
 ~~~
 
@@ -154,10 +154,10 @@ better idea. Here's an enum:
 
     impl Monster {
         fn attack(&self) {
-          match *self {
-              ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
-              IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
-          }
+            match *self {
+                ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
+                IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
+            }
         }
     }
 
@@ -179,11 +179,11 @@ out. It's awesome. Here's a simpler match expression:
 
 ~~~ {.rust}
     fn message(i: int) {
-      match i {
-          1 => println("ONE!"),
-          2 => println("Two is a prime."),
-          3 => println("THREE!"),
-          _ => println("no idea what that is, boss")
+        match i {
+            1 => println("ONE!"),
+            2 => println("Two is a prime."),
+            3 => println("THREE!"),
+            _ => println("no idea what that is, boss")
         }
     }
 

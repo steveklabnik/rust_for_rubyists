@@ -208,22 +208,22 @@ this for now by telling our child to die:
     }
 
     fn main() {
-      let (from_child, to_child) = DuplexStream::new();
+        let (from_child, to_child) = DuplexStream::new();
 
-      do spawn {
-          plus_one(&to_child);
-      };
+        do spawn {
+            plus_one(&to_child);
+        };
 
-      from_child.send(22);
-      from_child.send(23);
-      from_child.send(24);
-      from_child.send(25);
-      from_child.send(0);
+        from_child.send(22);
+        from_child.send(23);
+        from_child.send(24);
+        from_child.send(25);
+        from_child.send(0);
 
-      for num in range(0, 4) {
-          let answer = from_child.recv();
-          println(answer.to_str());
-      }
+        for num in range(0, 4) {
+            let answer = from_child.recv();
+            println(answer.to_str());
+        }
     }
 ~~~
 
@@ -248,21 +248,21 @@ video game:
 ~~~ {.rust}
     fn main() {
 
-      do spawn {
-        player_handler();
-      }
+        do spawn {
+            player_handler();
+        }
 
-      do spawn {
-        world_handler();
-      }
+        do spawn {
+            world_handler();
+        }
 
-      do spawn {
-        rendering_handler();
-      }
+        do spawn {
+            rendering_handler();
+        }
 
-      do spawn {
-        io_handler();
-      }
+        do spawn {
+            io_handler();
+        }
     }
 ~~~
 
