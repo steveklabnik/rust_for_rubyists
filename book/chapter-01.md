@@ -45,6 +45,8 @@ yet very different, can teach us a lot.
 Here's "Hello World" in Rust:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         println("Hello, world!");
     }
@@ -53,12 +55,14 @@ Here's "Hello World" in Rust:
 Here's a parallel "Hello World" in Rust:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(0, 10) {
-            do spawn {
+            spawn(proc() {
                 let greeting_message = "Hello?";
                 println(greeting_message);
-            }
+            });
         }
     }
 ~~~

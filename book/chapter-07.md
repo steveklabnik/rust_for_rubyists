@@ -65,6 +65,8 @@ An owned pointer tells Rust that you own a reference to something. This is
 indicated with a `~`:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         let x: ~int = ~10;
         println((*x).to_str());
@@ -74,6 +76,8 @@ indicated with a `~`:
 You can't make another owned pointer to this value:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         let x: ~int = ~10;
         let y = x;
@@ -96,6 +100,8 @@ It tells us that we moved the value of `x` to `y` and points out where
 the move happens. Neat. We can make a copy:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         let x: ~int = ~10;
         let y = x.clone();
@@ -118,6 +124,8 @@ Borrowed Pointers
 Enter borrowed pointers:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn plus_one(x: &int) -> int {
         *x + 1
     }

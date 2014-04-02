@@ -31,6 +31,8 @@ I'll wait.
 Done? I got this:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn print_vec(v: &[int]) {
         for i in v.iter() {
             println(i.to_str())
@@ -67,6 +69,8 @@ You'll often be seeing owned pointers with strings. Go ahead. You can do it!
 I got this:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn print_vec(v: &[int]) {
         for i in v.iter() {
             println(i.to_str())
@@ -100,15 +104,17 @@ thing is that we don't have the same method body. We're doing different
 things to convert our arguments to a string. Here's the answer:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn print_vec(v: &[int]) {
         for i in v.iter() {
-            println(i.to_str())
+            println!("{}", i)
         }
     }
 
     fn print_vec_str(v: &[~str]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i)
         }
     }
 
@@ -129,7 +135,7 @@ same... Let's fix that:
 ~~~ {.rust}
     fn print_vec<T>(v: &[T]) {
         for i in v.iter() {
-            println(i.to_str())
+            println!("{}", i)
         }
     }
 
@@ -155,13 +161,13 @@ closely.
 If you try to compile this, you'll get an error:
 
     $ rustc traits.rs && ./traits
-    traits.rs:3:17: 3:28 error: type `&T` does not implement any method in scope named `to_str`
-    traits.rs:3         println(i).to_str())
-                                ^~~~~~~~~~~~~~
+    fizzbuzz.rs:5:28: 5:29 error: failed to find an implementation of trait std::fmt::Show for T
+    fizzbuzz.rs:5             println!("{}", i)
+
 
 This is a problem. Our generic type T does not have any restrictions on
 what kind of thing it is, which means we can't guarantee that we'll get
-something that has the `to_str` method defined on it.
+something that has the ability to be displayed.
 
 For that, we need Traits.
 
@@ -171,9 +177,9 @@ Traits
 This **will** work:
 
 ~~~ {.rust}
-    fn print_vec<T: ToStr>(v: &[T]) {
+    fn print_vec<T: std::fmt::Show>(v: &[T]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i)
         }
     }
 
@@ -188,7 +194,7 @@ This **will** work:
     }
 ~~~
 
-The `<T: ToStr>` says: "We take any type `T` that implements the `ToStr`
+The `<T: std::fmt::Show>` says: "We take any type `T` that implements the `Show`
 trait.
 
 Traits are sort of like 'static duck typing' or 'structural typing.' We
@@ -248,9 +254,9 @@ this out:
 
     $ cat traits.rs
 ~~~ {.rust}
-    fn print_vec<T: ToStr>(v: &[T]) {
+    fn print_vec<T: std::fmt::Show>(v: &[T]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i)
         }
     }
 
@@ -429,9 +435,9 @@ with things of different types and change it (morph) into specialized
 (mono) versions. To simplify, the compiler takes this code:
 
 ~~~ {.rust}
-    fn print_vec<T: ToStr>(v: &[T]) {
+    fn print_vec<T: std::fmt::Show>(v: &[T]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i);
         }
     }
 
@@ -451,13 +457,13 @@ And turns it into:
 ~~~ {.rust}
     fn print_vec_str(v: &[~str]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i);
         }
     }
 
     fn print_vec_int(v: &[int]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i);
         }
     }
 

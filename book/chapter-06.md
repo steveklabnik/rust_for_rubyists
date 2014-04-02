@@ -20,6 +20,8 @@ page](http://en.wikipedia.org/wiki/Thread_%28computing%29) has a good overview.
 Here's some code that prints "Hello" 500 times:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(0, 500) {
             println("Hello");
@@ -31,11 +33,13 @@ You may remember this from earlier. This loops 500 times, printing
 "Hello." Now let's make it roflscale with tasks:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(0, 500) {
-            do spawn {
+            spawn(proc() {
                 println("Hello");
-            }
+            });
         }
     }
 ~~~
@@ -78,20 +82,23 @@ ends: a channel that sends info down the pipe, and a port that receives
 info. Here's an example of a task that sends us back a 10:
 
 ~~~ {.rust}
-    fn main() {
-        let (port, chan): (Port<int>, Chan<int>) = Chan::new();
+    use std::io::println;
 
-        do spawn {
+    fn main() {
+        let (chan, port) = channel();
+
+        spawn(proc() {
             chan.send(10);
-        }
+        });
 
         println(port.recv().to_str());
     }
 ~~~
 
-You can imagine that instead of sending 10, we might be doing some sort
-of complex calculation. It could be doing that work in the background
-while we did more important things.
+The `channel` function, imported by the prelude, creates both sides of this
+pipe. You can imagine that instead of sending 10, we might be doing some sort
+of complex calculation. It could be doing that work in the background while we
+did more important things.
 
 What about that `chan.send` bit? Well, the task captures the `chan`
 variable we set up before, so it's just matter of using it. This is
@@ -110,10 +117,10 @@ would be pretty annoying, so we have some standard library code for
 this: `DuplexStream`:
 
 ~~~ {.rust}
-    extern mod extra;
-    use extra::comm::DuplexStream;
+    extern crate sync;
+    use std::io::println;
 
-    fn plus_one(channel: &DuplexStream<int, int>) {
+    fn plus_one(channel: &sync::DuplexStream<int, int>) {
         let mut value: int;
         loop {
             value = channel.recv();
@@ -122,11 +129,11 @@ this: `DuplexStream`:
     }
 
     fn main() {
-        let (from_child, to_child) = DuplexStream::new();
+        let (from_child, to_child) = sync::duplex();
 
-        do spawn {
+        spawn(proc() {
             plus_one(&to_child);
-        }
+        });
 
         from_child.try_send(22);
         from_child.try_send(23);
@@ -141,15 +148,15 @@ this: `DuplexStream`:
 ~~~
 
 
-What's this `extern mod extra` madness? Well, that's how we `link` to
+What's this `extern crate` madness? Well, that's how we `link` to
 external libraries. If you've used C or C++ before, you know what this
 means. If you haven't, it's essentially how you declare that your
 program uses a certain dynamic library (`.dll` on Windows, `.dylib` on
-OS X, and `.so` on other Unix systems). `extra` is part of Rust itself,
+OS X, and `.so` on other Unix systems). `sync` is part of Rust itself,
 it includes extras as compared to `std` (which is automatically included
 in every program), such as JSON parsing, networking, and data
-structures. See <http://static.rust-lang.org/doc/0.9/extra/index.html>
-for more.
+structures. See all of the directories starting with 'lib'
+<https://github.com/mozilla/rust/tree/master/src> for more.
 
 We make a function that just loops forever, gets an `int` off of the
 port, and sends the number plus 1 back down the channel. In the main
@@ -195,10 +202,10 @@ means if one task fails, all of its children and parents fail too. We can fix
 this for now by telling our child to die:
 
 ~~~ {.rust}
-    extern mod extra;
-    use extra::comm::DuplexStream;
+    extern crate sync;
+    use std::io::println;
 
-    fn plus_one(channel: &DuplexStream<int, int>) {
+    fn plus_one(channel: &sync::DuplexStream<int, int>) {
         let mut value: int;
         loop {
             value = channel.recv();
@@ -208,16 +215,17 @@ this for now by telling our child to die:
     }
 
     fn main() {
-        let (from_child, to_child) = DuplexStream::new();
+        let (from_child, to_child) = sync::duplex();
 
-        do spawn {
+        spawn(proc() {
             plus_one(&to_child);
-        };
+        });
 
-        from_child.send(22);
-        from_child.send(23);
+        from_child.try_send(22);
+        from_child.try_send(23);
         from_child.send(24);
         from_child.send(25);
+
         from_child.send(0);
 
         for num in range(0, 4) {
@@ -248,21 +256,21 @@ video game:
 ~~~ {.rust}
     fn main() {
 
-        do spawn {
+        spawn(proc() {
             player_handler();
-        }
+        });
 
-        do spawn {
+        spawn(proc() {
             world_handler();
-        }
+        });
 
-        do spawn {
+        spawn(proc() {
             rendering_handler();
-        }
+        });
 
-        do spawn {
+        spawn(proc() {
             io_handler();
-        }
+        });
     }
 ~~~
 
@@ -271,4 +279,4 @@ me. I like it. In fact, someone *is* working on an Actor
 [library](http://www.reddit.com/r/rust/comments/1i3c15/experimental_actor_library_in_rust/)!
 We'll see how these kinds of things develop as Rust moves forward. For more,
 the [tasks and communication
-tutorial](http://static.rust-lang.org/doc/0.9/guide-tasks.html) is helpful.
+tutorial](http://static.rust-lang.org/doc/0.10/guide-tasks.html) is helpful.

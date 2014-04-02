@@ -23,14 +23,16 @@ Using `stdin()`
 Turns out getting text input is pretty simple. Just try this:
 
 ~~~ {.rust}
-    use std::io::buffered::BufferedReader;
+    use std::io::BufferedReader;
+    use std::io::println;
     use std::io;
-    
+
+
     fn main() {
         println("INPUT:");
         let mut reader = BufferedReader::new(io::stdin());
-    
-        let input = reader.read_line().unwrap_or(~"nothing");
+
+        let input = reader.read_line().unwrap();
         println("YOU TYPED:");
         println(input);
     }
@@ -46,8 +48,8 @@ wrap it in a `BufferedReader`, which gives us the `read_line()` method. This
 reads stuff up to a `\n` from whatever it's implemented on. So we grab that
 line, save it in a variable, and then print it out again. Super simple.
 
-This `unwrap_or` business we'll talk about in a minute. First, what's up with
-this `use` shenanigans?
+This `unwrap` business we'll talk about in a minute. First, what's up with
+this `use` shenanigans? We've been using them forever, let's talk details.
 
 How to use `use`
 ----------------
@@ -62,16 +64,18 @@ Rust basically pretends that it has these two lines at the beginning of
 every program:
 
 ~~~ {.rust}
-    extern mod std;
+    extern crate std;
     use std::prelude::*;
 ~~~
 
-Two things here. The first line is this `extern mod` business. I wanted
+Two things here. The first line is this `extern crate` business. I wanted
 to clarify my understanding, so I jumped into the [ever helpful Rust
 IRC](http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust) and
 asked:
 
     pcwalton: basically "extern mod" is where you put the stuff you'd put on the compiler link line in C++
+
+(`extern crate` was `extern mod` back then.)
 
 Right. So we're saying 'please link against this library.' Rust uses a
 load path to find where those libraries are, which you can modify with
@@ -136,7 +140,7 @@ Pretty simple. So now we can see why the code acts like it has these two
 lines at the top:
 
 ~~~ {.rust}
-    extern mod std;
+    extern crate std;
     use std::prelude::*;
 ~~~
 
@@ -155,14 +159,15 @@ So, I was trying to cast a string to an integer to get this program
 going. So I wrote this:
 
 ~~~ {.rust}
-    use std::io::buffered::BufferedReader;
+    use std::io::BufferedReader;
+    use std::io::println;
     use std::io;
 
     fn main() {
         println("INPUT:");
         let mut reader = BufferedReader::new(io::stdin());
 
-        let input = reader.read_line().unwrap_or(~"nothing");
+        let input = reader.read_line().unwrap();
         let num = from_str::<int>(input.slice_to(input.len() - 1));
         println("YOU TYPED:");
         println(num.to_str());
@@ -187,12 +192,13 @@ doesn't actually return a string, it returns an `Option`. We can then
 use pattern matching to handle both cases. Observe:
 
 ~~~ {.rust}
-    use std::io::buffered::BufferedReader;
+    use std::io::BufferedReader;
+    use std::io::println;
     use std::io;
 
     fn main() {
         let mut reader = BufferedReader::new(io::stdin());
-        let input = reader.read_line().unwrap_or(~"nothing");
+        let input = reader.read_line().unwrap();
         let num = from_str::<int>(input.slice_to(input.len() - 1));
 
         match num {
@@ -226,6 +232,8 @@ Looping forever is possible with `while true`, but like in Ruby, that's
 kinda silly. Rust gives us `loop` to loop forever:
 
 ~~~ {.rust}
+    use std::io::println;
+
     loop {
         println("HELLO")
     }
@@ -235,6 +243,8 @@ Obviously you don't want to actually run that. You can use `break` to
 break out of the loop:
 
 ~~~ {.rust}
+    use std::io::println;
+
     let mut i = 0;
     loop {
         i += 1;
@@ -253,7 +263,8 @@ Random Number Generation
 Random number generation isn't too bad:
 
 ~~~ {.rust}
-    use std::rand;
+    extern crate rand;
+    use std::io::println;
 
     fn main() {
         let n = rand::random::<int>();
@@ -265,10 +276,13 @@ This will print out a different number each time you run it. But you'll
 get biiiiiiig numbers. If we want 1-100, of course we have to do this:
 
 ~~~ {.rust}
-    use std::rand::Rng;
+    extern crate rand;
+    use rand::task_rng;
+    use rand::Rng;
+    use std::io::println;
 
     fn main() {
-        let r = std::rand::rng().gen_range(1, 101);
+        let r = task_rng().gen_range(1, 101);
         println(r.to_str());
     }
 ~~~
@@ -286,12 +300,15 @@ some pointer stuff... I thought it was a little awkward, though.  After asking
 on IRC, 'strcat' gave me this version:
 
 ~~~ {.rust}
-    use std::io::buffered::BufferedReader;
+    extern crate rand;
+    use std::io::BufferedReader;
+    use std::io::println;
     use std::io;
-    use std::rand;
+    use rand::task_rng;
+    use rand::Rng;
 
     fn generate_secret_number() -> int {
-        (rand::random::<int>() % 100).abs() + 1
+        task_rng().gen_range(1, 100)
     }
 
     fn process_guess(secret:int, guess: int) -> bool {
@@ -320,7 +337,7 @@ on IRC, 'strcat' gave me this version:
             println!("Guess {:d}", round);
 
             let mut reader = BufferedReader::new(io::stdin());
-            let input = reader.read_line().unwrap_or(~"nothing");
+            let input = reader.read_line().unwrap();
             let num = from_str::<int>(input.slice_to(input.len() - 1));
 
             match num {
@@ -330,7 +347,6 @@ on IRC, 'strcat' gave me this version:
                 None         => println("Hey, put in a number.")
             }
         }
-
         println("Done!");
     }
 ~~~

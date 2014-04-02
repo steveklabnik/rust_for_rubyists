@@ -14,6 +14,8 @@ Structs
 Structs are ways of packaging up multiple values into one:
 
 ~~~ {.rust}
+    use std::io::println;
+
     struct Monster {
         health: int,
         attack: int
@@ -33,14 +35,7 @@ This gives:
     10
     20
 
-Seems simple enough! Note that you can give a struct to `format!`, using
-the `:?` format specifier. Example:
-
-    $ rustc dwemthysarray.rs && ./dwemthysarray
-    Monster{health: 10, attack: 20}
-
-
-Fancy!
+Seems simple enough!
 
 Methods
 -------
@@ -79,6 +74,8 @@ You can define associated functions (class methods, in Ruby, static
 methods, in Java) as well:
 
 ~~~ {.rust}
+    use std::io::println;
+
     struct Monster {
         health: int,
         attack: int
@@ -105,6 +102,8 @@ methods, in Java) as well:
 Constructors are a good reason to use associated functions:
 
 ~~~ {.rust}
+    use std::io::println;
+
     struct Monster {
         health: int,
         attack: int
@@ -178,6 +177,8 @@ If you haven't used pattern matching in another language, you're missing
 out. It's awesome. Here's a simpler match expression:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn message(i: int) {
         match i {
             1 => println("ONE!"),

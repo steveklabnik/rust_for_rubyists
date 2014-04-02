@@ -59,22 +59,27 @@ you'd expect, but we have curly braces rather than our friends `do/end`.
 Now that we've got that cleared up, let's compile and run our tests:
 
     $ rustc --test fizzbuzz.rs
-    fizzbuzz.rs:1:12: 1:16 warning: unused variable: `num`
-    fizzbuzz.rs:1 fn is_three(num: int) -> bool {
-                              ^~~~
+    fizzbuzz.rs:1:17: 1:20 warning: unused variable: `num`, #[warn(unused_variable)] on by default
+    fizzbuzz.rs:1     fn is_three(num: int) -> bool {
+                                  ^~~
 
     $ ./fizzbuzz
+
     running 1 test
-    rust: task failed at 'One is not three', fizzbuzz.rs:8
     test test_is_three ... FAILED
+
+    failures:
+
+    ---- test_is_three stdout ----
+      task 'test_is_three' failed at 'One is not three', fizzbuzz.rs:8
+      
 
     failures:
         test_is_three
 
-    result: FAILED. 0 passed; 1 failed; 0 ignored
+    test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 
-    rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
-    rust: domain main @0x85d9c0 root task failed
+    task '<main>' failed at 'Some tests failed', /some/path/to/rust
 
 Rust is kind enough to give us a warning: we never used the `num`
 argument. We then get our failure, "One is not three", because we
@@ -104,7 +109,7 @@ TDD means do the simplest thing! Compile and run it:
     running 1 test
     test test_is_three ... ok
 
-    result: ok. 1 passed; 0 failed; 0 ignored
+    result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
 Awesome! We pass! We still have that warning, though... let's write
 another test, and see what happens:
@@ -137,16 +142,20 @@ another test, and see what happens:
     $ ./fizzbuzz
     running 2 tests
     test test_is_three_with_not_three ... ok
-    rust: task failed at 'Three should be three', fizzbuzz.rs:15
     test test_is_three_with_three ... FAILED
+
+    failures:
+
+    ---- test_is_three_with_three stdout ----
+      task 'test_is_three_with_three' failed at 'Three should be three', fizzbuzz.rs:15
+      
 
     failures:
         test_is_three_with_three
 
-    result: FAILED. 1 passed; 1 failed; 0 ignored
+    test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 
-    rust: task failed at 'Some tests failed', /build/src/rust-0.6/src/libstd/test.rs:104
-    rust: domain main @0x15109c0 root task failed
+    task '<main>' failed at 'Some tests failed', /some/path
 
 Great! It showed that our first test passed, and that our second one
 failed. Let's make both tests pass:
@@ -181,7 +190,7 @@ failed. Let's make both tests pass:
     test test_is_three_with_not_three ... ok
     test test_is_three_with_three ... ok
 
-    result: ok. 2 passed; 0 failed; 0 ignored
+    result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 
 Awesome! This shows off how elses work, as well. It's probably what you
 expected. Go ahead and try to refactor this into a one-liner.
@@ -199,17 +208,20 @@ but there's one wrinkle: note there's no semicolon here. If you had one,
 you'd get:
 
     $ rustc --test fizzbuzz.rs
-    fizzbuzz.rs:1:0: 3:1 error: not all control paths return a value
-    fizzbuzz.rs:1 fn is_three(num: int) -> bool {
-    fizzbuzz.rs:2     num % 3 == 0;
-    fizzbuzz.rs:3 }
+    hello.rs:2:21: 2:21 note: consider removing this semicolon:
+    hello.rs:2         num % 3 == 0;
+                                   ^
+    hello.rs:1:5: 3:6 error: not all control paths return a value
+    hello.rs:1     fn is_three(num: int) -> bool {
+    hello.rs:2         num % 3 == 0;
+    hello.rs:3     }
     error: aborting due to previous error
 
 Basically, ending an expression in Rust with a semicolon ignores the
 value of that expression. Another way to think about it is that the
 semicolon turns the expression into a statement, and statements don't
-have values. This is kinda weird. I don't know how I feel about it. But
-it is something you should know about.
+have values. This is kinda weird. It becomes natural after some use, though.
+And Rust is even smart enough to tell us that it's probably a problem!
 
 Okay, now try to TDD out the `is_five` and `is_fifteen` methods. They
 should work the same way, but this will let you get practice actually
@@ -225,13 +237,15 @@ writing it out. Once you see this, you're ready to advance:
     test test_is_three_with_three ... ok
     test test_is_fifteen_with_not_fifteen ... ok
 
-    result: ok. 6 passed; 0 failed; 0 ignored
+    result: ok. 6 passed; 0 failed; 0 ignored, 0 measured
 
 Okay! Let's talk about the main program now. We've got the tools to
 build FizzBuzz, let's make it work. First thing we need to do is print
 out all the numbers from one to 100. It's easy!
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(0,100) {
             println("num");
@@ -298,6 +312,8 @@ you're into that sort of thing.
 Anywho, where were we? Oh, iteration:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(0, 100) {
             println(num);
@@ -322,6 +338,8 @@ it a number. Whoops! Now, there's two ways to fix this. The first is to use the
 `to_str` function:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(1, 100) {
             println(num.to_str())
@@ -344,6 +362,8 @@ the `format!` function. At least, it looks like a function to me. Here it
 is:
 
 ~~~ {.rust}
+    use std::io::println;
+
     fn main() {
         for num in range(1, 4) {
             println(format!("{:d}", num));
@@ -367,6 +387,10 @@ Because this combination is common, you can use `println!` as a combination of
         }
     }
 ~~~
+
+Note that we removed the import statement: we're no longer using the `println` from
+the `io` module, we're using the `println!` macro from the 'prelude', which are
+the things Rust automatically imports for you.
 
 Anyway, now we have 1 to 99. We need 1 to 100.
 
