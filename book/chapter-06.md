@@ -60,7 +60,7 @@ of things aren't like that. Let's take a look at the type signature of
 `spawn`:
 
 ~~~ {.rust}
-    fn spawn(f: ~fn())
+    fn spawn(f: proc())
 ~~~
 
 Spawn is a function that takes a pointer to another function (it's a
