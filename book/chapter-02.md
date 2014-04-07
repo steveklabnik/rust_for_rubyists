@@ -35,6 +35,9 @@ You can also install the nightly build to try out changes as they're made:
 And switch between them with:
 
     $ sudo update-alternatives --config rustc
+    
+As with many PPAs, this is a community-maintained package. Please review the contents
+of packages before totally trusting what's inside of them.
 
 ### Mac
 
@@ -65,6 +68,9 @@ If you don't use Homebrew, install it. Seriously.
 
 (Note: If you're reading this close to release, Homebrew may not have 0.10 yet,
 you can use brew install --HEAD rust to get master, which will be close.)
+
+As with all of Homebrew, this is a community-maintained package. Please review the contents
+of packages before totally trusting what's inside of them.
 
 ### Linux
 
