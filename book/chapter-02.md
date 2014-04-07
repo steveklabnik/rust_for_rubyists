@@ -62,7 +62,20 @@ Unix Thing.
     $ sudo make install
 
 Most package managers I've checked out either have no package or a really old
-package, so you'll probably want to just install from source.
+package, so you'll probably want to just install from source. 
+
+If you know what is `virtualenv` and how it may be usefull for you, you can check
+out tool like [envirius](https://github.com/ekalinin/envirius), which allows you to
+install rust from source like this:
+
+    $ nv mk --rust=0.9
+    Creating environment: rust-0.9 ...
+     * installing rust==0.9 ...
+     * done (in 5 secs.)
+    $ nv on rust-0.9
+    Environment rust-0.9 activated.
+    (rust-0.9) $ rustc -v
+    rustc 0.9
 
 ### Windows
 
