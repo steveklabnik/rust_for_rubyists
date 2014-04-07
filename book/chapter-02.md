@@ -19,6 +19,23 @@ Pick your OS and your 32 or 64 bit variant.
 
 You'll have to run `install.sh` from inside the unzipped package.
 
+### Ubuntu (and variants)
+
+If you're using ubuntu, you can also install it through a
+[PPA](https://launchpad.net/~hansjorg/+archive/rust):
+
+    $ sudo apt-add-repository ppa:hansjorg/rust
+    $ sudo apt-get update
+    $ sudo apt-get install rust-0.10
+    
+You can also install the nightly build to try out changes as they're made:
+
+    $ sudo apt-get install rust-nightly
+    
+And switch between them with:
+
+    $ sudo update-alternatives --config rustc
+
 ### Mac
 
 * http://static.rust-lang.org/dist/rust-0.10-x86_64-apple-darwin.tar.gz
