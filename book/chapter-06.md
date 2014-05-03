@@ -204,8 +204,8 @@ this for now by telling our child to die:
         let mut value: int;
         loop {
             value = channel.recv();
-            channel.send(value + 1);
             if value == 0 { break; }
+            channel.send(value + 1);
         }
     }
 
