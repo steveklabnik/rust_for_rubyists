@@ -24,7 +24,7 @@ fails. Let's give it a shot: Open up `testing.rs` and put this in it:
 
     #[test]
     fn this_tests_code() {
-        println("")
+        println("");
     }
 ~~~
 
