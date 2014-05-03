@@ -166,11 +166,11 @@ in the background, we can send it bunches of values:
 
 ~~~ {.rust}
     fn main() {
-        let (from_child, to_child) = DuplexStream::new();
+        let (from_child, to_child) = sync::duplex();
 
-        do spawn {
+        spawn(proc() {
             plus_one(&to_child);
-        };
+        });
 
         from_child.send(22);
         from_child.send(23);
