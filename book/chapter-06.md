@@ -216,8 +216,8 @@ this for now by telling our child to die:
             plus_one(&to_child);
         });
 
-        from_child.try_send(22);
-        from_child.try_send(23);
+        from_child.send(22);
+        from_child.send(23);
         from_child.send(24);
         from_child.send(25);
 
