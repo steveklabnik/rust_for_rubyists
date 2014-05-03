@@ -135,15 +135,10 @@ this: `DuplexStream`:
             plus_one(&to_child);
         });
 
-        from_child.try_send(22);
-        from_child.try_send(23);
-        from_child.send(24);
-        from_child.send(25);
+        from_child.send(22);
 
-        for num in range(0, 4) {
-            let answer = from_child.recv();
-            println(answer.to_str());
-        }
+        let answer = from_child.recv();
+        println(answer.to_str());
     }
 ~~~
 
