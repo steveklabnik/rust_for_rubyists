@@ -359,7 +359,7 @@ Okay. So the first time we have our code, we have two calls to
 `print_vec`, one for a vector of strings and one for a vector of ints.
 The call to `nm`...
 
-Oh wait, I haven't told you about `nm`!
+Oh wait, I mentioned `nm` before, but let me tell you some more about it now!
 
 A diversion about nm
 --------------------
