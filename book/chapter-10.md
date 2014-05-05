@@ -316,9 +316,9 @@ this out:
     ....editing...
     $ cat traits.rs
 ~~~ {.rust}
-    fn print_vec<T: ToStr>(v: &[T]) {
+    fn print_vec<T: std::fmt::Show>(v: &[T]) {
         for i in v.iter() {
-            println((*i).to_str())
+            println!("{}", i)
         }
     }
 
