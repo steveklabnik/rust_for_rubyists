@@ -135,15 +135,10 @@ this: `DuplexStream`:
             plus_one(&to_child);
         });
 
-        from_child.try_send(22);
-        from_child.try_send(23);
-        from_child.send(24);
-        from_child.send(25);
+        from_child.send(22);
 
-        for num in range(0, 4) {
-            let answer = from_child.recv();
-            println(answer.to_str());
-        }
+        let answer = from_child.recv();
+        println(answer.to_str());
     }
 ~~~
 
@@ -166,11 +161,11 @@ in the background, we can send it bunches of values:
 
 ~~~ {.rust}
     fn main() {
-        let (from_child, to_child) = DuplexStream::new();
+        let (from_child, to_child) = sync::duplex();
 
-        do spawn {
+        spawn(proc() {
             plus_one(&to_child);
-        };
+        });
 
         from_child.send(22);
         from_child.send(23);
@@ -209,8 +204,8 @@ this for now by telling our child to die:
         let mut value: int;
         loop {
             value = channel.recv();
-            channel.send(value + 1);
             if value == 0 { break; }
+            channel.send(value + 1);
         }
     }
 
@@ -221,8 +216,8 @@ this for now by telling our child to die:
             plus_one(&to_child);
         });
 
-        from_child.try_send(22);
-        from_child.try_send(23);
+        from_child.send(22);
+        from_child.send(23);
         from_child.send(24);
         from_child.send(25);
 
