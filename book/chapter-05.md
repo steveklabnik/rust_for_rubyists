@@ -258,6 +258,12 @@ Step one: print **something** 100 times. If you run this via
 100 times. Note that our tests didn't actually run. Not only are they not run,
 they're actually not even in the executable:
 
+Compile with the test flag:
+
+~~~
+$ rustc --test fizzbuzz.rs
+~~~
+
 On Linux:
 
 ~~~
@@ -269,7 +275,9 @@ On OS X:
 ~~~
 $ nm fizzbuzz | c++filt -p -i | grep test
 ~~~
-   
+
+Expected output:
+
 ~~~
 0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
 0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
@@ -281,6 +289,8 @@ $ nm fizzbuzz | c++filt -p -i | grep test
 000000000040fea0 T __test::main::_79fbef3fc431adf6::_00
 0000000000614890 D __test::tests::_7c31a8a9617a6a::_00
 ~~~
+
+Compile without the test flag:
 
 ~~~
 $ rustc fizzbuzz.rs
@@ -297,6 +307,8 @@ On OS X:
 ~~~
 $ nm fizzbuzz~ | c++filt -p -i | grep test
 ~~~
+
+Expected output:
 
     $
 
