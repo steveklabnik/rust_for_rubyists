@@ -247,7 +247,7 @@ out all the numbers from one to 100. It's easy!
     use std::io::println;
 
     fn main() {
-        for num in range(0,100) {
+        for num in range(1, 100) {
             println("num");
         }
     }
@@ -327,7 +327,7 @@ Anywho, where were we? Oh, iteration:
     use std::io::println;
 
     fn main() {
-        for num in range(0, 100) {
+        for num in range(1, 100) {
             println(num);
         }
     }
@@ -377,7 +377,7 @@ is:
     use std::io::println;
 
     fn main() {
-        for num in range(1, 4) {
+        for num in range(1, 100) {
             println(format!("{:d}", num));
         }
     }
