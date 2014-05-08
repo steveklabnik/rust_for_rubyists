@@ -211,9 +211,9 @@ Neat. The reason we didn't need to specify a `_` case in our monster code
 is that because we were matching an `enum`, rust knew we had covered all
 the possible cases. But since we're matching an `int`, what would happen
 if we called, say, `message(349)`? Rust makes us specify a default case
-with `_` so that it knows exactly what we want. Make sure you put that
-`_` case _last_, however, because Rust looks at them top-to-bottom, and
-will take the first matching case it finds.
+with `_` so that it knows exactly what we want. You also have to put the `_`
+case last, after any other cases, because Rust looks at them top-to-bottom, and
+will complain about unreachable patterns that come after `_`.
 
 The cool thing is that when pattern matching on a struct, the `match`
 can destructure it:
