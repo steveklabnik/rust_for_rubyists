@@ -1,9 +1,9 @@
 fn main() {
-    do 10.times {
-        do spawn {
+    for num in range(0, 10) {
+        spawn(proc() {
             let greeting_message = "Hello?";
-            println(greeting_message);
-        }
+            println!("{}", greeting_message);
+            // or just `println!("Hello?")`
+        });
     }
 }
-
