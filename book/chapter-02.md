@@ -66,8 +66,8 @@ already use. Just do this:
 
 If you don't use Homebrew, install it. Seriously.
 
-(Note: If you're reading this close to release, Homebrew may not have 0.10 yet,
-you can use brew install --HEAD rust to get master, which will be close.)
+(Note: Homebrew's current version of rust is 0.10, but you can use `brew install --HEAD rust`
+to get the most recent version of rust.)
 
 As with all of Homebrew, this is a community-maintained package. Please review the contents
 of packages before totally trusting what's inside of them.
