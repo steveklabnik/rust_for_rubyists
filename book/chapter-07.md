@@ -154,5 +154,4 @@ Pointer strategy
 Basically, idiomatic Rust code will... not use pointers at all, and just use
 values. If you need a pointer, use owned pointers, as they won't involve the
 GC. If you're writing a function that needs to take a pointer, use borrowed
-pointers, rather than being specific, and once you need managed pointers,
-you'll know.
+pointers, rather than being specific.
