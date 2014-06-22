@@ -12,7 +12,7 @@ and you'll sometimes hear a borrowed pointer to a vector called a
 Examples
 --------
 
-See if this looks familliar:
+See if this looks familiar:
 
 ~~~ {.rust}
     fn main() {
