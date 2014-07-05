@@ -282,7 +282,7 @@ get biiiiiiig numbers. If we want 1-100, of course we have to do this:
     use std::io::println;
 
     fn main() {
-        let r = task_rng().gen_range(1, 101);
+        let r = task_rng().gen_range(1u, 101);
         println(r.to_str());
     }
 ~~~
@@ -308,7 +308,7 @@ on IRC, 'strcat' gave me this version:
     use rand::Rng;
 
     fn generate_secret_number() -> int {
-        task_rng().gen_range(1, 100)
+        task_rng().gen_range(1u, 100)
     }
 
     fn process_guess(secret:int, guess: int) -> bool {
@@ -333,7 +333,7 @@ on IRC, 'strcat' gave me this version:
         println("");
         println("Guess a number from 1-100 (you get five tries):");
 
-        for round in range(0, 5) {
+        for round in range(0u, 5) {
             println!("Guess {:d}", round);
 
             let mut reader = BufferedReader::new(io::stdin());
