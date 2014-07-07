@@ -63,14 +63,11 @@ of things aren't like that. Let's take a look at the type signature of
     fn spawn(f: proc())
 ~~~
 
-Spawn is a function that takes a pointer to another function (it's a
-higher order function). But there's that `~` again. This means that the
-pointer is an 'owned pointer.' We'll talk more about what exactly that
-means in the next chapter, but you can infer from the name that this
-means that we own all of the references to the data in this closure.
-Therefore, Rust can move the function around at will and know it won't
-break anything. The type system has helped us determine exactly how
-isolated our task actually is.
+Spawn is a function that takes a proc: a closure that can only be run once.
+This means that Rust can do what it wants, moving the closure to another task,
+or other optimizations. The details aren't particularly important at this
+stage, and Rust will be undergoing some reform with regards to closures soon,
+so just think of it as a closure, and that's good enough.
 
 Pipes, Channels, and Ports
 --------------------------
