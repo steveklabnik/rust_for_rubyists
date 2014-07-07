@@ -38,7 +38,7 @@ This makes sense: We haven't defined any functions yet. Let's define
 one:
 
 ~~~ {.rust}
-fn div_by_three(x: int) -> bool {
+fn div_by_three(num: int) -> bool {
    true
 }
 
@@ -61,8 +61,8 @@ you'd expect, but we have curly braces rather than our friends `do/end`.
 Now that we've got that cleared up, let's compile and run our tests:
 
     $ rustc --test fizzbuzz.rs
-    fizzbuzz.rs:1:17: 1:18 warning: unused variable: `x`, #[warn(unused_variable)] on by default
-    fizzbuzz.rs:1 fn div_by_three(x: int) -> bool {
+    fizzbuzz.rs:1:17: 1:18 warning: unused variable: `num`, #[warn(unused_variable)] on by default
+    fizzbuzz.rs:1 fn div_by_three(num: int) -> bool {
                                   ^
 
     running 1 test
@@ -72,8 +72,8 @@ Now that we've got that cleared up, let's compile and run our tests:
 
     ---- test_div_by_three stdout ----
         task 'test_div_by_three' failed at 'One is not three', fizzbuzz.rs:8
-        
-        
+
+
 
     failures:
         test_div_by_three
@@ -88,7 +88,7 @@ argument. We then get our failure, "One is not three", because we
 returned true. Now that we have a failing test, let's make it pass:
 
 ~~~ {.rust}
-fn div_by_three(x: int) -> bool {
+fn div_by_three(num: int) -> bool {
    false
 }
 
@@ -103,8 +103,8 @@ fn test_div_by_three() {
 TDD means do the simplest thing! Compile and run it:
 
     $ rustc --test fizzbuzz.rs
-    fizzbuzz.rs:1:17: 1:18 warning: unused variable: `x`, #[warn(unused_variable)] on by default
-    fizzbuzz.rs:1 fn div_by_three(x: int) -> bool {
+    fizzbuzz.rs:1:17: 1:18 warning: unused variable: `num`, #[warn(unused_variable)] on by default
+    fizzbuzz.rs:1 fn div_by_three(num: int) -> bool {
                                   ^
 
     $ ./fizzbuzz
@@ -117,11 +117,28 @@ Awesome! We pass! We still have that warning, though... let's write
 another test, and see what happens:
 
 ~~~ {.rust}
+fn div_by_three(num: int) -> bool {
+   false
+}
+
+#[test]
+fn test_div_by_three() {
+    if div_by_three(1) {
+        fail!("One is not three");
+    }
+}
+
+#[test]
+fn test_div_by_three_with_three() {
+    if !div_by_three(3) {
+        fail!("Three should be three");
+    }
+}
 ~~~
 
     $ rustc --test fizzbuzz.rs
-    fizzbuzz.rs:1:17: 1:18 warning: unused variable: `x`, #[warn(unused_variable)] on by default
-    fizzbuzz.rs:1 fn div_by_three(x: int) -> bool {
+    fizzbuzz.rs:1:17: 1:18 warning: unused variable: `num`, #[warn(unused_variable)] on by default
+    fizzbuzz.rs:1 fn div_by_three(num: int) -> bool {
                                   ^
 
 
@@ -134,8 +151,8 @@ another test, and see what happens:
 
     ---- test_div_by_three_with_three stdout ----
         task 'test_div_by_three_with_three' failed at 'Three should be three', fizzbuzz.rs:15
-        
-        
+
+
 
     failures:
         test_div_by_three_with_three
@@ -149,8 +166,8 @@ Great! It showed that our first test passed, and that our second one
 failed. Let's make both tests pass:
 
 ~~~ {.rust}
-fn div_by_three(x: int) -> bool {
-    if x % 3 == 0 {
+fn div_by_three(num: int) -> bool {
+    if num % 3 == 0 {
         true
     } else {
         false
@@ -186,8 +203,8 @@ expected. Go ahead and try to refactor this into a one-liner.
 Done? How'd you do? Here's mine:
 
 ~~~ {.rust}
-fn div_by_three(x: int) -> bool {
-    x % 3 == 0
+fn div_by_three(num: int) -> bool {
+    num % 3 == 0
 }
 ~~~
 
@@ -197,11 +214,11 @@ you'd get:
 
     $ rustc --test fizzbuzz.rs
     fizzbuzz.rs:2:15: 2:16 note: consider removing this semicolon:
-    fizzbuzz.rs:2     x % 3 == 0;
+    fizzbuzz.rs:2     num % 3 == 0;
                                 ^
     fizzbuzz.rs:1:1: 3:2 error: not all control paths return a value
-    fizzbuzz.rs:1 fn div_by_three(x: int) -> bool {
-    fizzbuzz.rs:2     x % 3 == 0;
+    fizzbuzz.rs:1 fn div_by_three(num: int) -> bool {
+    fizzbuzz.rs:2     num % 3 == 0;
     fizzbuzz.rs:3 }
     error: aborting due to previous error
 
