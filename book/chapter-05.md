@@ -521,11 +521,10 @@ actually want is:
     }
 ~~~
 
-What's up with the tildes? They modify the declaration somehow. I added it
-because running without it gives an error message that implies you need it:
-give it a shot. Because our variables are typed, we have to convert the number
-in the `else` case to a string. In Ruby we'd just let it be a `Fixnum` if it
-was a number. Oh well. We'll talk more about them later.
+Why the "`to_str()`"s? There are two types of Strings in Rust: `Str`,
+which is a heap allocated string with dynamic length, and `&str`, which
+is a borrowed, immutable view into a string. The literal is of type `&str`,
+but we want a `Str`. `to_str()` turns a `&str` into a `String`.
 
 Because the `if` returns a value, we could also do something like this:
 
