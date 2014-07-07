@@ -11,9 +11,9 @@ Tasks
 -----
 
 The fundamental unit of computation in Rust is called a 'task.' Tasks are like
-threads, but you can choose the low-level details of how they operate.  Rust
+threads, but you can choose the low-level details of how they operate. Rust
 now supports both 1:1 scheduled and N:M scheduled threads as well, though the
-work for 1:1 is still ongoing, so N:M is the default.  The details of what
+work for 1:1 is still ongoing, so N:M is the default. The details of what
 _exactly_ that means are out of the scope of this tutorial, but the [Wikipedia
 page](http://en.wikipedia.org/wiki/Thread_%28computing%29) has a good overview.
 
@@ -72,11 +72,15 @@ so just think of it as a closure, and that's good enough.
 Pipes, Channels, and Ports
 --------------------------
 
-If our tasks are 100% isolated, they wouldn't be that useful: we need
-some kind of communication between tasks in order to get back useful
-results. We can communicate between tasks with pipes. Pipes have two
-ends: a channel that sends info down the pipe, and a port that receives
-info. Here's an example of a task that sends us back a 10:
+If our tasks are 100% isolated, they wouldn't be that useful: we need some kind
+of communication between tasks in order to get back useful results. We can
+communicate between tasks with pipes. Pipes have two ends: a channel that sends
+info down the pipe, and a port that receives info. If you've used these
+concepts in other languages, Rust's are similar, except that Rust's are
+explicitly typed. Some implementations of this pattern in other languages do
+not make this distinction. Otherwise, they're very similar.
+
+Here's an example of a task that sends us back a 10:
 
 ~~~ {.rust}
 
