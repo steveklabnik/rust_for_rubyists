@@ -82,16 +82,15 @@ ends: a channel that sends info down the pipe, and a port that receives
 info. Here's an example of a task that sends us back a 10:
 
 ~~~ {.rust}
-    use std::io::println;
 
     fn main() {
         let (chan, port) = channel();
 
         spawn(proc() {
-            chan.send(10);
+            chan.send(10u);
         });
 
-        println(port.recv().to_str());
+        println!("{:s}", port.recv().to_str());
     }
 ~~~
 
@@ -117,28 +116,31 @@ would be pretty annoying, so we have some standard library code for
 this: `DuplexStream`:
 
 ~~~ {.rust}
-    extern crate sync;
-    use std::io::println;
 
-    fn plus_one(channel: &sync::DuplexStream<int, int>) {
+    use std::comm::{channel, Sender, Receiver};
+
+    fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
         let mut value: int;
         loop {
-            value = channel.recv();
-            channel.send(value + 1);
+            value = receiver.recv();
+            sender.send(value + 1)
         }
     }
 
-    fn main() {
-        let (from_child, to_child) = sync::duplex();
+    fn main () {
+        let (fromParentSender, fromParentReceiver) = channel();
+        let (fromChildSender, fromChildReceiver) = channel();
 
         spawn(proc() {
-            plus_one(&to_child);
+            plus_one(&fromChildSender, &fromParentReceiver);
         });
 
-        from_child.send(22);
+        fromParentSender.send(22);
 
-        let answer = from_child.recv();
-        println(answer.to_str());
+        for _ in range(0i, 4) {
+            let answer = fromChildReceiver.recv();
+            println!("{:s}", answer.to_str());
+        }
     }
 ~~~
 
@@ -160,21 +162,23 @@ send it a `22`, and print out the result. Because this task is running
 in the background, we can send it bunches of values:
 
 ~~~ {.rust}
-    fn main() {
-        let (from_child, to_child) = sync::duplex();
+
+    fn main () {
+        let (fromParentSender, fromParentReceiver) = channel();
+        let (fromChildSender, fromChildReceiver) = channel();
 
         spawn(proc() {
-            plus_one(&to_child);
+            plus_one(&fromChildSender, &fromParentReceiver);
         });
 
-        from_child.send(22);
-        from_child.send(23);
-        from_child.send(24);
-        from_child.send(25);
+        fromParentSender.send(22);
+        fromParentSender.send(23);
+        fromParentSender.send(24);
+        fromParentSender.send(25);
 
-        for num in range(0, 4) {
-            let answer = from_child.recv();
-            println(answer.to_str());
+        for _ in range(0u, 4) {
+            let answer = fromChildReceiver.recv();
+            println!("{:s}", answer.to_str());
         }
     }
 ~~~
@@ -197,35 +201,36 @@ means if one task fails, all of its children and parents fail too. We can fix
 this for now by telling our child to die:
 
 ~~~ {.rust}
-    extern crate sync;
-    use std::io::println;
 
-    fn plus_one(channel: &sync::DuplexStream<int, int>) {
+    use std::comm::{channel, Sender, Receiver};
+
+    fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
         let mut value: int;
         loop {
-            value = channel.recv();
+            value = receiver.recv();
+            sender.send(value + 1);
             if value == 0 { break; }
-            channel.send(value + 1);
         }
     }
 
-    fn main() {
-        let (from_child, to_child) = sync::duplex();
+    fn main () {
+        let (fromParentSender, fromParentReceiver) = channel();
+        let (fromChildSender, fromChildReceiver) = channel();
 
         spawn(proc() {
-            plus_one(&to_child);
+            plus_one(&fromChildSender, &fromParentReceiver);
         });
 
-        from_child.send(22);
-        from_child.send(23);
-        from_child.send(24);
-        from_child.send(25);
+        fromParentSender.send(22);
+        fromParentSender.send(23);
+        fromParentSender.send(24);
+        fromParentSender.send(24);
 
-        from_child.send(0);
+        fromParentSender.send(0);
 
-        for num in range(0, 4) {
-            let answer = from_child.recv();
-            println(answer.to_str());
+        for _ in range(0i, 4) {
+            let answer = fromChildReceiver.recv();
+            println!("{:s}", answer.to_str());
         }
     }
 ~~~
