@@ -37,10 +37,10 @@ or not making `AbstractFactoryFactoryImpls` just to get work done.
 
 I think that that language is Rust.
 
-Now: Rust is not perfect, by far. Its documentation is poor. It is
-certainly *very* complex. Fighting with a compiler can be frustrating.
-But the point is to *learn*. And using a language that's very familiar,
-yet very different, can teach us a lot.
+Now: Rust is not perfect, by far. Its documentation is poor, but getting
+better, as I've been hired by Mozilla to fix it.  It is can feel quite complex.
+Fighting with a compiler can be frustrating.  But the point is to *learn*. And
+using a language that's very familiar, yet very different, can teach us a lot.
 
 Here's "Hello World" in Rust:
 
@@ -54,7 +54,7 @@ Here's a parallel "Hello World" in Rust:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(0u, 10) {
+        for _ in range(0u, 10) {
             spawn(proc() {
                 let greeting_message = "Hello?";
                 println!("{}", greeting_message);
@@ -70,7 +70,10 @@ Here's a rough port to Ruby:
     10.times do
       Thread.new do
         greeting_message = "Hello?"
-        puts "#{greeting_message}" # slightly unnatural ruby to match `format!` macro in rust.
+
+        # This is weird in Ruby but it's closer to the println! macro
+        # usage in the Rust example.
+        puts "#{greeting_message}"
       end
     end
 ~~~

@@ -11,11 +11,9 @@ Rust programs end in `.rs`:
 Put this in it:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    fn main() {
-        println("Hello, world.");
-    }
+fn main() {
+    println!("Hello, world.");
+}
 ~~~
 
 And compile it with `rustc`:

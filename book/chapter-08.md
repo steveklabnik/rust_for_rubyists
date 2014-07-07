@@ -14,19 +14,17 @@ Structs
 Structs are ways of packaging up multiple values into one:
 
 ~~~ {.rust}
-    use std::io::println;
+struct Monster {
+    health: int,
+    attack: int
+}
 
-    struct Monster {
-        health: int,
-        attack: int
-    }
+fn main() {
+    let m = Monster { health: 10, attack: 20 };
 
-    fn main() {
-        let m = Monster { health: 10, attack: 20 };
-
-        println(m.health.to_str());
-        println(m.attack.to_str());
-    }
+    println!("{:s}", m.health.to_str());
+    println!("{:s}", m.attack.to_str());
+}
 ~~~
 
 This gives:
@@ -45,88 +43,84 @@ Python people who are reading will be high fiving each other in droves.
 Let's add a method for our `Monster` s:
 
 ~~~ {.rust}
-    struct Monster {
-        health: int,
-        attack: int
-    }
+struct Monster {
+    health: int,
+    attack: int
+}
 
-    impl Monster {
-        fn attack(&self) {
-            println!("The monster attacks for {:d} damage.", self.attack);
-        }
+impl Monster {
+    fn attack(&self) {
+        println!("The monster attacks for {:d} damage.", self.attack);
     }
+}
 
-    fn main() {
-        let m = Monster { health: 10, attack: 20 };
+fn main() {
+    let m = Monster { health: 10, attack: 20 };
 
-        m.attack();
-    }
+    m.attack();
+}
 ~~~
 
 This gives:
 
     The monster attacks for 20 damage.
 
-Methods will want to take a borrowed pointer, obviously. We don't care
-what the ownership semantics are. That's the `&self`, if you forgot.
+Methods will want to take a borrowed pointer. We don't care what the ownership
+semantics are. That's the `&self`, if you forgot.
 
 You can define associated functions (class methods, in Ruby, static
 methods, in Java) as well:
 
 ~~~ {.rust}
-    use std::io::println;
+struct Monster {
+    health: int,
+    attack: int
+}
 
-    struct Monster {
-        health: int,
-        attack: int
+impl Monster {
+    fn attack(&self) {
+        println!("The monster attacks for {:d} damage.", self.attack);
     }
 
-    impl Monster {
-        fn attack(&self) {
-            println!("The monster attacks for {:d} damage.", self.attack);
-        }
-
-        fn count() {
-            println("There are a bunch of monsters out tonight.");
-        }
+    fn count() {
+        println!("There are a bunch of monsters out tonight.");
     }
+}
 
-    fn main() {
-        let m = Monster { health: 10, attack: 20 };
+fn main() {
+    let m = Monster { health: 10, attack: 20 };
 
-        m.attack();
-        Monster::count();
-    }
+    m.attack();
+    Monster::count();
+}
 ~~~
 
 Constructors are a good reason to use associated functions:
 
 ~~~ {.rust}
-    use std::io::println;
+struct Monster {
+    health: int,
+    attack: int
+}
 
-    struct Monster {
-        health: int,
-        attack: int
+impl Monster {
+    fn new(health: int, attack: int) -> Monster {
+        Monster { health:health, attack:attack }
     }
 
-    impl Monster {
-        fn new(health: int, attack: int) -> Monster {
-            Monster { health:health, attack:attack }
-        }
-
-        fn attack(&self) {
-            println!("The monster attacks for {:d} damage.", self.attack);
-        }
-
-        fn count() {
-            println("There are a bunch of monsters out tonight.");
-        }
-
+    fn attack(&self) {
+        println!("The monster attacks for {:d} damage.", self.attack);
     }
 
-    fn main() {
-        Monster::new(20, 40).attack();
+    fn count() {
+        println!("There are a bunch of monsters out tonight.");
     }
+
+}
+
+fn main() {
+    Monster::new(20, 40).attack();
+}
 ~~~
 
 Note the lack of a semicolon inside `new`, so it's acting as an
@@ -145,25 +139,25 @@ languages, we'd use inheritance. In Rust, it seems like Enums are a
 better idea. Here's an enum:
 
 ~~~ {.rust}
-    enum Monster {
-        ScubaArgentine(int, int, int, int),
-        IndustrialRaverMonkey(int, int, int, int)
-    }
+enum Monster {
+    ScubaArgentine(int, int, int, int),
+    IndustrialRaverMonkey(int, int, int, int)
+}
 
 
-    impl Monster {
-        fn attack(&self) {
-            match *self {
-                ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
-                IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
-            }
+impl Monster {
+    fn attack(&self) {
+        match *self {
+            ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
+            IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
         }
     }
+}
 
-    fn main() {
-        let irm = IndustrialRaverMonkey(46, 35, 91, 2);
-        irm.attack();
-    }
+fn main() {
+    let irm = IndustrialRaverMonkey(46, 35, 91, 2);
+    irm.attack();
+}
 ~~~
 
 Okay, few new things here: We can see that there's some duplication
@@ -177,29 +171,27 @@ If you haven't used pattern matching in another language, you're missing
 out. It's awesome. Here's a simpler match expression:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    fn message(i: int) {
-        match i {
-            1 => println("ONE!"),
-            2 => println("Two is a prime."),
-            3 => println("THREE!"),
-            _ => println("no idea what that is, boss")
-        }
+fn message(i: int) {
+    match i {
+        1 => println!("ONE!"),
+        2 => println!("Two is a prime."),
+        3 => println!("THREE!"),
+        _ => println!("no idea what that is, boss")
     }
+}
 
-    fn main() {
-        message(1);
-        message(2);
-        message(3);
-    }
+fn main() {
+    message(1);
+    message(2);
+    message(3);
+}
 ~~~
 
 Does that make sense? It's sorta like a `case` statement, but it's more
 powerful. If we leave off the `_` case, Rust will complain:
 
     $ rustc match.rs && ./match
-    match.rs:2:4: 6:5 error: non-exhaustive patterns
+    match.rs:2:4: 6:5 error: non-exhaustive patterns: `_` not covered
     match.rs:2     match i {
     match.rs:3         1 => println("ONE!"),
     match.rs:4         2 => println("Two is a prime."),
@@ -219,9 +211,9 @@ The cool thing is that when pattern matching on a struct, the `match`
 can destructure it:
 
 ~~~ {.rust}
-    match p {
-        Point{x:x, y:y} => println!("X: {:d}, Y: {:d}", x, y)
-    }
+match p {
+    Point{x:x, y:y} => println!("X: {:d}, Y: {:d}", x, y)
+}
 ~~~
 
 We name the two fields of a `Point` `x` and `y`, and those names are

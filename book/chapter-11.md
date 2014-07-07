@@ -23,19 +23,17 @@ Using `stdin()`
 Turns out getting text input is pretty simple. Just try this:
 
 ~~~ {.rust}
-    use std::io::BufferedReader;
-    use std::io::println;
-    use std::io;
+use std::io;
 
+fn main() {
+    println!("INPUT:");
+    let mut reader = io::stdin();
 
-    fn main() {
-        println("INPUT:");
-        let mut reader = BufferedReader::new(io::stdin());
+    let input = reader.read_line().ok().expect("Failed to read line");
 
-        let input = reader.read_line().unwrap();
-        println("YOU TYPED:");
-        println(input);
-    }
+    println!("YOU TYPED:");
+    println!(input);
+}
 ~~~
 
 Give that a run. It should prompt you to type something in, and then
@@ -43,12 +41,11 @@ echo out what you typed. Simple enough!
 
 I want to talk about that import, but first, let's go over this
 `stdin()` business. Basically. `io::stdin()` will give you a reference
-to standard in. It only has the lowest-level of reading capabilities, so we
-wrap it in a `BufferedReader`, which gives us the `read_line()` method. This
-reads stuff up to a `\n` from whatever it's implemented on. So we grab that
-line, save it in a variable, and then print it out again. Super simple.
+to standard in.  Next, the `read_line()` method. This reads stuff up to a `\n`
+from whatever it's implemented on. So we grab that line, save it in a variable,
+and then print it out again. Super simple.
 
-This `unwrap` business we'll talk about in a minute. First, what's up with
+This `ok().epxect()` business we'll talk about in a minute. First, what's up with
 this `use` shenanigans? We've been using them forever, let's talk details.
 
 How to use `use`
@@ -64,8 +61,8 @@ Rust basically pretends that it has these two lines at the beginning of
 every program:
 
 ~~~ {.rust}
-    extern crate std;
-    use std::prelude::*;
+extern crate std;
+use std::prelude::*;
 ~~~
 
 Two things here. The first line is this `extern crate` business. I wanted
@@ -159,19 +156,18 @@ So, I was trying to cast a string to an integer to get this program
 going. So I wrote this:
 
 ~~~ {.rust}
-    use std::io::BufferedReader;
-    use std::io::println;
-    use std::io;
+use std::io;
 
-    fn main() {
-        println("INPUT:");
-        let mut reader = BufferedReader::new(io::stdin());
+fn main() {
+    println!("INPUT:");
+    let mut reader = io::stdin();
 
-        let input = reader.read_line().unwrap();
-        let num = from_str::<int>(input.slice_to(input.len() - 1));
-        println("YOU TYPED:");
-        println(num.to_str());
-    }
+    let input = reader.read_line().ok().expect("Failed to read line");
+    let input_num: Option<int> = from_str(input.as_slice().trim());
+
+    println!("YOU TYPED:");
+    println!("{}", input_num);
+}
 ~~~
 
 I was gonna convert the string to an int, then back to a string to print
@@ -192,20 +188,20 @@ doesn't actually return a string, it returns an `Option`. We can then
 use pattern matching to handle both cases. Observe:
 
 ~~~ {.rust}
-    use std::io::BufferedReader;
-    use std::io::println;
-    use std::io;
+use std::io;
 
-    fn main() {
-        let mut reader = BufferedReader::new(io::stdin());
-        let input = reader.read_line().unwrap();
-        let num = from_str::<int>(input.slice_to(input.len() - 1));
+fn main() {
+    println!("INPUT:");
+    let mut reader = io::stdin();
 
-        match num {
-            Some(number_string) => println(number_string.to_str()),
-            None                => println("Hey, put in a number.")
-        }
+    let input = reader.read_line().ok().expect("Failed to read line");
+    let input_num: Option<int> = from_str(input.as_slice().trim());
+
+    match input_num {
+        Some(number) => println!("{:d}", number),
+        None                => println!("Hey, put in a number.")
     }
+}
 ~~~
 
 Remember `match`? It's really good for matching against some kind of
@@ -213,10 +209,10 @@ type and breaking it up. Here we match against our `Option` type.
 `Option` looks like this:
 
 ~~~ {.rust}
-    enum Option<T> {
-        Some(T),
-        None
-    }
+enum Option<T> {
+    Some(T),
+    None
+}
 ~~~
 
 `Option` is called `Maybe` in some other languages, but basically, you
@@ -232,25 +228,21 @@ Looping forever is possible with `while true`, but like in Ruby, that's
 kinda silly. Rust gives us `loop` to loop forever:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    loop {
-        println("HELLO")
-    }
+loop {
+    println!("HELLO")
+}
 ~~~
 
 Obviously you don't want to actually run that. You can use `break` to
 break out of the loop:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    let mut i = 0;
-    loop {
-        i += 1;
-        if i == 5 { break; }
-        println("hi");
-    }
+let mut i = 0;
+loop {
+    i += 1;
+    if i == 5 { break; }
+    println!("hi");
+}
 ~~~
 
 This will print `"hi"` four times. You're going to want to do this,
@@ -263,31 +255,16 @@ Random Number Generation
 Random number generation isn't too bad:
 
 ~~~ {.rust}
-    extern crate rand;
-    use std::io::println;
+use std::rand::Rng;
 
-    fn main() {
-        let n = rand::random::<int>();
-        println(n.to_str());
-    }
+fn main() {
+    let secret_number = std::rand::task_rng().gen_range(1i, 101);
+    println!("{:d}", secret_number);
+}
 ~~~
 
-This will print out a different number each time you run it. But you'll
-get biiiiiiig numbers. If we want 1-100, of course we have to do this:
-
-~~~ {.rust}
-    extern crate rand;
-    use rand::task_rng;
-    use rand::Rng;
-    use std::io::println;
-
-    fn main() {
-        let r = task_rng().gen_range(1u, 101);
-        println(r.to_str());
-    }
-~~~
-
-This will get us a random number between 1 and 100.
+This will print out a different number each time you run it. This will get us a
+random number between 1 and 100.
 
 Okay! You should have all the tools you need to implement the guessing
 game. Have it it. I'm starting... now.
@@ -295,60 +272,51 @@ game. Have it it. I'm starting... now.
 My version
 ----------
 
-Okay! That took me... about half an hour. Maybe 45 minutes. I decided to use
-some pointer stuff... I thought it was a little awkward, though.  After asking
-on IRC, 'strcat' gave me this version:
+Okay! That took me... about half an hour. Maybe 45 minutes. I found some helpful
+stuff in the standard library we didn't talk about: `cmp`, mainly:
 
 ~~~ {.rust}
-    extern crate rand;
-    use std::io::BufferedReader;
-    use std::io::println;
-    use std::io;
-    use rand::task_rng;
-    use rand::Rng;
+use std::io;
+use std::rand::Rng;
 
-    fn generate_secret_number() -> int {
-        task_rng().gen_range(1u, 100)
-    }
+fn main() {
+    println!("Guess the number!");
 
-    fn process_guess(secret:int, guess: int) -> bool {
-        println!("You guessed: {:d}", guess);
+    let secret_number = std::rand::task_rng().gen_range(1i, 101);
+    println!("Secret number is {}", secret_number);
 
-        if guess > secret {
-            println("Your guess was too high!");
-            false
-        } else if guess < secret {
-            println("Your guess was too low!");
-            false
-        } else {
-            println("You got it!");
-            true
-        }
-    }
+    let mut guesses: int = 0;
+    let mut reader = io::stdin();
 
-    fn main() {
-        let secret = generate_secret_number();
+    loop {
+        println!("Please input guess number {}", guesses + 1);
 
-        println("--- N U M B E R - G A M E ---");
-        println("");
-        println("Guess a number from 1-100 (you get five tries):");
+        let input = reader.read_line().ok().expect("Failed to read line");
+        let input_num: Option<int> = from_str(input.as_slice().trim());
 
-        for round in range(0u, 5) {
-            println!("Guess {:d}", round);
-
-            let mut reader = BufferedReader::new(io::stdin());
-            let input = reader.read_line().unwrap();
-            let num = from_str::<int>(input.slice_to(input.len() - 1));
-
-            match num {
-                Some(number) => {
-                    if process_guess(secret, number) { break; }
-                }
-                None         => println("Hey, put in a number.")
+        let num = match input_num  {
+            Some(num) => num,
+            None      => {
+                println!("Please input a number.");
+                continue;
             }
+        };
+
+        println!("You guessed: {}", num);
+        guesses += 1;
+
+        match num.cmp(&secret_number) {
+            Less    => println!("Too small!"),
+            Greater => println!("Too big!"),
+            Equal   => {
+                println!("You win!");
+                break;
+            },
         }
-        println("Done!");
     }
+
+    println!("You took {} guesses!", guesses);
+}
 ~~~
 
 Conclusion

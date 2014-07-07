@@ -3,45 +3,39 @@ Tasks in Rust
 
 One of the things that Rust is super good at is concurrency. In order to
 understand Rust's strengths, you have to understand its approach to
-concurrency, and then its approach to memory. The two are inter-related,
-and we can't keep glossing over details like "just put `~` in front of
-things" anymore.
+concurrency, and then its approach to memory.
 
 Tasks
 -----
 
 The fundamental unit of computation in Rust is called a 'task.' Tasks are like
-threads, but you can choose the low-level details of how they operate. Rust
-now supports both 1:1 scheduled and N:M scheduled threads as well, though the
-work for 1:1 is still ongoing, so N:M is the default. The details of what
-_exactly_ that means are out of the scope of this tutorial, but the [Wikipedia
+threads, but you can choose the low-level details of how they operate. Rust now
+supports both 1:1 scheduled and N:M scheduled threads. Rust uses 1:1 threads by
+default.  The details of what _exactly_ that means are out of the scope of this
+tutorial, but the [Wikipedia
 page](http://en.wikipedia.org/wiki/Thread_%28computing%29) has a good overview.
 
 Here's some code that prints "Hello" 500 times:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    fn main() {
-        for num in range(0u, 500) {
-            println("Hello");
-        }
+fn main() {
+    for num in range(0u, 500) {
+        println!("Hello");
     }
+}
 ~~~
 
 You may remember this from earlier. This loops 500 times, printing
 "Hello." Now let's make it roflscale with tasks:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    fn main() {
-        for num in range(0u, 500) {
-            spawn(proc() {
-                println("Hello");
-            });
-        }
+fn main() {
+    for num in range(0u, 500) {
+        spawn(proc() {
+            println!("Hello");
+        });
     }
+}
 ~~~
 
 That's it! We spin up 500 tasks that print stuff. If you inspect your
@@ -60,7 +54,7 @@ of things aren't like that. Let's take a look at the type signature of
 `spawn`:
 
 ~~~ {.rust}
-    fn spawn(f: proc())
+fn spawn(f: proc())
 ~~~
 
 Spawn is a function that takes a proc: a closure that can only be run once.
@@ -83,16 +77,15 @@ not make this distinction. Otherwise, they're very similar.
 Here's an example of a task that sends us back a 10:
 
 ~~~ {.rust}
+fn main() {
+    let (chan, port) = channel();
 
-    fn main() {
-        let (chan, port) = channel();
+    spawn(proc() {
+        chan.send(10u);
+    });
 
-        spawn(proc() {
-            chan.send(10u);
-        });
-
-        println!("{:s}", port.recv().to_str());
-    }
+    println!("{:s}", port.recv().to_str());
+}
 ~~~
 
 The `channel` function, imported by the prelude, creates both sides of this
@@ -105,84 +98,46 @@ variable we set up before, so it's just matter of using it. This is
 similar to Ruby's blocks:
 
 ~~~ {.ruby}
-    foo = 10
-    2.times do
-      puts foo
-    end
+foo = 10
+2.times do
+  puts foo
+end
 ~~~
 
 This is really only one-way transit, though: what if we want to
 communicate back and forth? Setting up two ports and channels each time
 would be pretty annoying, so we have some standard library code for
-this: `DuplexStream`:
-
-~~~ {.rust}
-
-    use std::comm::{channel, Sender, Receiver};
-
-    fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
-        let mut value: int;
-        loop {
-            value = receiver.recv();
-            sender.send(value + 1)
-        }
-    }
-
-    fn main () {
-        let (fromParentSender, fromParentReceiver) = channel();
-        let (fromChildSender, fromChildReceiver) = channel();
-
-        spawn(proc() {
-            plus_one(&fromChildSender, &fromParentReceiver);
-        });
-
-        fromParentSender.send(22);
-
-        for _ in range(0i, 4) {
-            let answer = fromChildReceiver.recv();
-            println!("{:s}", answer.to_str());
-        }
-    }
-~~~
-
-
-What's this `extern crate` madness? Well, that's how we `link` to
-external libraries. If you've used C or C++ before, you know what this
-means. If you haven't, it's essentially how you declare that your
-program uses a certain dynamic library (`.dll` on Windows, `.dylib` on
-OS X, and `.so` on other Unix systems). `sync` is part of Rust itself,
-it includes extras as compared to `std` (which is automatically included
-in every program), such as JSON parsing, networking, and data
-structures. See all of the directories starting with 'lib'
-<https://github.com/mozilla/rust/tree/master/src> for more.
+this.
 
 We make a function that just loops forever, gets an `int` off of the
 port, and sends the number plus 1 back down the channel. In the main
-function, we make a `DuplexStream`, send one end to a new task, and then
+function, we make a channel, send one end to a new task, and then
 send it a `22`, and print out the result. Because this task is running
 in the background, we can send it bunches of values:
 
 ~~~ {.rust}
+fn main () {
+    let (fromParentSender, fromParentReceiver) = channel();
+    let (fromChildSender, fromChildReceiver) = channel();
 
-    fn main () {
-        let (fromParentSender, fromParentReceiver) = channel();
-        let (fromChildSender, fromChildReceiver) = channel();
+    spawn(proc() {
+        plus_one(&fromChildSender, &fromParentReceiver);
+    });
 
-        spawn(proc() {
-            plus_one(&fromChildSender, &fromParentReceiver);
-        });
+    fromParentSender.send(22);
+    fromParentSender.send(23);
+    fromParentSender.send(24);
+    fromParentSender.send(25);
 
-        fromParentSender.send(22);
-        fromParentSender.send(23);
-        fromParentSender.send(24);
-        fromParentSender.send(25);
-
-        for _ in range(0u, 4) {
-            let answer = fromChildReceiver.recv();
-            println!("{:s}", answer.to_str());
-        }
+    for _ in range(0u, 4) {
+        let answer = fromChildReceiver.recv();
+        println!("{:s}", answer.to_str());
     }
+}
 ~~~
+
+The `use` statement imports other modules. In this case, there's a `std::comm`
+module that we'll use parts of.
 
 Pretty simple. Our task is always waiting for work. If you run this,
 you'll get some weird output at the end:
@@ -202,38 +157,37 @@ means if one task fails, all of its children and parents fail too. We can fix
 this for now by telling our child to die:
 
 ~~~ {.rust}
+use std::comm::{channel, Sender, Receiver};
 
-    use std::comm::{channel, Sender, Receiver};
-
-    fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
-        let mut value: int;
-        loop {
-            value = receiver.recv();
-            sender.send(value + 1);
-            if value == 0 { break; }
-        }
+fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
+    let mut value: int;
+    loop {
+        value = receiver.recv();
+        sender.send(value + 1);
+        if value == 0 { break; }
     }
+}
 
-    fn main () {
-        let (fromParentSender, fromParentReceiver) = channel();
-        let (fromChildSender, fromChildReceiver) = channel();
+fn main () {
+    let (fromParentSender, fromParentReceiver) = channel();
+    let (fromChildSender, fromChildReceiver) = channel();
 
-        spawn(proc() {
-            plus_one(&fromChildSender, &fromParentReceiver);
-        });
+    spawn(proc() {
+        plus_one(&fromChildSender, &fromParentReceiver);
+    });
 
-        fromParentSender.send(22);
-        fromParentSender.send(23);
-        fromParentSender.send(24);
-        fromParentSender.send(24);
+    fromParentSender.send(22);
+    fromParentSender.send(23);
+    fromParentSender.send(24);
+    fromParentSender.send(24);
 
-        fromParentSender.send(0);
+    fromParentSender.send(0);
 
-        for _ in range(0i, 4) {
-            let answer = fromChildReceiver.recv();
-            println!("{:s}", answer.to_str());
-        }
+    for _ in range(0i, 4) {
+        let answer = fromChildReceiver.recv();
+        println!("{:s}", answer.to_str());
     }
+}
 ~~~
 
 Now when we send a zero, our child task terminates. If you run this,
@@ -255,29 +209,25 @@ done inside these tasks that communicate with each other. Like, for a
 video game:
 
 ~~~ {.rust}
-    fn main() {
+fn main() {
 
-        spawn(proc() {
-            player_handler();
-        });
+    spawn(proc() {
+        player_handler();
+    });
 
-        spawn(proc() {
-            world_handler();
-        });
+    spawn(proc() {
+        world_handler();
+    });
 
-        spawn(proc() {
-            rendering_handler();
-        });
+    spawn(proc() {
+        rendering_handler();
+    });
 
-        spawn(proc() {
-            io_handler();
-        });
-    }
+    spawn(proc() {
+        io_handler();
+    });
+}
 ~~~
 
 ... with the associated channels, of course. This feels very Actor-y to
-me. I like it. In fact, someone *is* working on an Actor
-[library](http://www.reddit.com/r/rust/comments/1i3c15/experimental_actor_library_in_rust/)!
-We'll see how these kinds of things develop as Rust moves forward. For more,
-the [tasks and communication
-tutorial](http://static.rust-lang.org/doc/0.10/guide-tasks.html) is helpful.
+me. I like it.
