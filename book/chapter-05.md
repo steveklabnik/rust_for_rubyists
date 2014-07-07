@@ -299,13 +299,13 @@ $ rustc fizzbuzz.rs
 On Linux:
 
 ~~~
-$ nm -C fizzbuzz~ | grep test
+$ nm -C fizzbuzz | grep test
 ~~~
 
 On OS X:
 
 ~~~
-$ nm fizzbuzz~ | c++filt -p -i | grep test
+$ nm fizzbuzz | c++filt -p -i | grep test
 ~~~
 
 Expected output:
