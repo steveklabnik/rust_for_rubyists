@@ -378,7 +378,7 @@ Uhhhh `let mut`? `let` is the way that we make a local variable. `mut`
 means we plan to mutate that variable: yes, variables are immutable by
 default.
 
-Also, `:s` is the formt string for a... string.
+Also, `:s` is the format string for a... string.
 
 We can shorten this up a bit with this syntax:
 
