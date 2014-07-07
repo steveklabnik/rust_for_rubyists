@@ -247,7 +247,7 @@ out all the numbers from one to 100. It's easy!
     use std::io::println;
 
     fn main() {
-        for num in range(1, 100) {
+        for num in range(1u, 100) {
             println("num");
         }
     }
@@ -327,7 +327,7 @@ Anywho, where were we? Oh, iteration:
     use std::io::println;
 
     fn main() {
-        for num in range(1, 100) {
+        for num in range(1u, 100) {
             println(num);
         }
     }
@@ -353,7 +353,7 @@ it a number. Whoops! Now, there's two ways to fix this. The first is to use the
     use std::io::println;
 
     fn main() {
-        for num in range(1, 100) {
+        for num in range(1u, 100) {
             println(num.to_str())
         }
     }
@@ -377,7 +377,7 @@ is:
     use std::io::println;
 
     fn main() {
-        for num in range(1, 100) {
+        for num in range(1u, 100) {
             println(format!("{:d}", num));
         }
     }
@@ -394,7 +394,7 @@ Because this combination is common, you can use `println!` as a combination of
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 100) {
+        for num in range(1u, 100) {
             println!("{:d}", num);
         }
     }
@@ -408,7 +408,7 @@ Anyway, now we have 1 to 99. We need 1 to 100.
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 101) {
+        for num in range(1u, 101) {
             println!("{:d}", num);
         }
     }
@@ -418,7 +418,7 @@ Now we can put the two together:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 101) {
+        for num in range(1u, 101) {
             let mut answer = "";
 
             if is_fifteen(num){
@@ -450,7 +450,7 @@ We can shorten this up a bit with this syntax:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 101) {
+        for num in range(1u, 101) {
             let mut answer =
                 if is_fifteen(num){
                     "FizzBuzz"
@@ -476,7 +476,7 @@ remove the `mut`:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 101) {
+        for num in range(1u, 101) {
             let answer =
                 if is_fifteen(num){
                     "FizzBuzz"
@@ -502,7 +502,7 @@ actually want is:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 101) {
+        for num in range(1u, 101) {
             let answer =
                 if is_fifteen(num){
                     "FizzBuzz".to_str()
@@ -531,7 +531,7 @@ Because the `if` returns a value, we could also do something like this:
 
 ~~~ {.rust}
     fn main() {
-        for num in range(1, 101) {
+        for num in range(1u, 101) {
             println(
                 if is_fifteen(num) { "FizzBuzz".to_str() }
                 else if is_three(num) { "Fizz".to_str() }

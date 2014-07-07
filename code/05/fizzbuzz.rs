@@ -1,5 +1,5 @@
 fn main() {
-    for num in range(1, 101) { 
+    for num in range(1u, 101) { 
         println( 
             if is_fifteen(num) { ~"FizzBuzz" } 
             else if is_three(num) { ~"Fizz" } 

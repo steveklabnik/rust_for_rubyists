@@ -23,7 +23,7 @@ Here's some code that prints "Hello" 500 times:
     use std::io::println;
 
     fn main() {
-        for num in range(0, 500) {
+        for num in range(0u, 500) {
             println("Hello");
         }
     }
@@ -36,7 +36,7 @@ You may remember this from earlier. This loops 500 times, printing
     use std::io::println;
 
     fn main() {
-        for num in range(0, 500) {
+        for num in range(0u, 500) {
             spawn(proc() {
                 println("Hello");
             });
