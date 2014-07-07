@@ -21,7 +21,7 @@ And compile it with `rustc`:
     $ rustc hello.rs
 
 It should compile without error. If you get one, double check that you
-have the semicolons, the curlies, and the parentheses. Errors look like
+have the semicolons, the curlies, double quotation marks, and the parentheses. Errors look like
 this:
 
     $ rustc hello.rs
