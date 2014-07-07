@@ -505,13 +505,13 @@ actually want is:
         for num in range(1, 101) {
             let answer =
                 if is_fifteen(num){
-                    ~"FizzBuzz"
+                    "FizzBuzz".to_str()
                 }
                 else if is_three(num) {
-                    ~"Fizz"
+                    "Fizz".to_str()
                 }
                 else if is_five(num) {
-                    ~"Buzz"
+                    "Buzz".to_str()
                 }
                 else {
                     num.to_str()
@@ -533,9 +533,9 @@ Because the `if` returns a value, we could also do something like this:
     fn main() {
         for num in range(1, 101) {
             println(
-                if is_fifteen(num) { ~"FizzBuzz" }
-                else if is_three(num) { ~"Fizz" }
-                else if is_five(num) { ~"Buzz" }
+                if is_fifteen(num) { "FizzBuzz".to_str() }
+                else if is_three(num) { "Fizz".to_str() }
+                else if is_five(num) { "Buzz".to_str() }
                 else { num.to_str() }
             );
         }
