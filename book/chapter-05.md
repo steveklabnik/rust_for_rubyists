@@ -284,12 +284,12 @@ $ nm fizzbuzz | c++filt -p -i | grep test
 Expected output:
 
 ~~~
-0000000000403cd0 t test_is_five_with_five::_79fbef3fc431adf6::_00
-0000000000403ac0 t test_is_three_with_three::_79fbef3fc431adf6::_00
-0000000000403c10 t test_is_five_with_not_five::_79fbef3fc431adf6::_00
-0000000000403ee0 t test_is_fifteen_with_fifteen::_79fbef3fc431adf6::_00
-0000000000403a00 t test_is_three_with_not_three::_79fbef3fc431adf6::_00
-0000000000403e20 t test_is_fifteen_with_not_fifteen::_79fbef3fc431adf6::_00
+0000000000403cd0 t test_div_by_five_with_five::_79fbef3fc431adf6::_00
+0000000000403ac0 t test_div_by_three_with_three::_79fbef3fc431adf6::_00
+0000000000403c10 t test_div_by_five_with_not_five::_79fbef3fc431adf6::_00
+0000000000403ee0 t test_div_by_fifteen_with_fifteen::_79fbef3fc431adf6::_00
+0000000000403a00 t test_div_by_three_with_not_three::_79fbef3fc431adf6::_00
+0000000000403e20 t test_div_by_fifteen_with_not_fifteen::_79fbef3fc431adf6::_00
                  U test::test_main_static::_e5d562a4bc8c4dd6::_06
 000000000040fea0 T __test::main::_79fbef3fc431adf6::_00
 0000000000614890 D __test::tests::_7c31a8a9617a6a::_00
@@ -472,10 +472,10 @@ Because the `if` returns a value, we could also do something like this:
 ~~~ {.rust}
 fn main() {
     for num in range(1i, 101) {
-        println!(
-            if is_fifteen(num) { "FizzBuzz".to_str() }
-            else if is_three(num) { "Fizz".to_str() }
-            else if is_five(num) { "Buzz".to_str() }
+        println!("{:s}", 
+            if div_by_fifteen(num) { "FizzBuzz".to_str() }
+            else if div_by_three(num) { "Fizz".to_str() }
+            else if div_by_five(num) { "Buzz".to_str() }
             else { num.to_str() }
         );
     }
