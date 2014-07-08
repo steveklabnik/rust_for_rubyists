@@ -399,7 +399,7 @@ fn main() {
                 ""
             };
 
-        println("{:s}", answer);
+        println!("{:s}", answer);
     }
 }
 ~~~
@@ -472,7 +472,7 @@ Because the `if` returns a value, we could also do something like this:
 ~~~ {.rust}
 fn main() {
     for num in range(1i, 101) {
-        println(
+        println!(
             if is_fifteen(num) { "FizzBuzz".to_str() }
             else if is_three(num) { "Fizz".to_str() }
             else if is_five(num) { "Buzz".to_str() }
