@@ -55,7 +55,7 @@ argument, `num`, and that it's of an integer type. The `-> bool` says
 that we return a boolean, and the `true`, well, returns true. Just like
 Ruby, the value of the last expression gets returned.
 
-You'll also note we have an `if` statement. It's pretty close to what
+You'll also note we have an `if` expression. It's pretty close to what
 you'd expect, but we have curly braces rather than our friends `do/end`.
 
 Now that we've got that cleared up, let's compile and run our tests:
