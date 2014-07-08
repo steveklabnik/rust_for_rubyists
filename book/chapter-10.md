@@ -15,11 +15,11 @@ refactor that into the generic form.
 Let's do an exercise. You have this code:
 
 ~~~ {.rust}
-    fn main() {
-        let vec = [1,2,3];
+fn main() {
+    let vec = [1i, 2i,3i];
 
-        print_vec(vec);
-    }
+    print_vec(vec);
+}
 ~~~
 
 Implement `print_vec` so that it puts out `1 2 3` with newlines between
@@ -31,19 +31,17 @@ I'll wait.
 Done? I got this:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    fn print_vec(v: &[int]) {
-        for i in v.iter() {
-            println(i.to_str())
-        }
+fn print_vec(v: &[int]) {
+    for i in v.iter() {
+        println!("{:d}", *i)
     }
+}
 
-    fn main() {
-        let vec = [1,2,3];
+fn main() {
+    let vec = [1i ,2i ,3i];
 
-        print_vec(vec);
-    }
+    print_vec(vec);
+}
 ~~~
 
 Pretty straightforward. We take a slice (remember, 'borrowed vector' ==
@@ -53,15 +51,15 @@ out.
 Round two: Implement this:
 
 ~~~ {.rust}
-    fn main() {
-        let vec = [1,2,3];
+fn main() {
+    let vec = [1i ,2i ,3i];
 
-        print_vec(vec);
+    print_vec(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+    let str_vec = ["hey", "there", "yo"];
 
-        print_vec_str(str_vec);
-    }
+    print_vec_str(str_vec);
+}
 ~~~
 
 You'll often be seeing owned pointers with strings. Go ahead. You can do it!
@@ -69,68 +67,38 @@ You'll often be seeing owned pointers with strings. Go ahead. You can do it!
 I got this:
 
 ~~~ {.rust}
-    use std::io::println;
-
-    fn print_vec(v: &[int]) {
-        for i in v.iter() {
-            println(i.to_str())
-        }
+fn print_vec(v: &[int]) {
+    for i in v.iter() {
+        println!("{:d}", *i)
     }
+}
 
-    fn print_vec_str(v: &[~str]) {
-        for i in v.iter() {
-            println(*i)
-        }
+fn print_vec_str(v: &[&str]) {
+    for i in v.iter() {
+        println!("{:s}", *i)
     }
+}
 
-    fn main() {
-        let vec = [1,2,3];
+fn main() {
+    let vec = [1i ,2i ,3i];
 
-        print_vec(vec);
+    print_vec(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+    let str_vec = ["hey", "there", "yo"];
 
-        print_vec_str(str_vec);
-    }
+    print_vec_str(str_vec);
+}
 ~~~
 
 You'll notice we had to declare what type of `str` we had. See, strings
 are actually implemented as vectors of characters (encoded in UTF-8), so
 while they are sorta a type, you can't have just `str` as a type. You
-gotta say `~str`.
+gotta say `&str`. As I mentioned before, there is also a mutable,
+heap-allocated string type, `Str`.
 
-Okay, obviously, this situation sucks! What can we do? Well, the first
-thing is that we don't have the same method body. We're doing different
-things to convert our arguments to a string. Here's the answer:
+Okay, obviously, this situation sucks! What can we do?
 
-~~~ {.rust}
-    use std::io::println;
-
-    fn print_vec(v: &[int]) {
-        for i in v.iter() {
-            println!("{}", i)
-        }
-    }
-
-    fn print_vec_str(v: &[~str]) {
-        for i in v.iter() {
-            println!("{}", i)
-        }
-    }
-
-    fn main() {
-        let vec = [1,2,3];
-
-        print_vec(vec);
-
-        let str_vec = [~"hey", ~"there", ~"yo"];
-
-        print_vec_str(str_vec);
-    }
-~~~
-
-And now that we have the same method body, our types are almost the
-same... Let's fix that:
+We can use generics!
 
 ~~~ {.rust}
     fn print_vec<T>(v: &[T]) {
@@ -140,11 +108,11 @@ same... Let's fix that:
     }
 
     fn main() {
-        let vec = [1,2,3];
+        let vec = [1i, 2i, 3i];
 
         print_vec(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+        let str_vec = ["hey", "there", "yo"];
 
         print_vec(str_vec);
     }
@@ -177,21 +145,21 @@ Traits
 This **will** work:
 
 ~~~ {.rust}
-    fn print_vec<T: std::fmt::Show>(v: &[T]) {
-        for i in v.iter() {
-            println!("{}", i)
-        }
+fn print_vec<T: std::fmt::Show>(v: &[T]) {
+    for i in v.iter() {
+        println!("{}", i)
     }
+}
 
-    fn main() {
-        let vec = [1,2,3];
+fn main() {
+    let vec = [1i ,2i ,3i];
 
-        print_vec(vec);
+    print_vec(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+    let str_vec = ["hey", "there", "yo"];
 
-        print_vec(str_vec);
-    }
+    print_vec(str_vec);
+}
 ~~~
 
 The `<T: std::fmt::Show>` says: "We take any type `T` that implements the `Show`
@@ -261,11 +229,11 @@ this out:
     }
 
     fn main() {
-        let vec = [1,2,3];
+        let vec = [1i, 2i, 3i];
 
         print_vec(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+        let str_vec = ["hey", "there", "yo"];
 
         print_vec(str_vec);
     }
@@ -279,7 +247,7 @@ this out:
     there
     yo
 
-    $ nm -C traits~ | grep vec
+    $ nm -C traits | grep vec
     0000000000401500 t print_vec_2912::_85e5a3bc2d3e1a83::_00
     0000000000401ee0 t print_vec_2912::anon::expr_fn_2970
     0000000000404cd0 t print_vec_3218::_f1e1b4437dbb28a::_00
@@ -331,7 +299,7 @@ this out:
 
     $ rustc traits.rs && ./traits
 
-    $ nm -C traits~ | grep vec
+    $ nm -C traits | grep vec
     00000000004012d0 t print_vec_2908::_85e5a3bc2d3e1a83::_00
     0000000000401cb0 t print_vec_2908::anon::expr_fn_2966
     0000000000402a20 t vec::__extensions__::reserve_3026::_de1a9d6344b57ab::_00
@@ -442,11 +410,11 @@ with things of different types and change it (morph) into specialized
     }
 
     fn main() {
-        let vec = [1,2,3];
+        let vec = [1i ,2i ,3i];
 
         print_vec(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+        let str_vec = ["hey", "there", "yo"];
 
         print_vec(str_vec);
     }
@@ -455,7 +423,7 @@ with things of different types and change it (morph) into specialized
 And turns it into:
 
 ~~~ {.rust}
-    fn print_vec_str(v: &[~str]) {
+    fn print_vec_str(v: &[&str]) {
         for i in v.iter() {
             println!("{}", i);
         }
@@ -468,11 +436,11 @@ And turns it into:
     }
 
     fn main() {
-        let vec = [1,2,3];
+        let vec = [1i ,2i ,3i];
 
         print_vec_int(vec);
 
-        let str_vec = [~"hey", ~"there", ~"yo"];
+        let str_vec = ["hey", "there", "yo"];
 
         print_vec_str(str_vec);
     }
@@ -481,6 +449,9 @@ And turns it into:
 Complete with changing the calls at each call site to call the special
 version of the function. We call this 'static dispatch,' as opposed to
 the 'dynamic dispatch' that'd happen at runtime.
+
+(I am fudging a bit here with the `println!` macro line, but it's the correct
+mental model. `{}` doesn't actually work on `int`.)
 
 These are the kinds of optimizations that we get with static typing.
 Neat! I will say that there are efforts to bring this kind of
@@ -726,14 +697,14 @@ Done? Here's mine:
     }
 
     fn main() {
-        let monkey: ~IndustrialRaverMonkey               = ~Monster::new();
-        let angel: ~DwarvenAngel                         = ~Monster::new();
-        let tentacle: ~AssistantViceTentacleAndOmbudsman = ~Monster::new();
-        let deer: ~TeethDeer                             = ~Monster::new();
-        let cyclist: ~IntrepidDecomposedCyclist          = ~Monster::new();
-        let dragon: ~Dragon                              = ~Monster::new();
+        let monkey: &IndustrialRaverMonkey               = &Monster::new();
+        let angel: &DwarvenAngel                         = &Monster::new();
+        let tentacle: &AssistantViceTentacleAndOmbudsman = &Monster::new();
+        let deer: &TeethDeer                             = &Monster::new();
+        let cyclist: &IntrepidDecomposedCyclist          = &Monster::new();
+        let dragon: &Dragon                              = &Monster::new();
 
-        let dwemthys_vector: ~[~Monster] = ~[monkey as ~Monster, angel as ~Monster, tentacle as ~Monster, deer as ~Monster, cyclist as ~Monster, dragon as ~Monster];
+        let dwemthys_vector: &[&Monster] = [monkey as &Monster, angel as &Monster, tentacle as &Monster, deer as &Monster, cyclist as &Monster, dragon as &Monster];
 
         monsters_attack(dwemthys_vector);
     }
