@@ -38,7 +38,7 @@ or not making `AbstractFactoryFactoryImpls` just to get work done.
 I think that that language is Rust.
 
 Now: Rust is not perfect, by far. Its documentation is poor, but getting
-better, as I've been hired by Mozilla to fix it.  It is can feel quite complex.
+better, as I've been hired by Mozilla to fix it.  It can feel quite complex.
 Fighting with a compiler can be frustrating.  But the point is to *learn*. And
 using a language that's very familiar, yet very different, can teach us a lot.
 
@@ -46,7 +46,7 @@ Here's "Hello World" in Rust:
 
 ~~~ {.rust}
     fn main() {
-        println("Hello, world!");
+        println!("Hello, world!");
     }
 ~~~
 
