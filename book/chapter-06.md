@@ -116,6 +116,17 @@ send it a `22`, and print out the result. Because this task is running
 in the background, we can send it bunches of values:
 
 ~~~ {.rust}
+use std::comm::{channel, Sender, Receiver};
+
+fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
+    let mut value: int;
+    loop {
+        value = receiver.recv();
+        sender.send(value + 1);
+        if value == 0 { break; }
+    }
+}
+
 fn main () {
     let (fromParentSender, fromParentReceiver) = channel();
     let (fromChildSender, fromChildReceiver) = channel();
