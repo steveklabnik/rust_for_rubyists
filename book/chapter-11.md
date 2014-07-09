@@ -279,6 +279,8 @@ stuff in the standard library we didn't talk about: `cmp`, mainly:
 use std::io;
 use std::rand::Rng;
 
+static NUM_OF_TRIES: int = 5;
+
 fn main() {
     println!("Guess the number!");
 
@@ -289,6 +291,10 @@ fn main() {
     let mut reader = io::stdin();
 
     loop {
+        if guesses == NUM_OF_TRIES {
+          println!("You failed to guess within the limit of {:d} guesses!", NUM_OF_TRIES);
+          break;
+        }
         println!("Please input guess number {}", guesses + 1);
 
         let input = reader.read_line().ok().expect("Failed to read line");
@@ -310,12 +316,11 @@ fn main() {
             Greater => println!("Too big!"),
             Equal   => {
                 println!("You win!");
+                println!("You took {} guesses!", guesses);
                 break;
             },
         }
     }
-
-    println!("You took {} guesses!", guesses);
 }
 ~~~
 
