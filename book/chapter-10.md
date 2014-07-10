@@ -690,7 +690,7 @@ Done? Here's mine:
         }
     }
 
-    fn monsters_attack(monsters: &[~Monster]) {
+    fn monsters_attack(monsters: &[&Monster]) {
         for monster in monsters.iter() {
             monster.attack();
         }
