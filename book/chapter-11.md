@@ -279,19 +279,18 @@ stuff in the standard library we didn't talk about: `cmp`, mainly:
 use std::io;
 use std::rand::Rng;
 
-static NUM_OF_TRIES: int = 5;
-
 fn main() {
     println!("Guess the number!");
 
     let secret_number = std::rand::task_rng().gen_range(1i, 101);
     println!("Secret number is {}", secret_number);
 
+    let max_number_of_tries = 5
     let mut guesses: int = 0;
     let mut reader = io::stdin();
 
     loop {
-        if guesses == NUM_OF_TRIES {
+        if guesses == max_number_of_tries {
           println!("You failed to guess within the limit of {:d} guesses!", NUM_OF_TRIES);
           break;
         }
