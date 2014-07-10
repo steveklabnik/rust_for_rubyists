@@ -16,26 +16,17 @@ See if this looks familiar:
 
 ~~~ {.rust}
     fn main() {
-        let your_favorite_numbers = ~[1,2,3];
-        let my_favorite_numbers = ~[4,5,6];
+        let your_favorite_numbers = vec!(1i, 2i, 3i);
+        let my_favorite_numbers = vec!(4i, 5i, 6i);
 
         let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
 
-        println!("The third favorite number is {:d}.", our_favorite_numbers[2])
+        println!("The third favorite number is {:d}.", *our_favorite_numbers.get(2))
     }
 ~~~
 
-Seems like business as usual: `+` adds two vectors, `[]` does an
-indexing operation. What happens if you leave off the `~` s?:
-
-    $ rustc vectors.rs && ./vectors
-    vectors.rs:5:31: 5:74 error: failed to find an implementation of trait std::vec::Vector<<VI2>> for [int, .. 3]
-    vectors.rs:5     let our_favorite_numbers = your_favorite_numbers + my_favorite_numbers;
-                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Type `Vector<<VI2>>`? Basically, if you don't make your variable a pointer to a
-vector, it's stored on the stack with a fixed size. So concatenating them
-together doesn't make sense.
+Seems like business as usual: `+` adds two vectors, `get()` does an
+indexing operation.
 
 Mutability inheritance
 ----------------------
@@ -44,11 +35,10 @@ You can mutate vectors if you make them so:
 
 ~~~ {.rust}
     fn main() {
-        let a_vector = ~[1,2,3];
-        let mut another_vector = ~[];
-        another_vector.push_all(a_vector);
+        let mut another_vector = vec!(4i);
+        another_vector.push_all([1, 2, 3]);
 
-        println!("The first number is {:d}.", another_vector[0])
+        println!("The first number is {:d}.", *another_vector.get(1))
     }
 ~~~
 
@@ -56,10 +46,10 @@ Of course, changing an element of a vector doesn't make sense:
 
 ~~~ {.rust}
     fn main() {
-        let a_vector = ~[1,2,3];
-        a_vector[0] = 5; // fizzbuzz.rs:3:2: 3:12 error: cannot assign to immutable vec content
+        let a_vector = vec!(1i, 2i, 3i);
+        a_vector.get(0) = 5; // error: illegal left-hand side expression
 
-        println!("The first number is {:d}.", a_vector[0])
+        println!("The first number is {:d}.", *a_vector.get(0))
     }
 ~~~
 
@@ -67,11 +57,11 @@ But you can move it to a mutable one and then change it:
 
 ~~~ {.rust}
     fn main() {
-        let a_vector = ~[1,2,3];
+        let a_vector = vec!(1i, 2i, 3i);
         let mut mut_vector = a_vector;
-        mut_vector[0] = 5;
+        *mut_vector.get_mut(0) = 5;
 
-        println!("The first number is {:d}.", mut_vector[0])
+        println!("The first number is {:d}.", *mut_vector.get(0))
     }
 ~~~
 
