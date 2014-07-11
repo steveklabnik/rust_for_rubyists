@@ -38,7 +38,7 @@ You can mutate vectors if you make them so:
         let mut another_vector = vec!(4i);
         another_vector.push_all([1, 2, 3]);
 
-        println!("The first number is {:d}.", *another_vector.get(1))
+        println!("The second number is {:d}.", *another_vector.get(1))
     }
 ~~~
 
