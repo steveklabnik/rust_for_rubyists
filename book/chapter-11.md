@@ -32,7 +32,7 @@ fn main() {
     let input = reader.read_line().ok().expect("Failed to read line");
 
     println!("YOU TYPED:");
-    println!(input);
+    println!("{:s}", input);
 }
 ~~~
 
