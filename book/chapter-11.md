@@ -46,7 +46,7 @@ from whatever it's implemented on. So we grab that line, save it in a variable,
 and then print it out again. Super simple.
 
 This `ok().expect()` business we'll talk about in a minute. First, what's up with
-this `use` shenanigans? We've been using them forever, let's talk details.
+this `use` shenanigans?
 
 How to use `use`
 ----------------
