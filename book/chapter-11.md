@@ -45,7 +45,7 @@ to standard in.  Next, the `read_line()` method. This reads stuff up to a `\n`
 from whatever it's implemented on. So we grab that line, save it in a variable,
 and then print it out again. Super simple.
 
-This `ok().epxect()` business we'll talk about in a minute. First, what's up with
+This `ok().expect()` business we'll talk about in a minute. First, what's up with
 this `use` shenanigans? We've been using them forever, let's talk details.
 
 How to use `use`
@@ -199,7 +199,7 @@ fn main() {
 
     match input_num {
         Some(number) => println!("{:d}", number),
-        None                => println!("Hey, put in a number.")
+        None         => println!("Hey, put in a number.")
     }
 }
 ~~~
