@@ -127,7 +127,7 @@ fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
     }
 }
 
-fn main () {
+fn main() {
     let (fromParentSender, fromParentReceiver) = channel();
     let (fromChildSender, fromChildReceiver) = channel();
 
@@ -179,7 +179,7 @@ fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
     }
 }
 
-fn main () {
+fn main() {
     let (fromParentSender, fromParentReceiver) = channel();
     let (fromChildSender, fromChildReceiver) = channel();
 

@@ -65,6 +65,7 @@ Now that we've got that cleared up, let's compile and run our tests:
     fizzbuzz.rs:1 fn div_by_three(num: int) -> bool {
                                   ^
 
+    $ ./fizzbuzz
     running 1 test
     test test_div_by_three ... FAILED
 
@@ -406,7 +407,7 @@ fn main() {
 
 We've made the `if` assign the value to answer. Note that we had to
 remove the semicolons again; that lets the expression give its value to
-`answer.` Note that this \_also\_ makes answer immutable, so we can
+`answer.` Note that this _also_ makes answer immutable, so we can
 remove the `mut`:
 
 ~~~ {.rust}
