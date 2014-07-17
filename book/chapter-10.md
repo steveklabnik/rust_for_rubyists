@@ -16,7 +16,7 @@ Let's do an exercise. You have this code:
 
 ~~~ {.rust}
 fn main() {
-    let vec = [1i, 2i,3i];
+    let vec = [1i, 2i, 3i];
 
     print_vec(vec);
 }
@@ -38,7 +38,7 @@ fn print_vec(v: &[int]) {
 }
 
 fn main() {
-    let vec = [1i ,2i ,3i];
+    let vec = [1i, 2i, 3i];
 
     print_vec(vec);
 }
@@ -52,7 +52,7 @@ Round two: Implement this:
 
 ~~~ {.rust}
 fn main() {
-    let vec = [1i ,2i ,3i];
+    let vec = [1i, 2i, 3i];
 
     print_vec(vec);
 
@@ -80,7 +80,7 @@ fn print_vec_str(v: &[&str]) {
 }
 
 fn main() {
-    let vec = [1i ,2i ,3i];
+    let vec = [1i, 2i, 3i];
 
     print_vec(vec);
 
@@ -129,8 +129,13 @@ closely.
 If you try to compile this, you'll get an error:
 
     $ rustc traits.rs && ./traits
-    fizzbuzz.rs:5:28: 5:29 error: failed to find an implementation of trait std::fmt::Show for T
-    fizzbuzz.rs:5             println!("{}", i)
+    traits.rs:3:28: 3:29 error: failed to find an implementation of trait core::fmt::Show for T
+    traits.rs:3             println!("{}", i)
+                                        ^
+    note: in expansion of format_args!
+    <std macros>:2:23: 2:77 note: expansion site
+    <std macros>:1:1: 3:2 note: in expansion of println!
+    traits.rs:3:13: 4:10 note: expansion site
 
 
 This is a problem. Our generic type T does not have any restrictions on
@@ -152,7 +157,7 @@ fn print_vec<T: std::fmt::Show>(v: &[T]) {
 }
 
 fn main() {
-    let vec = [1i ,2i ,3i];
+    let vec = [1i, 2i, 3i];
 
     print_vec(vec);
 
@@ -410,7 +415,7 @@ with things of different types and change it (morph) into specialized
     }
 
     fn main() {
-        let vec = [1i ,2i ,3i];
+        let vec = [1i, 2i, 3i];
 
         print_vec(vec);
 
@@ -436,7 +441,7 @@ And turns it into:
     }
 
     fn main() {
-        let vec = [1i ,2i ,3i];
+        let vec = [1i, 2i, 3i];
 
         print_vec_int(vec);
 
@@ -515,7 +520,7 @@ make one:
     }
 
     fn main() {
-        let monkey = IndustrialRaverMonkey {strength:35};
+        let monkey = IndustrialRaverMonkey { strength: 35 };
 
         monkey.attack();
     }
@@ -559,7 +564,7 @@ implementation for absolutely anything:
     }
 
     fn main() {
-        let monkey = IndustrialRaverMonkey {strength:35};
+        let monkey = IndustrialRaverMonkey { strength: 35 };
         monkey.attack();
 
         let i = 10;
@@ -641,7 +646,7 @@ Done? Here's mine:
         }
 
         fn new() -> IndustrialRaverMonkey {
-            IndustrialRaverMonkey {life: 46, strength: 35, charisma: 91, weapon: 2}
+            IndustrialRaverMonkey { life: 46, strength: 35, charisma: 91, weapon: 2 }
         }
     }
 
@@ -650,7 +655,7 @@ Done? Here's mine:
             println!("The angel attacks for {:d}.", self.strength)
         }
         fn new() -> DwarvenAngel {
-            DwarvenAngel {life: 540, strength: 6, charisma: 144, weapon: 50}
+            DwarvenAngel { life: 540, strength: 6, charisma: 144, weapon: 50 }
         }
     }
 
@@ -659,7 +664,7 @@ Done? Here's mine:
             println!("The tentacle attacks for {:d}.", self.strength)
         }
         fn new() -> AssistantViceTentacleAndOmbudsman {
-            AssistantViceTentacleAndOmbudsman {life: 320, strength: 6, charisma: 144, weapon: 50}
+            AssistantViceTentacleAndOmbudsman { life: 320, strength: 6, charisma: 144, weapon: 50 }
         }
     }
 
@@ -668,7 +673,7 @@ Done? Here's mine:
             println!("The deer attacks for {:d}.", self.strength)
         }
         fn new() -> TeethDeer {
-            TeethDeer {life: 655, strength: 192, charisma: 19, weapon: 109}
+            TeethDeer { life: 655, strength: 192, charisma: 19, weapon: 109 }
         }
     }
 
@@ -677,7 +682,7 @@ Done? Here's mine:
             println!("The cyclist attacks for {:d}.", self.strength)
         }
         fn new() -> IntrepidDecomposedCyclist {
-            IntrepidDecomposedCyclist {life: 901, strength: 560, charisma: 422, weapon: 105}
+            IntrepidDecomposedCyclist { life: 901, strength: 560, charisma: 422, weapon: 105 }
         }
     }
 
@@ -686,7 +691,7 @@ Done? Here's mine:
             println!("The dragon attacks for {:d}.", self.strength)
         }
         fn new() -> Dragon {
-            Dragon {life: 1340, strength: 451, charisma: 1020, weapon: 939}
+            Dragon { life: 1340, strength: 451, charisma: 1020, weapon: 939 }
         }
     }
 

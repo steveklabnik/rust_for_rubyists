@@ -5,7 +5,7 @@ I'd like to talk about structs and methods, so let's build a fun little
 project:
 [DwemthysArray](http://mislav.uniqpath.com/poignant-guide/dwemthy/). One
 of \_why's sillier examples, we make an array of monsters, and then
-fight them. We won't be building the Array \_exactly\_, but something
+fight them. We won't be building the Array _exactly_, but something
 like it.
 
 Structs
@@ -105,7 +105,7 @@ struct Monster {
 
 impl Monster {
     fn new(health: int, attack: int) -> Monster {
-        Monster { health:health, attack:attack }
+        Monster { health: health, attack: attack }
     }
 
     fn attack(&self) {
@@ -212,7 +212,7 @@ can destructure it:
 
 ~~~ {.rust}
 match p {
-    Point{x:x, y:y} => println!("X: {:d}, Y: {:d}", x, y)
+    Point{ x: x, y: y } => println!("X: {:d}, Y: {:d}", x, y)
 }
 ~~~
 
