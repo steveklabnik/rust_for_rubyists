@@ -67,7 +67,7 @@ Here's a rough port to Ruby:
 
 
 ~~~ {.ruby}
-    10.times do
+    10.times.map do
       Thread.new do
         greeting_message = "Hello?"
 
@@ -75,7 +75,7 @@ Here's a rough port to Ruby:
         # usage in the Rust example.
         puts "#{greeting_message}"
       end
-    end
+    end.each(&:join)
 ~~~
 
 That's it. Note the stuff that's *similar* to Ruby:
