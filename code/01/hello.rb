@@ -1,6 +1,9 @@
-10.times do
+10.times.map do
   Thread.new do
     greeting_message = "Hello?"
-    puts "#{greeting_message}" # slightly unnatural ruby to match `format!` macro in rust.
+
+    # This is weird in Ruby but it's closer to the println! macro
+    # usage in the Rust example.
+    puts "#{greeting_message}"
   end
-end
+end.each(&:join)
