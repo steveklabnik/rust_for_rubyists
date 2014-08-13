@@ -459,10 +459,10 @@ fn main() {
 }
 ~~~
 
-Why the "`to_string()`"s? There are two types of Strings in Rust: `Str`,
+Why the "`to_string()`"s? There are two types of Strings in Rust: `String`,
 which is a heap allocated string with dynamic length, and `&str`, which
 is a borrowed, immutable view into a string. The literal is of type `&str`,
-but we want a `Str`. `to_string()` turns a `&str` into a `String`.
+but we want a `String`. `to_string()` turns a `&str` into a `String`.
 
 Before, we could get away with a `&str`, because they all had the same
 type. But since we've added an arm with an `int`, we need to make them all
