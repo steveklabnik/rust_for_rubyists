@@ -442,16 +442,16 @@ fn main() {
     for num in range(1i, 101) {
         let answer =
             if div_by_fifteen(num){
-                "FizzBuzz".to_str()
+                "FizzBuzz".to_string()
             }
             else if div_by_three(num) {
-                "Fizz".to_str()
+                "Fizz".to_string()
             }
             else if div_by_five(num) {
-                "Buzz".to_str()
+                "Buzz".to_string()
             }
             else {
-                num.to_str()
+                num.to_string()
             };
 
         println!("{}", answer);
@@ -459,10 +459,10 @@ fn main() {
 }
 ~~~
 
-Why the "`to_str()`"s? There are two types of Strings in Rust: `Str`,
+Why the "`to_string()`"s? There are two types of Strings in Rust: `Str`,
 which is a heap allocated string with dynamic length, and `&str`, which
 is a borrowed, immutable view into a string. The literal is of type `&str`,
-but we want a `Str`. `to_str()` turns a `&str` into a `String`.
+but we want a `Str`. `to_string()` turns a `&str` into a `String`.
 
 Before, we could get away with a `&str`, because they all had the same
 type. But since we've added an arm with an `int`, we need to make them all
@@ -474,10 +474,10 @@ Because the `if` returns a value, we could also do something like this:
 fn main() {
     for num in range(1i, 101) {
         println!("{:s}", 
-            if div_by_fifteen(num) { "FizzBuzz".to_str() }
-            else if div_by_three(num) { "Fizz".to_str() }
-            else if div_by_five(num) { "Buzz".to_str() }
-            else { num.to_str() }
+            if div_by_fifteen(num) { "FizzBuzz".to_string() }
+            else if div_by_three(num) { "Fizz".to_string() }
+            else if div_by_five(num) { "Buzz".to_string() }
+            else { num.to_string() }
         );
     }
 }
