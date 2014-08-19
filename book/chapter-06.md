@@ -84,7 +84,7 @@ fn main() {
         chan.send(10u);
     });
 
-    println!("{:s}", port.recv().to_str());
+    println!("{:s}", port.recv().to_string());
 }
 ~~~
 
@@ -142,7 +142,7 @@ fn main() {
 
     for _ in range(0u, 4) {
         let answer = fromChildReceiver.recv();
-        println!("{:s}", answer.to_str());
+        println!("{:s}", answer.to_string());
     }
 }
 ~~~
@@ -196,7 +196,7 @@ fn main() {
 
     for _ in range(0i, 4) {
         let answer = fromChildReceiver.recv();
-        println!("{:s}", answer.to_str());
+        println!("{:s}", answer.to_string());
     }
 }
 ~~~
