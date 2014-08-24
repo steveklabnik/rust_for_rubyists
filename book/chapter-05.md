@@ -209,7 +209,7 @@ fn div_by_three(num: int) -> bool {
 }
 ~~~
 
-Wait, whaaaat? Remember,the last thing in a function is a return in Rust,
+Wait, whaaaat? Remember, the last thing in a function is a return in Rust,
 but there's one wrinkle: note there's no semicolon here. If you had one,
 you'd get:
 
