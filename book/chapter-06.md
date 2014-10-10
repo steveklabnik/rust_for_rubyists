@@ -128,20 +128,20 @@ fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
 }
 
 fn main() {
-    let (fromParentSender, fromParentReceiver) = channel();
-    let (fromChildSender, fromChildReceiver) = channel();
+    let (from_parent_sender, from_parent_receiver) = channel();
+    let (from_child_sender, from_child_receiver) = channel();
 
     spawn(proc() {
-        plus_one(&fromChildSender, &fromParentReceiver);
+        plus_one(&from_child_sender, &from_parent_receiver);
     });
 
-    fromParentSender.send(22);
-    fromParentSender.send(23);
-    fromParentSender.send(24);
-    fromParentSender.send(25);
+    from_parent_sender.send(22);
+    from_parent_sender.send(23);
+    from_parent_sender.send(24);
+    from_parent_sender.send(25);
 
     for _ in range(0u, 4) {
-        let answer = fromChildReceiver.recv();
+        let answer = from_child_receiver.recv();
         println!("{:s}", answer.to_string());
     }
 }
@@ -180,22 +180,22 @@ fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
 }
 
 fn main() {
-    let (fromParentSender, fromParentReceiver) = channel();
-    let (fromChildSender, fromChildReceiver) = channel();
+    let (from_parent_sender, from_parent_receiver) = channel();
+    let (from_child_sender, from_child_receiver) = channel();
 
     spawn(proc() {
-        plus_one(&fromChildSender, &fromParentReceiver);
+        plus_one(&from_child_sender, &from_parent_receiver);
     });
 
-    fromParentSender.send(22);
-    fromParentSender.send(23);
-    fromParentSender.send(24);
-    fromParentSender.send(24);
+    from_parent_sender.send(22);
+    from_parent_sender.send(23);
+    from_parent_sender.send(24);
+    from_parent_sender.send(24);
 
-    fromParentSender.send(0);
+    from_parent_sender.send(0);
 
     for _ in range(0i, 4) {
-        let answer = fromChildReceiver.recv();
+        let answer = from_child_receiver.recv();
         println!("{:s}", answer.to_string());
     }
 }
