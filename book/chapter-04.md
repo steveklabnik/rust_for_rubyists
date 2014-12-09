@@ -48,7 +48,7 @@ Bam! Now let's make it fail:
 ~~~ {.rust}
 #[test]
 fn this_tests_code() {
-    fail!("Fail!");
+    panic!("Fail!");
 }
 ~~~
 

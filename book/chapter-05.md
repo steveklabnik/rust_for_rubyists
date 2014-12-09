@@ -20,7 +20,7 @@ First, a test. This will go in fizzbuzz.rs:
 #[test]
 fn test_div_by_three() {
     if div_by_three(1) {
-        fail!("One is not three");
+        panic!("One is not three");
     }
 }
 ~~~
@@ -45,7 +45,7 @@ fn div_by_three(num: int) -> bool {
 #[test]
 fn test_div_by_three() {
     if div_by_three(1) {
-        fail!("One is not three");
+        panic!("One is not three");
     }
 }
 ~~~
@@ -96,7 +96,7 @@ fn div_by_three(num: int) -> bool {
 #[test]
 fn test_div_by_three() {
     if div_by_three(1) {
-        fail!("One is not three");
+        panic!("One is not three");
     }
 }
 ~~~
@@ -125,14 +125,14 @@ fn div_by_three(num: int) -> bool {
 #[test]
 fn test_div_by_three() {
     if div_by_three(1) {
-        fail!("One is not three");
+        panic!("One is not three");
     }
 }
 
 #[test]
 fn test_div_by_three_with_three() {
     if !div_by_three(3) {
-        fail!("Three should be three");
+        panic!("Three should be three");
     }
 }
 ~~~
@@ -178,14 +178,14 @@ fn div_by_three(num: int) -> bool {
 #[test]
 fn test_div_by_three() {
     if div_by_three(1) {
-        fail!("One is not three");
+        panic!("One is not three");
     }
 }
 
 #[test]
 fn test_div_by_three_with_three() {
     if !div_by_three(3) {
-        fail!("Three should be three");
+        panic!("Three should be three");
     }
 }
 ~~~
@@ -485,7 +485,7 @@ fn main() {
 
 It's more compact, and removes the intermediate variable all together.
 
-We can do one other thing too: this whole `if/fail!` thing so common in
+We can do one other thing too: this whole `if/panic!` thing so common in
 tests seems too complex. Why do we have to write if over and over and
 over again? Meet `assert!`:
 
