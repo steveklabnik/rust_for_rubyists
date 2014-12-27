@@ -1,6 +1,9 @@
 Tasks in Rust
 =============
 
+**Warning:** The Rust libraries that implement threading are considered
+unstable as of Rust 0.13. 
+
 One of the things that Rust is super good at is concurrency. In order to
 understand Rust's strengths, you have to understand its approach to
 concurrency, and then its approach to memory.
@@ -29,14 +32,30 @@ You may remember this from earlier. This loops 500 times, printing
 "Hello." Now let's make it roflscale with tasks:
 
 ~~~ {.rust}
+use std::thread::Thread;
+
 fn main() {
     for num in range(0u, 500) {
-        spawn(proc() {
-            println!("Hello");
+        let _ = Thread::spawn(move || {
+            println!("hello");
         });
     }
 }
 ~~~
+
+A few notes: 
+
+* The `spawn` keyword, used to create a new process, is located in Rust's 
+standard library. It can be included with the `use` keyword, similar to 
+Ruby's `require` or `include`. You can read more about how `use` works 
+[here] (http://doc.rust-lang.org/reference.html#use-declarations).
+
+* By default, threads must return a value or the compiler will complain. 
+`let _` assigns the thread's return value to a throwaway variable, 
+placating the compiler. 
+
+* There will still be a compiler warning thrown because the variable `num`
+is never used. 
 
 That's it! We spin up 500 tasks that print stuff. If you inspect your
 output, you can tell it's working:
@@ -77,14 +96,16 @@ not make this distinction. Otherwise, they're very similar.
 Here's an example of a task that sends us back a 10:
 
 ~~~ {.rust}
+use std::thread::Thread;
+
 fn main() {
     let (chan, port) = channel();
 
-    spawn(proc() {
+    let _ = Thread::spawn(move || {
         chan.send(10u);
     });
 
-    println!("{:s}", port.recv().to_string());
+    println!("{}", port.recv().to_string());
 }
 ~~~
 
