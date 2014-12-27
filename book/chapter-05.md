@@ -332,7 +332,7 @@ Anywho, where were we? Oh, iteration:
 ~~~ {.rust}
 fn main() {
     for num in range(1i, 100) {
-        println!("{:d}", num);
+        println!("{}", num);
     }
 }
 ~~~
@@ -345,7 +345,7 @@ Anyway, now we have 1 to 99. We need 1 to 100.
 ~~~ {.rust}
 fn main() {
     for num in range(1i, 101) {
-        println!("{:d}", num);
+        println!("{}", num);
     }
 }
 ~~~
@@ -355,7 +355,7 @@ Now we can put the two together:
 ~~~ {.rust}
 fn main() {
     for num in range(1i, 101) {
-        let mut answer = "";
+        let mut answer;
 
         if div_by_fifteen(num){
             answer = "FizzBuzz";
@@ -370,7 +370,7 @@ fn main() {
             answer = "";
         };
 
-        println!("{:s}", answer);
+        println!("{}", answer);
     }
 }
 ~~~
@@ -378,8 +378,6 @@ fn main() {
 Uhhhh `let mut`? `let` is the way that we make a local variable. `mut`
 means we plan to mutate that variable: yes, variables are immutable by
 default.
-
-Also, `:s` is the format string for a... string.
 
 We can shorten this up a bit with this syntax:
 
@@ -400,7 +398,7 @@ fn main() {
                 ""
             };
 
-        println!("{:s}", answer);
+        println!("{}", answer);
     }
 }
 ~~~
@@ -427,7 +425,7 @@ fn main() {
                 ""
             };
 
-        println!("{:s}", answer);
+        println!("{}", answer);
     }
 }
 ~~~
@@ -473,7 +471,7 @@ Because the `if` returns a value, we could also do something like this:
 ~~~ {.rust}
 fn main() {
     for num in range(1i, 101) {
-        println!("{:s}", 
+        println!("{}", 
             if div_by_fifteen(num) { "FizzBuzz".to_string() }
             else if div_by_three(num) { "Fizz".to_string() }
             else if div_by_five(num) { "Buzz".to_string() }
