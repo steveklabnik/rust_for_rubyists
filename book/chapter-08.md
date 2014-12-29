@@ -197,7 +197,7 @@ Does that make sense? It's sorta like a `case` statement, but it's more
 powerful. If we leave off the `_` case, Rust will complain:
 
     $ rustc match.rs && ./match
-    match.rs:2:4: 6:5 error: non-exhaustive patterns: `_` not covered
+    match.rs:2:4: 6:5 error: non-exhaustive patterns: `_` not covered  [E0004]
     match.rs:2     match i {
     match.rs:3         1 => println("ONE!"),
     match.rs:4         2 => println("Two is a prime."),
@@ -218,7 +218,7 @@ can destructure it:
 
 ~~~ {.rust}
 match p {
-    Point{ x: x, y: y } => println!("X: {:d}, Y: {:d}", x, y)
+    Point{ x: x, y: y } => println!("X: {}, Y: {}", x, y)
 }
 ~~~
 
