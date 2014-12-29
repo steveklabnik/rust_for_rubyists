@@ -67,7 +67,7 @@ create one with the `box` keyword:
 ~~~ {.rust}
 fn main() {
     let x = box 10i;
-    println!("{:d}", *x);
+    println!("{}", *x);
 }
 ~~~
 
@@ -77,23 +77,26 @@ You can't make another owned pointer to this value:
 fn main() {
     let x = box 10i;
     let y = x;
-    println!("{:d}", *x);
+    println!("{}", *x);
 }
 ~~~
 
 This yields:
 
     $ rustc owned.rs && ./owned
-    owned.rs:4:22: 4:24 error: use of partially moved value: `*x`
-    owned.rs:4     println!("{:d}", *x);
-                                       ^~
+    owned.rs:4:22: 4:24 error: use of moved value: `*x`
+    owned.rs:4     println!("{}", *x);
+                                  ^~
     note: in expansion of format_args!
     <std macros>:2:23: 2:77 note: expansion site
     <std macros>:1:1: 3:2 note: in expansion of println!
     owned.rs:4:5: 4:26 note: expansion site
-    owned.rs:3:9: 3:10 note: `x` moved here because it has type `Box<int>`, which is moved by default (use `ref` to override)
+    owned.rs:3:9: 3:10 note: `x` moved here because it has type `Box<int>`, which is moved by default 
     owned.rs:3     let y = x;
-                          ^
+                       ^
+    owned.rs:3:9: 3:10 help: use `ref` to override
+    owned.rs:3     let y = x;
+                       ^
     error: aborting due to previous error
 
 It tells us that we moved the value of `x` to `y` and points out where
@@ -103,7 +106,7 @@ the move happens. Neat. We can make a copy:
 fn main() {
     let x = box 10i;
     let y = x.clone();
-    println!("{:d}", *x);
+    println!("{}", *x);
 }
 ~~~
 
@@ -129,7 +132,7 @@ fn plus_one(x: &int) -> int {
 fn main() {
     let y = box 10i;
 
-    println!("{:d}", plus_one(&*y));
+    println!("{}", plus_one(&*y));
 }
 ~~~
 
