@@ -50,7 +50,7 @@ struct Monster {
 
 impl Monster {
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage - keeps {} health.", self.attack, self.health);
+        println!("The monster attacks for {} damage - keeps {} health.", self.attack, self.health);
     }
 }
 
@@ -63,7 +63,7 @@ fn main() {
 
 This gives:
 
-    The monster attacks for 20 damage.
+    The monster attacks for 20 damage - keeps 10 health.
 
 Methods will want to take a borrowed pointer. We don't care what the ownership
 semantics are. That's the `&self`, if you forgot.
@@ -79,7 +79,7 @@ struct Monster {
 
 impl Monster {
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage.", self.attack);
+        println!("The monster attacks for {} damage - keeps {} health.", self.attack, self.health);
     }
 
     fn count() {
@@ -109,7 +109,7 @@ impl Monster {
     }
 
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage.", self.attack);
+        println!("The monster attacks for {} damage - keeps {} health.", self.attack, self.health);
     }
 
     fn count() {
@@ -119,6 +119,7 @@ impl Monster {
 }
 
 fn main() {
+    Monster::count();
     Monster::new(20, 40).attack();
 }
 ~~~
@@ -127,7 +128,7 @@ Note the lack of a semicolon inside `new`, so it's acting as an
 expression. `new` is just a function that creates a new `Monster`
 struct and returns it. This gives:
 
-    The monster attacks for 40 damage.
+    The monster attacks for 40 damage - keeps 20 health.
 
 as you'd expect.
 
