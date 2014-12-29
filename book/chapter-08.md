@@ -22,8 +22,8 @@ struct Monster {
 fn main() {
     let m = Monster { health: 10, attack: 20 };
 
-    println!("{:s}", m.health.to_string());
-    println!("{:s}", m.attack.to_string());
+    println!("{}", m.health.to_string());
+    println!("{}", m.attack.to_string());
 }
 ~~~
 
@@ -50,7 +50,7 @@ struct Monster {
 
 impl Monster {
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage.", self.attack);
+        println!("The monster attacks for {:d} damage - keeps {} health.", self.attack, self.health);
     }
 }
 
