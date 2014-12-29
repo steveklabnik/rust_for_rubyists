@@ -1,3 +1,6 @@
+use Monster::ScubaArgentine;
+use Monster::IndustrialRaverMonkey;
+
 enum Monster {
     ScubaArgentine(int, int, int, int),
     IndustrialRaverMonkey(int, int, int, int)
@@ -7,8 +10,8 @@ enum Monster {
 impl Monster {
     fn attack(&self) {
         match *self {
-            ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
-            IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
+            ScubaArgentine(l, s, c, w) => println!("The monster attacks for {} damage.", w),
+            IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {} damage.", w)
         }
     }
 }
