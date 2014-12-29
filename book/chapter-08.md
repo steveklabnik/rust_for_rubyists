@@ -22,8 +22,8 @@ struct Monster {
 fn main() {
     let m = Monster { health: 10, attack: 20 };
 
-    println!("{:s}", m.health.to_string());
-    println!("{:s}", m.attack.to_string());
+    println!("{}", m.health.to_string());
+    println!("{}", m.attack.to_string());
 }
 ~~~
 
@@ -50,7 +50,7 @@ struct Monster {
 
 impl Monster {
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage.", self.attack);
+        println!("The monster attacks for {} damage - keeps {} health.", self.attack, self.health);
     }
 }
 
@@ -63,7 +63,7 @@ fn main() {
 
 This gives:
 
-    The monster attacks for 20 damage.
+    The monster attacks for 20 damage - keeps 10 health.
 
 Methods will want to take a borrowed pointer. We don't care what the ownership
 semantics are. That's the `&self`, if you forgot.
@@ -79,7 +79,7 @@ struct Monster {
 
 impl Monster {
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage.", self.attack);
+        println!("The monster attacks for {} damage - keeps {} health.", self.attack, self.health);
     }
 
     fn count() {
@@ -109,7 +109,7 @@ impl Monster {
     }
 
     fn attack(&self) {
-        println!("The monster attacks for {:d} damage.", self.attack);
+        println!("The monster attacks for {} damage - keeps {} health.", self.attack, self.health);
     }
 
     fn count() {
@@ -119,6 +119,7 @@ impl Monster {
 }
 
 fn main() {
+    Monster::count();
     Monster::new(20, 40).attack();
 }
 ~~~
@@ -127,7 +128,7 @@ Note the lack of a semicolon inside `new`, so it's acting as an
 expression. `new` is just a function that creates a new `Monster`
 struct and returns it. This gives:
 
-    The monster attacks for 40 damage.
+    The monster attacks for 40 damage - keeps 20 health.
 
 as you'd expect.
 
@@ -139,6 +140,11 @@ languages, we'd use inheritance. In Rust, it seems like Enums are a
 better idea. Here's an enum:
 
 ~~~ {.rust}
+// import these creatures into our local scope - 
+// for we can call them without prefixed 'Monster::'
+use Monster::ScubaArgentine;
+use Monster::IndustrialRaverMonkey;
+
 enum Monster {
     ScubaArgentine(int, int, int, int),
     IndustrialRaverMonkey(int, int, int, int)
@@ -148,8 +154,8 @@ enum Monster {
 impl Monster {
     fn attack(&self) {
         match *self {
-            ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
-            IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
+            ScubaArgentine(l, s, c, w) => println!("The monster attacks for {} damage.", w),
+            IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {} damage.", w)
         }
     }
 }
@@ -191,7 +197,7 @@ Does that make sense? It's sorta like a `case` statement, but it's more
 powerful. If we leave off the `_` case, Rust will complain:
 
     $ rustc match.rs && ./match
-    match.rs:2:4: 6:5 error: non-exhaustive patterns: `_` not covered
+    match.rs:2:4: 6:5 error: non-exhaustive patterns: `_` not covered  [E0004]
     match.rs:2     match i {
     match.rs:3         1 => println("ONE!"),
     match.rs:4         2 => println("Two is a prime."),
@@ -212,7 +218,7 @@ can destructure it:
 
 ~~~ {.rust}
 match p {
-    Point{ x: x, y: y } => println!("X: {:d}, Y: {:d}", x, y)
+    Point{ x: x, y: y } => println!("X: {}, Y: {}", x, y)
 }
 ~~~
 
