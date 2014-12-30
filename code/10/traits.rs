@@ -47,7 +47,7 @@ struct Dragon {
 
 impl Monster for IndustrialRaverMonkey {
     fn attack(&self) {
-        println!("The monkey attacks for {:d}.", self.strength)
+        println!("The monkey attacks for {}.", self.strength)
     }
 
     fn new() -> IndustrialRaverMonkey {
@@ -57,7 +57,7 @@ impl Monster for IndustrialRaverMonkey {
 
 impl Monster for DwarvenAngel {
     fn attack(&self) {
-        println!("The angel attacks for {:d}.", self.strength)
+        println!("The angel attacks for {}.", self.strength)
     }
     fn new() -> DwarvenAngel {
         DwarvenAngel { life: 540, strength: 6, charisma: 144, weapon: 50 }
@@ -66,7 +66,7 @@ impl Monster for DwarvenAngel {
 
 impl Monster for AssistantViceTentacleAndOmbudsman {
     fn attack(&self) {
-        println!("The tentacle attacks for {:d}.", self.strength)
+        println!("The tentacle attacks for {}.", self.strength)
     }
     fn new() -> AssistantViceTentacleAndOmbudsman {
         AssistantViceTentacleAndOmbudsman { life: 320, strength: 6, charisma: 144, weapon: 50 }
@@ -75,7 +75,7 @@ impl Monster for AssistantViceTentacleAndOmbudsman {
 
 impl Monster for TeethDeer {
     fn attack(&self) {
-        println!("The deer attacks for {:d}.", self.strength)
+        println!("The deer attacks for {}.", self.strength)
     }
     fn new() -> TeethDeer {
         TeethDeer { life: 655, strength: 192, charisma: 19, weapon: 109 }
@@ -84,7 +84,7 @@ impl Monster for TeethDeer {
 
 impl Monster for IntrepidDecomposedCyclist {
     fn attack(&self) {
-        println!("The cyclist attacks for {:d}.", self.strength)
+        println!("The cyclist attacks for {}.", self.strength)
     }
     fn new() -> IntrepidDecomposedCyclist {
         IntrepidDecomposedCyclist { life: 901, strength: 560, charisma: 422, weapon: 105 }
@@ -93,7 +93,7 @@ impl Monster for IntrepidDecomposedCyclist {
 
 impl Monster for Dragon {
     fn attack(&self) {
-        println!("The dragon attacks for {:d}.", self.strength)
+        println!("The dragon attacks for {}.", self.strength)
     }
     fn new() -> Dragon {
         Dragon { life: 1340, strength: 451, charisma: 1020, weapon: 939 }
@@ -114,7 +114,7 @@ fn main() {
     let cyclist: &IntrepidDecomposedCyclist          = &Monster::new();
     let dragon: &Dragon                              = &Monster::new();
 
-    let dwemthys_vector: &[&Monster] = [monkey as &Monster, angel as &Monster, tentacle as &Monster, deer as &Monster, cyclist as &Monster, dragon as &Monster];
+    let dwemthys_vector = &[monkey as &Monster, angel as &Monster, tentacle as &Monster, deer as &Monster, cyclist as &Monster, dragon as &Monster];
 
     monsters_attack(dwemthys_vector);
 }
