@@ -33,7 +33,7 @@ Done? I got this:
 ~~~ {.rust}
 fn print_vec(v: &[int]) {
     for i in v.iter() {
-        println!("{:d}", *i)
+        println!("{}", i)
     }
 }
 
