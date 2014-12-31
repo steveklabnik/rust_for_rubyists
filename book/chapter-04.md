@@ -50,25 +50,36 @@ Bam! Now let's make it fail:
 fn this_tests_code() {
     panic!("Fail!");
 }
+
+#[test]
+fn this_tests_more_code() {
+  let (x, y) = (1i, 2i);
+  assert!(y == x);
+}
 ~~~
 
 Recompile, and the output should be:
 
-    running 1 test
+    running 2 test
     test this_tests_code ... FAILED
+    test this_tests_more_code ... FAILED
 
     failures:
 
     ---- this_tests_code stdout ----
-      task 'this_tests_code' failed at 'Fail!', testing.rs:5
-      
+       thread 'this_tests_code' panicked at 'Fail!', testing.rs:5
+    
+    ---- this_tests_more_code stdout ----
+       thread 'this_tests_more_code' panicked at 'assertion failed: x == y', testing.rs:11
+ 
 
     failures:
         this_tests_code
+        this_tests_more_code
 
-    test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+    test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured
 
-    task '<main>' failed at 'Some tests failed', /some/path/to/something
+    thread '<main>' panicked at 'Some tests failed', /some/path/to/something
 
 
 Super simple. That's all you need to know to get started. Next up: FizzBuzz.
