@@ -53,9 +53,12 @@ Here's "Hello World" in Rust:
 Here's a parallel "Hello World" in Rust:
 
 ~~~ {.rust}
+
+use std::thread::Thread;
+
     fn main() {
         for _ in range(0u, 10) {
-            spawn(proc() {
+            let _ = Thread::spawn(move || {
                 let greeting_message = "Hello?";
                 println!("{}", greeting_message);
             });
