@@ -1,6 +1,9 @@
 Tasks in Rust
 =============
 
+**Warning:** The Rust libraries that implement threading are considered
+unstable (Rust 0.12).
+
 One of the things that Rust is super good at is concurrency. In order to
 understand Rust's strengths, you have to understand its approach to
 concurrency, and then its approach to memory.
@@ -29,10 +32,12 @@ You may remember this from earlier. This loops 500 times, printing
 "Hello." Now let's make it roflscale with tasks:
 
 ~~~ {.rust}
+use std::thread::Thread;
+
 fn main() {
     for num in range(0u, 500) {
-        spawn(proc() {
-            println!("Hello");
+        let _ = Thread::spawn(move || {
+            println!("hello");
         });
     }
 }
@@ -46,7 +51,21 @@ output, you can tell it's working:
 
     Hello
 
-Ha! Printing to the screen is obviously something that tasks can step
+Ha! 
+
+A few notes: 
+
+* The `use` statement imports other modules. Here we use `spawn`, which is 
+part of the Rust standard library: `std::thread`. It is similar to Ruby's
+`require` or `include`. You can read more about how `use` works [here]
+(http://doc.rust-lang.org/reference.html#use-declarations).
+
+* By default, threads must return a value or the compiler will complain.
+`let _` assigns the thread's return value to a throwaway variable. There
+will still be a compiler warning because the variable `num` is never used, 
+but we can also fix that by replacing `num` with `_`. Try it!
+
+Printing to the screen is obviously something that tasks can step
 over each other with (if you're curious, it's because it is printing the
 string and the newline separately. Sometimes, another task gets to print
 its string before this task prints its newline). But the vast majority
@@ -80,11 +99,11 @@ Here's an example of a task that sends us back a 10:
 fn main() {
     let (chan, port) = channel();
 
-    spawn(proc() {
+    let _ = Thread::spawn(move || {
         chan.send(10u);
     });
 
-    println!("{:s}", port.recv().to_string());
+    println!("{}", port.recv().to_string());
 }
 ~~~
 
@@ -116,6 +135,7 @@ send it a `22`, and print out the result. Because this task is running
 in the background, we can send it bunches of values:
 
 ~~~ {.rust}
+use std::thread::Thread;
 use std::comm::{channel, Sender, Receiver};
 
 fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
@@ -123,7 +143,9 @@ fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
     loop {
         value = receiver.recv();
         sender.send(value + 1);
-        if value == 0 { break; }
+        if value == 0 { 
+            break; 
+        }
     }
 }
 
@@ -131,24 +153,21 @@ fn main() {
     let (from_parent_sender, from_parent_receiver) = channel();
     let (from_child_sender, from_child_receiver) = channel();
 
-    spawn(proc() {
-        plus_one(&from_child_sender, &from_parent_receiver);
-    });
-
     from_parent_sender.send(22);
     from_parent_sender.send(23);
     from_parent_sender.send(24);
     from_parent_sender.send(25);
 
-    for _ in range(0u, 4) {
+    let _ = Thread::spawn(move || {
+        plus_one(&from_child_sender, &from_parent_receiver);
+    });
+
+    for _ in range(0i, 4) {
         let answer = from_child_receiver.recv();
-        println!("{:s}", answer.to_string());
+        println!("{}", answer.to_string());
     }
 }
 ~~~
-
-The `use` statement imports other modules. In this case, there's a `std::comm`
-module that we'll use parts of.
 
 Pretty simple. Our task is always waiting for work. If you run this,
 you'll get some weird output at the end:
@@ -167,7 +186,11 @@ running `main`) died. By default, Rust tasks are bidirectionally linked, which
 means if one task fails, all of its children and parents fail too. We can fix
 this for now by telling our child to die:
 
+** Warning ** Unsure of the behavior as to the above program in Rust 0.13 because
+the child task is never closed. 
+
 ~~~ {.rust}
+use std::thread::Thread;
 use std::comm::{channel, Sender, Receiver};
 
 fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
@@ -175,28 +198,31 @@ fn plus_one(sender: &Sender<int>, receiver: &Receiver<int>) {
     loop {
         value = receiver.recv();
         sender.send(value + 1);
-        if value == 0 { break; }
+        if value == 0 { 
+            break; 
+        }
     }
 }
+
 
 fn main() {
     let (from_parent_sender, from_parent_receiver) = channel();
     let (from_child_sender, from_child_receiver) = channel();
 
-    spawn(proc() {
-        plus_one(&from_child_sender, &from_parent_receiver);
-    });
-
     from_parent_sender.send(22);
     from_parent_sender.send(23);
     from_parent_sender.send(24);
-    from_parent_sender.send(24);
+    from_parent_sender.send(25);
 
     from_parent_sender.send(0);
 
+    let _ = Thread::spawn(move || {
+        plus_one(&from_child_sender, &from_parent_receiver);
+    });
+
     for _ in range(0i, 4) {
         let answer = from_child_receiver.recv();
-        println!("{:s}", answer.to_string());
+        println!("{}", answer.to_string());
     }
 }
 ~~~
