@@ -10,7 +10,8 @@ Pointer recap
 -------------
 
 When you create a variable, you're really giving a name to a chunk of
-memory somewhere. We'll use C syntax for these examples:
+memory somewhere. We'll use C syntax for these examples assuming that
+sizeof(int) is 4 in a Little endian system:
 
 ~~~ {.c}
 int i = 5; int j = 6;
@@ -18,8 +19,14 @@ int i = 5; int j = 6;
 
       location   value
       ---------- -------
-      0x000000   5
-      0x000001   6
+      0x000000   0x000005
+      0x000001   0x000000
+      0x000002   0x000000
+      0x000003   0x000000
+      0x000004   0x000006
+      0x000005   0x000000
+      0x000006   0x000000
+      0x000007   0x000000
 
 This is of course slightly simplified. Anyway, we can introduce
 indirection by making a pointer:
@@ -30,9 +37,15 @@ int i = 5; int j = 6; int *pi = &i;
 
       location   value
       ---------- ----------
-      0x000000   5
-      0x000001   6
+      0x000000   0x000005
+      0x000001   0x000000
       0x000002   0x000000
+      0x000003   0x000000
+      0x000004   0x000006
+      0x000005   0x000000
+      0x000006   0x000000
+      0x000007   0x000000
+      0x000008   A hex representing another location in the memory (eg. 0xf8f200)
 
 `pi` has a pointer to another memory location. We can access the value
 of the thing that `pi` points at by using the `*`:
