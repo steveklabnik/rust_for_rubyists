@@ -1,5 +1,5 @@
 CHAPTERS=book/preamble.md \
-				 $(wildcard book/chapter-*.md)
+				 $(sort $(wildcard book/chapter-*.md))
 
 CONTENTS=book/title.txt \
 				 $(CHAPTERS)
