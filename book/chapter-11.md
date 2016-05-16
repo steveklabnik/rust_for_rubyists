@@ -267,7 +267,7 @@ This will print out a different number each time you run it. This will get us a
 random number between 1 and 100.
 
 Okay! You should have all the tools you need to implement the guessing
-game. Have it it. I'm starting... now.
+game. Have at it. I'm starting... now.
 
 My version
 ----------
