@@ -13,13 +13,13 @@ fn main() {
 
     loop {
         if guesses == max_number_of_tries {
-          println!("You failed to guess within the limit of {:d} guesses!", max_number_of_tries);
+          println!("You failed to guess within the limit of {} guesses!", max_number_of_tries);
           break;
         }
         println!("Please input guess number {}", guesses + 1);
 
         let input = reader.read_line().ok().expect("Failed to read line");
-        let input_num: Option<int> = from_str(input.as_slice().trim());
+        let input_num: Option<int> = input.trim().parse();
 
         let num = match input_num  {
             Some(num) => num,

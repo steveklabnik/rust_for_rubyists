@@ -33,7 +33,7 @@ Done? I got this:
 ~~~ {.rust}
 fn print_vec(v: &[int]) {
     for i in v.iter() {
-        println!("{:d}", *i)
+        println!("{}", i)
     }
 }
 
@@ -54,11 +54,11 @@ Round two: Implement this:
 fn main() {
     let vec = [1i, 2i, 3i];
 
-    print_vec(vec);
+    print_vec(vec.as_slice());
 
     let str_vec = ["hey", "there", "yo"];
 
-    print_vec_str(str_vec);
+    print_vec_str(str_vec.as_slice());
 }
 ~~~
 
@@ -69,24 +69,24 @@ I got this:
 ~~~ {.rust}
 fn print_vec(v: &[int]) {
     for i in v.iter() {
-        println!("{:d}", *i)
+        println!("{}", i)
     }
 }
 
 fn print_vec_str(v: &[&str]) {
     for i in v.iter() {
-        println!("{:s}", *i)
+        println!("{}", i)
     }
 }
 
 fn main() {
     let vec = [1i, 2i, 3i];
 
-    print_vec(vec);
+    print_vec(vec.as_slice());
 
     let str_vec = ["hey", "there", "yo"];
 
-    print_vec_str(str_vec);
+    print_vec_str(str_vec.as_slice());
 }
 ~~~
 
@@ -129,9 +129,12 @@ closely.
 If you try to compile this, you'll get an error:
 
     $ rustc traits.rs && ./traits
-    traits.rs:3:28: 3:29 error: failed to find an implementation of trait core::fmt::Show for T
+    traits.rs:3:28: 3:29 error: the trait `core::fmt::Show` is not implemented for the type `T`
     traits.rs:3             println!("{}", i)
-                                        ^
+                                           ^
+    traits.rs:3:28: 3:29 note: the trait `core::fmt::Show` must be implemented because it is required by `core::fmt::Show::fmt`
+    traits.rs:3             println!("{}", i)
+                                           ^
     note: in expansion of format_args!
     <std macros>:2:23: 2:77 note: expansion site
     <std macros>:1:1: 3:2 note: in expansion of println!
@@ -159,11 +162,11 @@ fn print_vec<T: std::fmt::Show>(v: &[T]) {
 fn main() {
     let vec = [1i, 2i, 3i];
 
-    print_vec(vec);
+    print_vec(vec.as_slice());
 
     let str_vec = ["hey", "there", "yo"];
 
-    print_vec(str_vec);
+    print_vec(str_vec.as_slice());
 }
 ~~~
 
@@ -236,11 +239,11 @@ this out:
     fn main() {
         let vec = [1i, 2i, 3i];
 
-        print_vec(vec);
+        print_vec(vec.as_slice());
 
         let str_vec = ["hey", "there", "yo"];
 
-        print_vec(str_vec);
+        print_vec(str_vec.as_slice());
     }
 ~~~
 
@@ -298,7 +301,7 @@ this out:
     fn main() {
         let vec = [1,2,3];
 
-        print_vec(vec);
+        print_vec(vec.as_slice());
     }
 ~~~
 
@@ -417,11 +420,11 @@ with things of different types and change it (morph) into specialized
     fn main() {
         let vec = [1i, 2i, 3i];
 
-        print_vec(vec);
+        print_vec(vec.as_slice());
 
         let str_vec = ["hey", "there", "yo"];
 
-        print_vec(str_vec);
+        print_vec(str_vec.as_slice());
     }
 ~~~
 
@@ -443,11 +446,11 @@ And turns it into:
     fn main() {
         let vec = [1i, 2i, 3i];
 
-        print_vec_int(vec);
+        print_vec_int(vec.as_slice());
 
         let str_vec = ["hey", "there", "yo"];
 
-        print_vec_str(str_vec);
+        print_vec_str(str_vec.as_slice());
     }
 ~~~
 
@@ -515,7 +518,7 @@ make one:
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println!("The monkey attacks for {:d}.", self.strength)
+            println!("The monkey attacks for {}.", self.strength)
         }
     }
 
@@ -532,8 +535,8 @@ Now we're cooking with gas! Remember our old implementation?:
     impl Monster {
         fn attack(&self) {
             match *self {
-                ScubaArgentine(l, s, c, w) => println!("The monster attacks for {:d} damage.", w),
-                IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {:d} damage.", w)
+                ScubaArgentine(l, s, c, w) => println!("The monster attacks for {} damage.", w),
+                IndustrialRaverMonkey(l, s, c, w) => println!("The monster attacks for {} damage.", w)
             }
         }
     }
@@ -553,13 +556,13 @@ implementation for absolutely anything:
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println!("The monkey attacks for {:d}.", self.strength)
+            println!("The monkey attacks for {}.", self.strength)
         }
     }
 
     impl Monster for int {
         fn attack(&self) {
-            println!("The int attacks for {:d}.", *self)
+            println!("The int attacks for {}.", *self)
         }
     }
 
@@ -642,7 +645,7 @@ Done? Here's mine:
 
     impl Monster for IndustrialRaverMonkey {
         fn attack(&self) {
-            println!("The monkey attacks for {:d}.", self.strength)
+            println!("The monkey attacks for {}.", self.strength)
         }
 
         fn new() -> IndustrialRaverMonkey {
@@ -652,7 +655,7 @@ Done? Here's mine:
 
     impl Monster for DwarvenAngel {
         fn attack(&self) {
-            println!("The angel attacks for {:d}.", self.strength)
+            println!("The angel attacks for {}.", self.strength)
         }
         fn new() -> DwarvenAngel {
             DwarvenAngel { life: 540, strength: 6, charisma: 144, weapon: 50 }
@@ -661,7 +664,7 @@ Done? Here's mine:
 
     impl Monster for AssistantViceTentacleAndOmbudsman {
         fn attack(&self) {
-            println!("The tentacle attacks for {:d}.", self.strength)
+            println!("The tentacle attacks for {}.", self.strength)
         }
         fn new() -> AssistantViceTentacleAndOmbudsman {
             AssistantViceTentacleAndOmbudsman { life: 320, strength: 6, charisma: 144, weapon: 50 }
@@ -670,7 +673,7 @@ Done? Here's mine:
 
     impl Monster for TeethDeer {
         fn attack(&self) {
-            println!("The deer attacks for {:d}.", self.strength)
+            println!("The deer attacks for {}.", self.strength)
         }
         fn new() -> TeethDeer {
             TeethDeer { life: 655, strength: 192, charisma: 19, weapon: 109 }
@@ -679,7 +682,7 @@ Done? Here's mine:
 
     impl Monster for IntrepidDecomposedCyclist {
         fn attack(&self) {
-            println!("The cyclist attacks for {:d}.", self.strength)
+            println!("The cyclist attacks for {}.", self.strength)
         }
         fn new() -> IntrepidDecomposedCyclist {
             IntrepidDecomposedCyclist { life: 901, strength: 560, charisma: 422, weapon: 105 }
@@ -688,7 +691,7 @@ Done? Here's mine:
 
     impl Monster for Dragon {
         fn attack(&self) {
-            println!("The dragon attacks for {:d}.", self.strength)
+            println!("The dragon attacks for {}.", self.strength)
         }
         fn new() -> Dragon {
             Dragon { life: 1340, strength: 451, charisma: 1020, weapon: 939 }
@@ -709,7 +712,7 @@ Done? Here's mine:
         let cyclist: &IntrepidDecomposedCyclist          = &Monster::new();
         let dragon: &Dragon                              = &Monster::new();
 
-        let dwemthys_vector: &[&Monster] = [monkey as &Monster, angel as &Monster, tentacle as &Monster, deer as &Monster, cyclist as &Monster, dragon as &Monster];
+        let dwemthys_vector = &[monkey as &Monster, angel as &Monster, tentacle as &Monster, deer as &Monster, cyclist as &Monster, dragon as &Monster];
 
         monsters_attack(dwemthys_vector);
     }
